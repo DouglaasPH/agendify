@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Virtual environment
+venv/
+.env/
+.env.local
+
+# SQLite database file
+src/agendify.db
+
+# Alembic migration cache
+alembic/versions/*.pyc
+alembic/versions/__pycache__/
+
+# Poetry
+.poetry/
+poetry.lock
+
+# IDE/editor config files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# MacOS
+.DS_Store

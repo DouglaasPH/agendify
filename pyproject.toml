@@ -1,0 +1,29 @@
+[project]
+name = "agendify"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Douglas Phelipe",email = "douglasphelipedpss@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "sqlalchemy",
+    "pydantic",
+    "python-jose[cryptography]",
+    "passlib[bcrypt]",
+    "python-dotenv",
+    "alembic (>=1.16.4,<2.0.0)",
+    "databases[aiosqlite]"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+alembic = "^1.16.4"
+
