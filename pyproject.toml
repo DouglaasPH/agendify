@@ -16,7 +16,8 @@ dependencies = [
     "passlib[bcrypt]",
     "python-dotenv",
     "alembic (>=1.16.4,<2.0.0)",
-    "databases[aiosqlite]"
+    "databases[aiosqlite]",
+    "python-multipart"
 ]
 
 
