@@ -7,9 +7,10 @@ from controllers import auth
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    from models.appointments import Appointments      # noqa
-    from models.availabilities import Availabilities  # noqa
-    from models.users import Users                    # noqa
+    from models.appointments import Appointments             # noqa
+    from models.availabilities import Availabilities         # noqa
+    from models.users import Users                           # noqa
+    from models.refresh_tokens import RefreshToken           # noqa
     
     Base.metadata.create_all(bind=engine)
     yield

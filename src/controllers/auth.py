@@ -1,32 +1,20 @@
-from fastapi import APIRouter
+from datetime import datetime
+
+from fastapi import APIRouter, Body
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import Depends, HTTPException
+
 from sqlalchemy.orm import Session
-from datetime import timedelta
 
 from database import get_db
 from models.users import Users
-from services.auth import (
-    get_db, authenticate_user, create_access_token,
-    get_current_user, ACCESS_TOKEN_EXPIRE_MINUTES, pwd_context
-)
+from models.refresh_tokens import RefreshToken
 from views.auth import LoginIn
+from services.auth import get_db, authenticate_user, pwd_context, get_current_user
+from services.token import create_access_token, create_refresh_token
 
 
 router = APIRouter(prefix="/auth")
-
-
-@router.post("/")
-def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    user_data = { "email": form_data.username, "password": form_data.password }     
-    user = authenticate_user(db, user_data)
-    if not user:
-        raise HTTPException(status_code=400, detail="Usuário ou senha inválidos")
-    access_token = create_access_token(
-        data = { "sub": user.name },
-        expires_delta = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    )
-    return { "access_token": access_token, "token_type": "bearer" }
 
 
 @router.post("/register")
@@ -42,4 +30,50 @@ def register(user_data: LoginIn, db: Session = Depends(get_db)):
     db.add(new_user)
     db.commit()
     db.refresh(new_user) # retorna o objeto com o ID gerado, por exemplo
-    return {"msg": "Usuário criado com sucesso"}
+    
+    return {"msg": "User created successfully"}
+
+
+@router.post("/")
+def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    user_data = { "email": form_data.username, "password": form_data.password }     
+    user = authenticate_user(user_data, db)
+    if not user:
+        raise HTTPException(status_code=400, detail="Invalid username or password.")
+    
+    access_token = create_access_token(user.id)
+    refresh_token = create_refresh_token(user.id, db)
+    
+    return { 
+            "access_token": access_token, 
+            "refresh_token": refresh_token,
+            "token_type": "bearer",
+            }
+
+
+@router.post("/logout")
+def logout(refresh_token: str = Body(...), current_user: Users = Depends(get_current_user), db: Session = Depends(get_db)):
+    token = db.query(RefreshToken).filter(RefreshToken.token == refresh_token).first()
+    
+    if token.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Token does not belong to the user.")
+    
+    if not token or token.is_revoked:
+        raise HTTPException(status_code=404, detail="Refresh token not found.")
+    
+    token.is_revoked = True
+    db.commit()
+    
+    return { "msg": "Logout successful." }
+
+
+@router.post("/refresh")
+def refresh_token(refresh_token: str = Body(...), db: Session = Depends(get_db)):
+    db_token = db.query(RefreshToken).filter_by(token=refresh_token).first()
+    if not db_token or db_token.is_revoked or db_token.expires_at < datetime.utcnow():
+        raise HTTPException(status_code=401, detail="Invalid refresh token.")
+
+    user = db_token.user
+    new_access_token = create_access_token(user.id)
+        
+    return {"access_token": new_access_token, "refresh_token": refresh_token, "token_type": "bearer"}
