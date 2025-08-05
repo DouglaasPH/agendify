@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from fastapi import APIRouter, Body
+from fastapi import APIRouter
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import Depends, HTTPException
 
@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 from database import get_db
 from models.users import Users
 from models.refresh_tokens import RefreshToken
-from views.auth import LoginIn
+from views.auth import LoginIn, RefreshTokenView
 from services.auth import get_db, authenticate_user, pwd_context, get_current_user
 from services.token import create_access_token, create_refresh_token
 
@@ -52,7 +52,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
 
 
 @router.post("/logout")
-def logout(refresh_token: str = Body(...), current_user: Users = Depends(get_current_user), db: Session = Depends(get_db)):
+def logout(refresh_token: RefreshTokenView, current_user: Users = Depends(get_current_user), db: Session = Depends(get_db)):
     token = db.query(RefreshToken).filter(RefreshToken.token == refresh_token).first()
     
     if token.user_id != current_user.id:
@@ -68,7 +68,7 @@ def logout(refresh_token: str = Body(...), current_user: Users = Depends(get_cur
 
 
 @router.post("/refresh")
-def refresh_token(refresh_token: str = Body(...), db: Session = Depends(get_db)):
+def refresh_token(refresh_token: RefreshTokenView, db: Session = Depends(get_db)):
     db_token = db.query(RefreshToken).filter_by(token=refresh_token).first()
     if not db_token or db_token.is_revoked or db_token.expires_at < datetime.utcnow():
         raise HTTPException(status_code=401, detail="Invalid refresh token.")
