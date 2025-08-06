@@ -5,10 +5,7 @@ __pycache__/
 *.pyd
 *.pyc
 
-# Virtual environment
-venv/
-.env/
-.env.local
+
 
 # SQLite database file
 src/agendify.db
