@@ -9,5 +9,6 @@ class Users(Base):
     name = Column(String, nullable=False)
     hashed_password = Column(String, nullable=False)
     email = Column(String, unique=True, nullable=False)
+    profession = Column(String, nullable=False)
     
     refresh_tokens = relationship("RefreshToken", back_populates="user")

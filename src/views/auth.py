@@ -8,6 +8,7 @@ class LoginIn(BaseModel):
     name: str
     email: str
     password: str
+    profession: str
 
 
 class RefreshTokenView(BaseModel):

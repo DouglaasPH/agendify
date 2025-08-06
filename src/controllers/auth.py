@@ -24,6 +24,7 @@ def register(user_data: LoginIn, db: Session = Depends(get_db)):
     new_user = Users(
         name=user_data.name,
         email=user_data.email,
+        profession=user_data.profession,
         hashed_password=hashed,
     )
     
