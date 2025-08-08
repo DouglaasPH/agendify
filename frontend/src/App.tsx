@@ -5,7 +5,11 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
+// Pages
 import HomePage from "./pages/home/home";
+
+// Components
+import NavBar from "./components/navbar/navBar";
 
 const browserRoutes = createBrowserRouter(
   createRoutesFromElements(
@@ -14,8 +18,7 @@ const browserRoutes = createBrowserRouter(
         index
         element={
           <>
-            {" "}
-            <HomePage></HomePage>{" "}
+            <NavBar /> <HomePage />
           </>
         }
       />
