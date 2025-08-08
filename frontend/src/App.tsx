@@ -10,6 +10,7 @@ import HomePage from "./pages/home/home";
 
 // Components
 import NavBar from "./components/navbar/navBar";
+import FooterBar from "./components/footerbar/footerBar";
 
 const browserRoutes = createBrowserRouter(
   createRoutesFromElements(
@@ -18,7 +19,7 @@ const browserRoutes = createBrowserRouter(
         index
         element={
           <>
-            <NavBar /> <HomePage />
+            <NavBar /> <HomePage /> <FooterBar />
           </>
         }
       />
