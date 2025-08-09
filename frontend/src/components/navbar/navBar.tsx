@@ -8,19 +8,19 @@ import InTheDashboardPages from "./components/inTheDashboardPages";
 import InTheChatPage from "./components/inTheChat";
 
 function NavBar() {
-  const inTheHome = false;
+  const inTheHome = true;
   const inTheDashboard = false;
-  const inTheChat = true;
+  const inTheChat = false;
 
   // TODO: Add logic to direct the types of navbar
 
   return (
-    <div className="w-full h-17 flex flex-row justify-between items-center pl-10 pr-10 border-b-2 border-b-[#E5E8EB]">
+    <div className="w-full h-17 flex flex-row justify-between items-center pl-1 xl:pl-10 pr-1 xl:pr-10 border-b-1 border-b-[#E5E8EB]">
       <div>
         <img
           src={logo}
           alt="logo"
-          className="hover:opacity-80 cursor-pointer"
+          className="hover:opacity-80 cursor-pointer h-[1.3rem] xl:h-lg"
         />
       </div>
       {inTheHome ? <InTheHomePage /> : <></>}
