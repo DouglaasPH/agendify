@@ -8,7 +8,7 @@ function FooterBar() {
           About us
         </button>
         <button className="font-inter font-medium text-[0.6rem] xl:text-[0.7rem] cursor-pointer hover:opacity-75 text-[#61738A]">
-          Support
+          Help center
         </button>
         <button className="font-inter font-medium text-[0.6rem] xl:text-[0.7rem] cursor-pointer hover:opacity-75 text-[#61738A]">
           Terms of use

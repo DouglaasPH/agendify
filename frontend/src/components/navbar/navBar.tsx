@@ -20,7 +20,7 @@ function NavBar() {
         <img
           src={logo}
           alt="logo"
-          className="hover:opacity-80 cursor-pointer h-[1.3rem] xl:h-lg"
+          className="hover:opacity-80 cursor-pointer h-[1.3rem] xl:h-[1.8rem]"
         />
       </div>
       {inTheHome ? <InTheHomePage /> : <></>}

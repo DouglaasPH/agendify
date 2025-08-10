@@ -7,6 +7,11 @@ import {
 
 // Pages
 import HomePage from "./pages/home/home";
+import AboutUsPage from "./pages/about_us/aboutUs";
+import HelpCenterPage from "./pages/help_center/helpCenter";
+import ContactPage from "./pages/contact/contact";
+import PrivacyPolicyPage from "./pages/privacy_policy/privacyPolicy";
+import TermsOfUsePage from "./pages/terms_of_use/termsOfUse";
 
 // Components
 import NavBar from "./components/navbar/navBar";
@@ -20,6 +25,46 @@ const browserRoutes = createBrowserRouter(
         element={
           <>
             <NavBar /> <HomePage /> <FooterBar />
+          </>
+        }
+      />
+      <Route
+        path="about-us"
+        element={
+          <>
+            <NavBar /> <AboutUsPage /> <FooterBar />
+          </>
+        }
+      />
+      <Route
+        path="help-center"
+        element={
+          <>
+            <NavBar /> <HelpCenterPage /> <FooterBar />
+          </>
+        }
+      />
+      <Route
+        path="contact"
+        element={
+          <>
+            <NavBar /> <ContactPage /> <FooterBar />
+          </>
+        }
+      />
+      <Route
+        path="privacy-policy"
+        element={
+          <>
+            <NavBar /> <PrivacyPolicyPage /> <FooterBar />
+          </>
+        }
+      />
+      <Route
+        path="terms-of-use"
+        element={
+          <>
+            <NavBar /> <TermsOfUsePage /> <FooterBar />
           </>
         }
       />
