@@ -55,14 +55,14 @@ function HelpCenterPage() {
           <h1 className="font-inter font-bold text-[1.5rem] sm:text-[2rem] xl:text-[2.5rem] text-[#121417]">
             Help Center
           </h1>
-          <p className="font-inter font-normal text-[0.8rem] sm:text-[0.9rem] xl:text-[1rem] text-[#61738A]">
+          <p className="font-inter font-normal text-[0.7rem] sm:text-[0.8rem] xl:text-[0.9rem] text-[#61738A]">
             Find answers to your questions or contact us for personalized
             support.
           </p>
         </section>
 
         {/* FAQ */}
-        <section className="w-full flex flex-col gap-6 p-4">
+        <section className="w-full flex flex-col gap-6">
           <h5 className="font-inter font-bold text-[1.2rem] sm:text-[1.4rem] xl:text-[1.5rem] text-[#121417]">
             Frequently Asked Questions
           </h5>
@@ -104,6 +104,20 @@ function HelpCenterPage() {
               </div>
             ))}
           </div>
+        </section>
+
+        {/* Help */}
+        <section className="w-full flex flex-col gap-6">
+          <h5 className="font-inter font-bold text-[1.2rem] sm:text-[1.4rem] xl:text-[1.5rem] text-[#121417]">
+            Need help? Get in touch
+          </h5>
+          <p className="font-inter font-normal text-[0.8rem] sm:text-[0.9rem] xl:text-[1rem] text-[#121417]">
+            Our support team is ready to help. Average response time is 24
+            hours.
+          </p>
+          <button className="p-2 pl-2 xl:pl-3 pr-2 xl:pr-3 w-30 bg-[#0D78F2] hover:opacity-95 rounded-lg text-[#FFFFFF] font-inter font-bold text-[0.8rem] xl:text-sm cursor-pointer">
+            Contact us
+          </button>
         </section>
       </div>
     </div>
