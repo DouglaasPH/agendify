@@ -50,7 +50,6 @@ function HelpCenterPage() {
   return (
     <div className="flex justify-center items-center px-4 mb-12">
       <div className="w-full max-w-[900px] mt-8 xl:mt-12 flex flex-col gap-8 p-6">
-        {/* Cabeçalho */}
         <section className="w-full">
           <h1 className="font-inter font-bold text-[1.5rem] sm:text-[2rem] xl:text-[2.5rem] text-[#121417]">
             Help Center
@@ -61,7 +60,6 @@ function HelpCenterPage() {
           </p>
         </section>
 
-        {/* FAQ */}
         <section className="w-full flex flex-col gap-6">
           <h5 className="font-inter font-bold text-[1.2rem] sm:text-[1.4rem] xl:text-[1.5rem] text-[#121417]">
             Frequently Asked Questions
@@ -91,7 +89,6 @@ function HelpCenterPage() {
                   />
                 </div>
 
-                {/* Resposta com animação */}
                 <div
                   className={`px-3 pb-3 font-inter text-[#61738A] text-[0.85rem] sm:text-[0.9rem] xl:text-[0.8rem] transition-all duration-300 ease-in-out`}
                   style={{
@@ -106,7 +103,6 @@ function HelpCenterPage() {
           </div>
         </section>
 
-        {/* Help */}
         <section className="w-full flex flex-col gap-6">
           <h5 className="font-inter font-bold text-[1.2rem] sm:text-[1.4rem] xl:text-[1.5rem] text-[#121417]">
             Need help? Get in touch
