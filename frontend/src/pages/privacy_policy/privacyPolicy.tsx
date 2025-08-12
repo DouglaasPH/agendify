@@ -5,7 +5,7 @@ function PrivacyPolicyPage() {
   return (
     <div className="flex justify-center items-center p-[0.4rem] mb-[8rem] xl:p-0">
       <div className="w-92 xl:w-270 xl:mt-12 mt-8 flex flex-col justify-center items-center gap-20">
-        <div className="flex flex-col justify-center items-center gap-10">
+        <div className="flex flex-col justify-center gap-10">
           <div>
             <h1 className="font-inter font-bold text-[1.5rem] sm:text-[2rem] xl:text-[2.5rem] text-[#121417]">
               Privacy Policy
