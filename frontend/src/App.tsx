@@ -12,6 +12,8 @@ import HelpCenterPage from "./pages/help_center/helpCenter";
 import ContactPage from "./pages/contact/contact";
 import PrivacyPolicyPage from "./pages/privacy_policy/privacyPolicy";
 import TermsOfUsePage from "./pages/terms_of_use/termsOfUse";
+import LoginPage from "./pages/login/login";
+import RegisterPage from "./pages/register/register";
 
 // Components
 import NavBar from "./components/navbar/navBar";
@@ -65,6 +67,22 @@ const browserRoutes = createBrowserRouter(
         element={
           <>
             <NavBar /> <TermsOfUsePage /> <FooterBar />
+          </>
+        }
+      />
+      <Route
+        path="login"
+        element={
+          <>
+            <NavBar /> <LoginPage /> <FooterBar />
+          </>
+        }
+      />
+      <Route
+        path="register"
+        element={
+          <>
+            <NavBar /> <RegisterPage /> <FooterBar />
           </>
         }
       />
