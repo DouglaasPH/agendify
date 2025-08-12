@@ -1,4 +1,9 @@
 import { useState } from "react";
+
+// font
+import "../../css/font.css";
+
+// vector
 import arrowVector from "../../assets/vectors/arrow.svg";
 
 function HelpCenterPage() {

@@ -1,3 +1,6 @@
+// font
+import "../../css/font.css";
+
 // vectors
 import emailVector from "../../assets/vectors/email.svg";
 import phoneVector from "../../assets/vectors/phone.svg";

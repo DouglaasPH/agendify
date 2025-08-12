@@ -1,3 +1,7 @@
+// font
+import "../../css/font.css";
+
+// avatars
 import avatarOne from "../../assets/avatars/36.png";
 import avatarTwo from "../../assets/avatars/35.png";
 import avatarThree from "../../assets/avatars/1.png";
