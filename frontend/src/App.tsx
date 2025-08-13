@@ -11,7 +11,7 @@ import AboutUsPage from "./pages/about_us/aboutUs";
 import HelpCenterPage from "./pages/help_center/helpCenter";
 import ContactPage from "./pages/contact/contact";
 import PrivacyPolicyPage from "./pages/privacy_policy/privacyPolicy";
-import TermsOfUsePage from "./pages/terms_of_use/termsOfUse";
+import AcceptTermsOfUsePage from "./pages/accept_terms_of_use/acceptTermsOfUse";
 import LoginPage from "./pages/login/login";
 import RegisterPage from "./pages/register/register";
 
@@ -63,14 +63,6 @@ const browserRoutes = createBrowserRouter(
         }
       />
       <Route
-        path="terms-of-use"
-        element={
-          <>
-            <NavBar /> <TermsOfUsePage /> <FooterBar />
-          </>
-        }
-      />
-      <Route
         path="login"
         element={
           <>
@@ -83,6 +75,14 @@ const browserRoutes = createBrowserRouter(
         element={
           <>
             <NavBar /> <RegisterPage /> <FooterBar />
+          </>
+        }
+      />
+      <Route
+        path="register/accept-terms-of-use"
+        element={
+          <>
+            <NavBar /> <AcceptTermsOfUsePage /> <FooterBar />
           </>
         }
       />
