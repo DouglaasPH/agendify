@@ -18,6 +18,7 @@ import RegisterPage from "./pages/register/register";
 // Components
 import NavBar from "./components/navbar/navBar";
 import FooterBar from "./components/footerbar/footerBar";
+import ChooseYourAvatarPage from "./pages/choose_your_avatar/chooseYourAvatar";
 
 const browserRoutes = createBrowserRouter(
   createRoutesFromElements(
@@ -83,6 +84,14 @@ const browserRoutes = createBrowserRouter(
         element={
           <>
             <NavBar /> <AcceptTermsOfUsePage /> <FooterBar />
+          </>
+        }
+      />
+      <Route
+        path="choose-your-avatar"
+        element={
+          <>
+            <NavBar /> <ChooseYourAvatarPage /> <FooterBar />
           </>
         }
       />
