@@ -9,8 +9,8 @@ import InTheChatPage from "./components/inTheChat";
 
 function NavBar() {
   const inTheHome = false;
-  const inTheDashboard = false;
-  const inTheChat = true;
+  const inTheDashboard = true;
+  const inTheChat = false;
 
   // TODO: Add logic to direct the types of navbar
 

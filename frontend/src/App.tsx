@@ -14,11 +14,12 @@ import PrivacyPolicyPage from "./pages/privacy_policy/privacyPolicy";
 import AcceptTermsOfUsePage from "./pages/accept_terms_of_use/acceptTermsOfUse";
 import LoginPage from "./pages/login/login";
 import RegisterPage from "./pages/register/register";
+import ChooseYourAvatarPage from "./pages/choose_your_avatar/chooseYourAvatar";
+import UserProfilePage from "./pages/user_profile/userProfile";
 
 // Components
 import NavBar from "./components/navbar/navBar";
 import FooterBar from "./components/footerbar/footerBar";
-import ChooseYourAvatarPage from "./pages/choose_your_avatar/chooseYourAvatar";
 
 const browserRoutes = createBrowserRouter(
   createRoutesFromElements(
@@ -71,27 +72,38 @@ const browserRoutes = createBrowserRouter(
           </>
         }
       />
-      <Route
-        path="register"
-        element={
-          <>
-            <NavBar /> <RegisterPage /> <FooterBar />
-          </>
-        }
-      />
-      <Route
-        path="register/accept-terms-of-use"
-        element={
-          <>
-            <NavBar /> <AcceptTermsOfUsePage /> <FooterBar />
-          </>
-        }
-      />
+      <Route path="register">
+        <Route
+          index
+          element={
+            <>
+              <NavBar /> <RegisterPage /> <FooterBar />
+            </>
+          }
+        />
+        <Route
+          path="accept-terms-of-use"
+          element={
+            <>
+              <NavBar /> <AcceptTermsOfUsePage /> <FooterBar />
+            </>
+          }
+        />
+      </Route>
+
       <Route
         path="choose-your-avatar"
         element={
           <>
             <NavBar /> <ChooseYourAvatarPage /> <FooterBar />
+          </>
+        }
+      />
+      <Route
+        path="user-profile"
+        element={
+          <>
+            <NavBar /> <UserProfilePage /> <FooterBar />
           </>
         }
       />
