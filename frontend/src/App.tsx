@@ -23,6 +23,7 @@ import UserProfilePage from "./pages/user_profile/userProfile";
 import EditDataPage from "./pages/edit_data/edit_data";
 import EditEmailPage from "./pages/edit_email/editEmail";
 import VerifyYourEmailPage from "./pages/verify_your_email/verifyYourEmail";
+import EmailChangeNoticePage from "./pages/email_change_notice/emailChangeNotice";
 
 const browserRoutes = createBrowserRouter(
   createRoutesFromElements(
@@ -135,6 +136,14 @@ const browserRoutes = createBrowserRouter(
         element={
           <>
             <NavBar /> <VerifyYourEmailPage /> <FooterBar />
+          </>
+        }
+      />
+      <Route
+        path="email-change-notice"
+        element={
+          <>
+            <NavBar /> <EmailChangeNoticePage /> <FooterBar />
           </>
         }
       />
