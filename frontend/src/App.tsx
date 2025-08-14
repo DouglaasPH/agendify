@@ -22,6 +22,7 @@ import ChooseYourAvatarPage from "./pages/choose_your_avatar/chooseYourAvatar";
 import UserProfilePage from "./pages/user_profile/userProfile";
 import EditDataPage from "./pages/edit_data/edit_data";
 import EditEmailPage from "./pages/edit_email/editEmail";
+import VerifyYourEmailPage from "./pages/verify_your_email/verifyYourEmail";
 
 const browserRoutes = createBrowserRouter(
   createRoutesFromElements(
@@ -129,6 +130,14 @@ const browserRoutes = createBrowserRouter(
           />
         </Route>
       </Route>
+      <Route
+        path="verify-your-email"
+        element={
+          <>
+            <NavBar /> <VerifyYourEmailPage /> <FooterBar />
+          </>
+        }
+      />
     </Route>
   )
 );
