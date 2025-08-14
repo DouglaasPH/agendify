@@ -16,6 +16,7 @@ import LoginPage from "./pages/login/login";
 import RegisterPage from "./pages/register/register";
 import ChooseYourAvatarPage from "./pages/choose_your_avatar/chooseYourAvatar";
 import UserProfilePage from "./pages/user_profile/userProfile";
+import ChangeAccountPage from "./pages/change_account/changeAccount";
 
 // Components
 import NavBar from "./components/navbar/navBar";
@@ -99,14 +100,24 @@ const browserRoutes = createBrowserRouter(
           </>
         }
       />
-      <Route
-        path="user-profile"
-        element={
-          <>
-            <NavBar /> <UserProfilePage /> <FooterBar />
-          </>
-        }
-      />
+      <Route path="user-profile">
+        <Route
+          index
+          element={
+            <>
+              <NavBar /> <UserProfilePage /> <FooterBar />
+            </>
+          }
+        />
+        <Route
+          path="edit"
+          element={
+            <>
+              <NavBar /> <ChangeAccountPage /> <FooterBar />
+            </>
+          }
+        />
+      </Route>
     </Route>
   )
 );
