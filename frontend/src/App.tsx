@@ -16,7 +16,7 @@ import LoginPage from "./pages/login/login";
 import RegisterPage from "./pages/register/register";
 import ChooseYourAvatarPage from "./pages/choose_your_avatar/chooseYourAvatar";
 import UserProfilePage from "./pages/user_profile/userProfile";
-import ChangeAccountPage from "./pages/change_account/changeAccount";
+import EditDataPage from "./pages/edit_data/edit_data";
 
 // Components
 import NavBar from "./components/navbar/navBar";
@@ -110,10 +110,10 @@ const browserRoutes = createBrowserRouter(
           }
         />
         <Route
-          path="edit"
+          path="edit-data"
           element={
             <>
-              <NavBar /> <ChangeAccountPage /> <FooterBar />
+              <NavBar /> <EditDataPage /> <FooterBar />
             </>
           }
         />

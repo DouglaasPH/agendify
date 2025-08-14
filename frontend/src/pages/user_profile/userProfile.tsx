@@ -5,6 +5,7 @@ import professionVector from "../../assets/vectors/profession.svg";
 import blockedVector from "../../assets/vectors/blocked.svg";
 import deleteVector from "../../assets/vectors/delete.svg";
 import logoutVector from "../../assets/vectors/logout.svg";
+import chainVector from "../../assets/vectors/chain.svg";
 
 function UserProfilePage() {
   const data_user = {
@@ -93,7 +94,23 @@ function UserProfilePage() {
                   <img src={blockedVector} alt="blocked vector" />
                 </div>
                 <h6 className="font-inter font-md text-[0.7rem] sm:text-[0.8rem] xl:text-[0.9rem] text-[#121417]">
-                  Change Data
+                  Edit Data
+                </h6>
+              </div>
+              <div className="w-53 flex flex-row gap-2 items-center cursor-pointer hover:opacity-60">
+                <div className="bg-[#F0F2F5] rounded-xl p-3 flex justify-center items-center">
+                  <img src={emailVector} alt="email vector" />
+                </div>
+                <h6 className="font-inter font-md text-[0.7rem] sm:text-[0.8rem] xl:text-[0.9rem] text-[#121417]">
+                  Change E-mail
+                </h6>
+              </div>
+              <div className="w-53 flex flex-row gap-2 items-center cursor-pointer hover:opacity-60">
+                <div className="bg-[#F0F2F5] rounded-xl p-3 flex justify-center items-center">
+                  <img src={chainVector} alt="chain vector" />
+                </div>
+                <h6 className="font-inter font-md text-[0.7rem] sm:text-[0.8rem] xl:text-[0.9rem] text-[#121417]">
+                  Change Password
                 </h6>
               </div>
               <div className="w-53 flex flex-row gap-2 items-center cursor-pointer hover:opacity-60">

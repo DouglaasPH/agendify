@@ -1,7 +1,6 @@
-function ChangeAccountPage() {
+function EditDataPage() {
   const data_user = {
     name: "Douglas Phelipe",
-    email: "douglas@gmail.com",
     phone_number: "(00) 90000-0000",
     profession: "Dev Full Stack",
     user_avatar_path: "../../../public/avatars/1.png",
@@ -11,7 +10,7 @@ function ChangeAccountPage() {
     <div className="flex justify-center items-center p-[0.4rem] xl:p-0 mb-20">
       <div className="w-92 sm:w-140 xl:w-270 xl:mt-12 mt-8 flex flex-col justify-center items-center gap-10">
         <h1 className=" w-full font-inter font-bold text-[1.5rem] sm:text-[1.65rem] xl:text-[1.8rem] text-[#121417]">
-          Edit Profile
+          Edit Profile Data
         </h1>
         <section className="flex flex-col items-center gap-3">
           <img
@@ -36,16 +35,6 @@ function ChangeAccountPage() {
             <input
               type="text"
               placeholder={data_user.name}
-              className="font-inter font-normal text-[0.6rem] sm:text-[0.7rem] xl:text-[0.8rem] placeholder-[#61738A] text-[#121417] border-none bg-[#E8EDF5] rounded-md p-2 w-full"
-            />
-          </div>
-          <div className="flex flex-col justify-between gap-1 w-full">
-            <p className="font-inter font-medium text-[0.6rem] sm:text-[0.7rem] xl:text-[0.8rem] text-[#121417]">
-              E-mail
-            </p>
-            <input
-              type="email"
-              placeholder={data_user.email}
               className="font-inter font-normal text-[0.6rem] sm:text-[0.7rem] xl:text-[0.8rem] placeholder-[#61738A] text-[#121417] border-none bg-[#E8EDF5] rounded-md p-2 w-full"
             />
           </div>
@@ -83,4 +72,4 @@ function ChangeAccountPage() {
   );
 }
 
-export default ChangeAccountPage;
+export default EditDataPage;
