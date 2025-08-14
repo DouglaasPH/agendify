@@ -30,6 +30,7 @@ import ResetPasswordWithoutLoginPage from "./pages/reset_password_without_login/
 import ResetPasswordWithLoginPage from "./pages/reset_password_with_login/resetPasswordWithLogin";
 import PasswordChangedSuccessfullyPage from "./pages/password_changed_successfully/passwordChangedSuccessfully";
 import DashboardPage from "./pages/dashboard/dashboard";
+import AvailabilityPage from "./pages/availability/availability";
 
 const browserRoutes = createBrowserRouter(
   createRoutesFromElements(
@@ -200,6 +201,14 @@ const browserRoutes = createBrowserRouter(
           element={
             <>
               <NavBar /> <DashboardPage /> <FooterBar />
+            </>
+          }
+        />
+        <Route
+          path="availability"
+          element={
+            <>
+              <NavBar /> <AvailabilityPage /> <FooterBar />
             </>
           }
         />
