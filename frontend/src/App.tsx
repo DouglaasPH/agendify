@@ -5,6 +5,10 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
+// Components
+import NavBar from "./components/navbar/navBar";
+import FooterBar from "./components/footerbar/footerBar";
+
 // Pages
 import HomePage from "./pages/home/home";
 import AboutUsPage from "./pages/about_us/aboutUs";
@@ -17,10 +21,7 @@ import RegisterPage from "./pages/register/register";
 import ChooseYourAvatarPage from "./pages/choose_your_avatar/chooseYourAvatar";
 import UserProfilePage from "./pages/user_profile/userProfile";
 import EditDataPage from "./pages/edit_data/edit_data";
-
-// Components
-import NavBar from "./components/navbar/navBar";
-import FooterBar from "./components/footerbar/footerBar";
+import EditEmailPage from "./pages/edit_email/editEmail";
 
 const browserRoutes = createBrowserRouter(
   createRoutesFromElements(
@@ -109,14 +110,24 @@ const browserRoutes = createBrowserRouter(
             </>
           }
         />
-        <Route
-          path="edit-data"
-          element={
-            <>
-              <NavBar /> <EditDataPage /> <FooterBar />
-            </>
-          }
-        />
+        <Route path="edit">
+          <Route
+            path="user-data"
+            element={
+              <>
+                <NavBar /> <EditDataPage /> <FooterBar />
+              </>
+            }
+          />
+          <Route
+            path="email"
+            element={
+              <>
+                <NavBar /> <EditEmailPage /> <FooterBar />
+              </>
+            }
+          />
+        </Route>
       </Route>
     </Route>
   )
