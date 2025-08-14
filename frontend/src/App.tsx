@@ -25,7 +25,7 @@ import EditEmailPage from "./pages/edit_email/editEmail";
 import VerifyYourEmailPage from "./pages/verify_your_email/verifyYourEmail";
 import EmailChangeNoticePage from "./pages/email_change_notice/emailChangeNotice";
 import EmailVerifiedSuccesfullyPage from "./pages/email_verified_successfully/emailVerifiedSuccessfully";
-import ForgotYourPasswordPage from "./pages/forgot_your_password/forgotYourPassword";
+import ForgotYourPasswordWithLoginPage from "./pages/forgot_your_password_with_login/forgotYourPassword_with_login";
 import ResetPasswordPage from "./pages/reset_password/resetPassword";
 
 const browserRoutes = createBrowserRouter(
@@ -102,7 +102,7 @@ const browserRoutes = createBrowserRouter(
           index
           element={
             <>
-              <NavBar /> <ForgotYourPasswordPage /> <FooterBar />
+              <NavBar /> <ForgotYourPasswordWithLoginPage /> <FooterBar />
             </>
           }
         />

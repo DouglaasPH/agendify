@@ -1,4 +1,4 @@
-function ForgotYourPasswordPage() {
+function ForgotYourPasswordWithLoginPage() {
   return (
     <div className="flex justify-center items-center p-[0.4rem] xl:p-0 mb-20">
       <div className="w-92 sm:w-140 xl:w-180 xl:mt-12 mt-8 flex flex-col justify-center items-center gap-7">
@@ -27,4 +27,4 @@ function ForgotYourPasswordPage() {
   );
 }
 
-export default ForgotYourPasswordPage;
+export default ForgotYourPasswordWithLoginPage;
