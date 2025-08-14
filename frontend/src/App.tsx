@@ -25,8 +25,9 @@ import EditEmailPage from "./pages/edit_email/editEmail";
 import VerifyYourEmailPage from "./pages/verify_your_email/verifyYourEmail";
 import EmailChangeNoticePage from "./pages/email_change_notice/emailChangeNotice";
 import EmailVerifiedSuccesfullyPage from "./pages/email_verified_successfully/emailVerifiedSuccessfully";
-import ForgotYourPasswordWithLoginPage from "./pages/forgot_your_password_with_login/forgotYourPassword_with_login";
-import ResetPasswordPage from "./pages/reset_password/resetPassword";
+import ForgotYourPasswordWithoutLoginPage from "./pages/forgot_your_password_without_login/forgotYourPassword_without_login";
+import ResetPasswordWithoutLoginPage from "./pages/reset_password_without_login/resetPasswordWithoutLogin";
+import ResetPasswordWithLoginPage from "./pages/reset_password_with_login/resetPasswordWithLogin";
 
 const browserRoutes = createBrowserRouter(
   createRoutesFromElements(
@@ -102,7 +103,7 @@ const browserRoutes = createBrowserRouter(
           index
           element={
             <>
-              <NavBar /> <ForgotYourPasswordWithLoginPage /> <FooterBar />
+              <NavBar /> <ForgotYourPasswordWithoutLoginPage /> <FooterBar />
             </>
           }
         />
@@ -110,7 +111,7 @@ const browserRoutes = createBrowserRouter(
           path="reset-password"
           element={
             <>
-              <NavBar /> <ResetPasswordPage /> <FooterBar />
+              <NavBar /> <ResetPasswordWithoutLoginPage /> <FooterBar />
             </>
           }
         />
@@ -146,6 +147,14 @@ const browserRoutes = createBrowserRouter(
             element={
               <>
                 <NavBar /> <EditEmailPage /> <FooterBar />
+              </>
+            }
+          />
+          <Route
+            path="password"
+            element={
+              <>
+                <NavBar /> <ResetPasswordWithLoginPage /> <FooterBar />
               </>
             }
           />

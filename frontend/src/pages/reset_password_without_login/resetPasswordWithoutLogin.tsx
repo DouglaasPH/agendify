@@ -1,4 +1,4 @@
-function ResetPasswordPage() {
+function ResetPasswordWithoutLoginPage() {
   return (
     <div className="flex justify-center items-center p-[0.4rem] xl:p-0 mb-20">
       <div className="w-92 sm:w-140 xl:w-180 xl:mt-12 mt-8 flex flex-col justify-center items-center gap-7">
@@ -8,21 +8,21 @@ function ResetPasswordPage() {
         <section className="flex flex-col justify-between gap-3 w-full">
           <div className="flex flex-col justify-between gap-1 w-full">
             <p className="font-inter font-medium text-[0.6rem] sm:text-[0.7rem] xl:text-[0.8rem] text-[#121417]">
-              E-mail
+              New password
             </p>
             <input
-              type="email"
-              placeholder="youremail@example.com"
+              type="text"
+              placeholder="New password"
               className="font-inter font-normal text-[0.6rem] sm:text-[0.7rem] xl:text-[0.8rem] placeholder-[#61738A] text-[#121417] border border-[#DBE0E5] rounded-md p-2 w-full"
             />
           </div>
           <div className="flex flex-col justify-between gap-1 w-full">
             <p className="font-inter font-medium text-[0.6rem] sm:text-[0.7rem] xl:text-[0.8rem] text-[#121417]">
-              Password
+              Confirm new password
             </p>
             <input
               type="text"
-              placeholder="Your password"
+              placeholder="Confirm new password"
               className="font-inter font-normal text-[0.6rem] sm:text-[0.7rem] xl:text-[0.8rem] placeholder-[#61738A] text-[#121417] border border-[#DBE0E5] rounded-md p-2 w-full"
             />
           </div>
@@ -40,4 +40,4 @@ function ResetPasswordPage() {
   );
 }
 
-export default ResetPasswordPage;
+export default ResetPasswordWithoutLoginPage;
