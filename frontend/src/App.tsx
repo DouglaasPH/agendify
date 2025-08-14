@@ -29,6 +29,7 @@ import ForgotYourPasswordWithoutLoginPage from "./pages/forgot_your_password_wit
 import ResetPasswordWithoutLoginPage from "./pages/reset_password_without_login/resetPasswordWithoutLogin";
 import ResetPasswordWithLoginPage from "./pages/reset_password_with_login/resetPasswordWithLogin";
 import PasswordChangedSuccessfullyPage from "./pages/password_changed_successfully/passwordChangedSuccessfully";
+import DashboardPage from "./pages/dashboard/dashboard";
 
 const browserRoutes = createBrowserRouter(
   createRoutesFromElements(
@@ -193,6 +194,16 @@ const browserRoutes = createBrowserRouter(
           </>
         }
       />
+      <Route path="user">
+        <Route
+          path="dashboard"
+          element={
+            <>
+              <NavBar /> <DashboardPage /> <FooterBar />
+            </>
+          }
+        />
+      </Route>
     </Route>
   )
 );
