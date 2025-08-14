@@ -28,6 +28,7 @@ import EmailVerifiedSuccesfullyPage from "./pages/email_verified_successfully/em
 import ForgotYourPasswordWithoutLoginPage from "./pages/forgot_your_password_without_login/forgotYourPassword_without_login";
 import ResetPasswordWithoutLoginPage from "./pages/reset_password_without_login/resetPasswordWithoutLogin";
 import ResetPasswordWithLoginPage from "./pages/reset_password_with_login/resetPasswordWithLogin";
+import PasswordChangedSuccessfullyPage from "./pages/password_changed_successfully/passwordChangedSuccessfully";
 
 const browserRoutes = createBrowserRouter(
   createRoutesFromElements(
@@ -181,6 +182,14 @@ const browserRoutes = createBrowserRouter(
         element={
           <>
             <NavBar /> <EmailVerifiedSuccesfullyPage /> <FooterBar />
+          </>
+        }
+      />
+      <Route
+        path="password-changed-succesfully"
+        element={
+          <>
+            <NavBar /> <PasswordChangedSuccessfullyPage /> <FooterBar />
           </>
         }
       />
