@@ -25,6 +25,8 @@ import EditEmailPage from "./pages/edit_email/editEmail";
 import VerifyYourEmailPage from "./pages/verify_your_email/verifyYourEmail";
 import EmailChangeNoticePage from "./pages/email_change_notice/emailChangeNotice";
 import EmailVerifiedSuccesfullyPage from "./pages/email_verified_successfully/emailVerifiedSuccessfully";
+import ForgotYourPasswordPage from "./pages/forgot_your_password/forgotYourPassword";
+import ResetPasswordPage from "./pages/reset_password/resetPassword";
 
 const browserRoutes = createBrowserRouter(
   createRoutesFromElements(
@@ -95,7 +97,24 @@ const browserRoutes = createBrowserRouter(
           }
         />
       </Route>
-
+      <Route path="forgot-your-password">
+        <Route
+          index
+          element={
+            <>
+              <NavBar /> <ForgotYourPasswordPage /> <FooterBar />
+            </>
+          }
+        />
+        <Route
+          path="reset-password"
+          element={
+            <>
+              <NavBar /> <ResetPasswordPage /> <FooterBar />
+            </>
+          }
+        />
+      </Route>
       <Route
         path="choose-your-avatar"
         element={
