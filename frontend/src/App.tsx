@@ -24,6 +24,7 @@ import EditDataPage from "./pages/edit_data/edit_data";
 import EditEmailPage from "./pages/edit_email/editEmail";
 import VerifyYourEmailPage from "./pages/verify_your_email/verifyYourEmail";
 import EmailChangeNoticePage from "./pages/email_change_notice/emailChangeNotice";
+import EmailVerifiedSuccesfullyPage from "./pages/email_verified_successfully/emailVerifiedSuccessfully";
 
 const browserRoutes = createBrowserRouter(
   createRoutesFromElements(
@@ -144,6 +145,14 @@ const browserRoutes = createBrowserRouter(
         element={
           <>
             <NavBar /> <EmailChangeNoticePage /> <FooterBar />
+          </>
+        }
+      />
+      <Route
+        path="email-verified-succesfully"
+        element={
+          <>
+            <NavBar /> <EmailVerifiedSuccesfullyPage /> <FooterBar />
           </>
         }
       />
