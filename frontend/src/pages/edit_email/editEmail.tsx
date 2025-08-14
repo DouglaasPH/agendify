@@ -3,7 +3,7 @@ function EditEmailPage() {
     <div className="flex justify-center items-center p-[0.4rem] xl:p-0 mb-20">
       <div className="w-92 sm:w-140 xl:w-270 xl:mt-12 mt-8 flex flex-col justify-center items-center gap-10">
         <h1 className=" w-full font-inter font-bold text-[1.5rem] sm:text-[1.65rem] xl:text-[1.8rem] text-[#121417]">
-          Change e-mail
+          Edit e-mail
         </h1>
         <section className="w-full flex flex-col justify-between gap-3">
           <div className="flex flex-col justify-between gap-1 w-full">
