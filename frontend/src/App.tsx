@@ -162,7 +162,7 @@ const browserRoutes = createBrowserRouter(
         </Route>
       </Route>
       <Route
-        path="verify-your-email"
+        path="verify-your-email-notice"
         element={
           <>
             <NavBar /> <VerifyYourEmailPage /> <FooterBar />
@@ -178,7 +178,7 @@ const browserRoutes = createBrowserRouter(
         }
       />
       <Route
-        path="email-verified-succesfully"
+        path="email-verified-succesfully-notice"
         element={
           <>
             <NavBar /> <EmailVerifiedSuccesfullyPage /> <FooterBar />
@@ -186,7 +186,7 @@ const browserRoutes = createBrowserRouter(
         }
       />
       <Route
-        path="password-changed-succesfully"
+        path="password-changed-succesfully-notice"
         element={
           <>
             <NavBar /> <PasswordChangedSuccessfullyPage /> <FooterBar />
