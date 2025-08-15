@@ -31,6 +31,7 @@ import ResetPasswordWithLoginPage from "./pages/reset_password_with_login/resetP
 import PasswordChangedSuccessfullyPage from "./pages/password_changed_successfully/passwordChangedSuccessfully";
 import DashboardPage from "./pages/dashboard/dashboard";
 import AvailabilityPage from "./pages/availability/availability";
+import AppointmentsPage from "./pages/appointments/appointments";
 
 const browserRoutes = createBrowserRouter(
   createRoutesFromElements(
@@ -209,6 +210,14 @@ const browserRoutes = createBrowserRouter(
           element={
             <>
               <NavBar /> <AvailabilityPage /> <FooterBar />
+            </>
+          }
+        />
+        <Route
+          path="appointment"
+          element={
+            <>
+              <NavBar /> <AppointmentsPage /> <FooterBar />
             </>
           }
         />
