@@ -55,7 +55,7 @@ function AppointmentsPage() {
       <div className="w-120 sm:w-150 xl:w-270 xl:mt-12 mt-8 flex flex-col justify-center items-center gap-10">
         <section className="w-full flex justify-between items-center">
           <h1 className="font-inter font-bold text-[1.8rem] sm:text-[2rem] xl:text-[2.5rem] text-[#121417]">
-            Overview
+            Appointment
           </h1>
           <button className="p-2 pl-1 xl:pl-2 pr-1 xl:pr-2 w-[7rem] sm:w-[8rem] xl:w-[9rem] bg-[#E8EDF5] hover:opacity-80 rounded-lg text-[#121417] font-inter font-bold text-[0.7rem] sm:text-[0.7rem] xl:text-[0.8rem] cursor-pointer">
             New appointment
