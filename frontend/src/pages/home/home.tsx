@@ -36,7 +36,7 @@ function HomePage() {
   }, []);
 
   return (
-    <div className="flex justify-center items-center p-[0.4rem] xl:p-0">
+    <div className="flex justify-center items-center p-[0.4rem] xl:p-0 mb-15">
       <div className="w-92 xl:w-270 xl:mt-12 mt-8 flex flex-col justify-center items-center gap-20">
         <section className="w-full">
           <img
@@ -46,7 +46,7 @@ function HomePage() {
             className="w-full"
           />
           <div
-            className="w-full xl:w-270 absolute flex flex-col justify-between items-center"
+            className="sm:w-80 sm:h-40 xl:h-70 w-full xl:w-270 absolute flex flex-col justify-between items-center"
             style={{
               top:
                 widthScreen < 640
@@ -75,9 +75,9 @@ function HomePage() {
             </button>
           </div>
         </section>
-        <section className="w-full h-135 xl:h-95 flex flex-col justify-between ">
+        <section className="w-full h-135 sm:h-175 xl:h-95 flex flex-col justify-between">
           <div className="w-full">
-            <h2 className="w-full font-inter font-black text-[1.5rem] xl:text-[3rem] text-[#121417]">
+            <h2 className="w-full font-inter font-black text-[1.5rem] sm:text-[2.4rem] xl:text-[3rem] text-[#121417]">
               How agendify works
             </h2>
             <p className="w-full font-inter font-normal text-[0.70rem] xl:text-[0.95rem] text-[#121417]">
@@ -85,8 +85,8 @@ function HomePage() {
               how easy it is:
             </p>
           </div>
-          <div className="h-110 xl:h-60 flex xl:flex-row flex-col justify-between items-center">
-            <div className="w-85 h-35 xl:w-85 p-4 flex flex-col justify-evenly border-1 border-[#DBE0E5] rounded-lg xl:rounded-lg">
+          <div className="h-110 sm:h-130 xl:h-60 flex xl:flex-row flex-col justify-between items-center">
+            <div className="w-85 h-35 sm:h-40 xl:h-full xl:w-85 p-4 flex flex-col justify-evenly border-1 border-[#DBE0E5] rounded-lg xl:rounded-lg">
               <img src={calendar} alt="calendar" className="w-4 xl:w-5" />
               <h4 className="font-inter font-bold text-[0.7rem] xl:text-[0.9rem] text-[#121417]">
                 Create your schedule
@@ -97,7 +97,7 @@ function HomePage() {
                 calendar being populated with appointments.
               </p>
             </div>
-            <div className="w-85 h-35 xl:w-85 p-4 flex flex-col justify-evenly border-1 border-[#DBE0E5] rounded-lg">
+            <div className="w-85 h-35 sm:h-40 xl:h-full xl:w-85 p-4 flex flex-col justify-evenly border-1 border-[#DBE0E5] rounded-lg">
               <img src={clock} alt="clock" className="w-4 xl:w-5" />
               <h4 className="font-inter font-bold text-[0.7rem] xl:text-[0.9rem] text-[#121417]">
                 Share your link
@@ -109,7 +109,7 @@ function HomePage() {
                 platforms.
               </p>
             </div>
-            <div className="w-85 h-35 xl:w-85 p-4 flex flex-col justify-evenly border-1 border-[#DBE0E5] rounded-lg">
+            <div className="w-85 h-35 sm:h-40 xl:h-full xl:w-85 p-4 flex flex-col justify-evenly border-1 border-[#DBE0E5] rounded-lg">
               <img
                 src={groupOfPeople}
                 alt="group of people"
