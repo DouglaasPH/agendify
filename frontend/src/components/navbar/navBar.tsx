@@ -9,13 +9,19 @@ import InTheChatPage from "./components/inTheChat";
 
 function NavBar() {
   const inTheHome = false;
-  const inTheDashboard = true;
-  const inTheChat = false;
+  const inTheDashboard = false;
+  const inTheChat = true;
 
   // TODO: Add logic to direct the types of navbar
 
   return (
-    <div className="w-full h-17 flex flex-row justify-between items-center pl-1 xl:pl-10 pr-1 xl:pr-10 border-b-1 border-b-[#E5E8EB]">
+    <div
+      className="w-full h-17 flex flex-row justify-between items-center pl-1 xl:pl-10 pr-1 xl:pr-10 border-b-1 border-b-[#E5E8EB]"
+      style={{
+        position: inTheChat ? "fixed" : "static",
+        backgroundColor: inTheChat ? "#FFFFFF" : "none",
+      }}
+    >
       <div>
         <img
           src={logo}

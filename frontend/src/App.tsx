@@ -32,6 +32,7 @@ import PasswordChangedSuccessfullyPage from "./pages/password_changed_successful
 import DashboardPage from "./pages/dashboard/dashboard";
 import AvailabilityPage from "./pages/availability/availability";
 import AppointmentsPage from "./pages/appointments/appointments";
+import ChatPage from "./pages/chat/chat";
 
 const browserRoutes = createBrowserRouter(
   createRoutesFromElements(
@@ -222,6 +223,14 @@ const browserRoutes = createBrowserRouter(
           }
         />
       </Route>
+      <Route
+        path="chat"
+        element={
+          <>
+            <NavBar /> <ChatPage />
+          </>
+        }
+      />
     </Route>
   )
 );
