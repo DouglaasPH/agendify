@@ -25,7 +25,7 @@ function ChatPage() {
 
   return (
     <div className="flex justify-center items-center p-[0.4rem] pt-20 xl:pb-15">
-      <div className="h-full w-110 sm:w-200 xl:w-270 xl:mt-12 mt-8 flex flex-col justify-between items-center gap-20">
+      <div className="h-full w-135 sm:w-200 xl:w-270 xl:mt-12 mt-8 flex flex-col justify-between items-center gap-20">
         <h1 className="text-center font-inter font-bold text-[1.5rem] sm:text-[2rem] xl:text-[2.5rem] text-[#121417]">
           Scheduling Assistant
         </h1>
@@ -33,7 +33,7 @@ function ChatPage() {
           {messages.map((msg, index) => (
             <p
               key={index}
-              className={`font-inter font-normal text-[0.8rem] sm:text-[0.8rem] xl:text-[0.9rem] p-2 rounded-lg max-w-[70%] ${
+              className={`font-inter font-normal text-[0.8rem] sm:text-[0.8rem] xl:text-[0.9rem] p-2 rounded-lg max-w-[25rem] break-words ${
                 msg.sender === "user"
                   ? "bg-blue-500 text-[#FFFFFF] self-end"
                   : "bg-gray-300 text-[#121417] self-start"
@@ -44,7 +44,7 @@ function ChatPage() {
           ))}
           <div ref={messagesEndRef} className="w-0 h-0" />
         </section>
-        <section className="bottom-0 fixed w-85 sm:w-160 xl:w-270 h-20 sm:h-20 xl:h-18 bg-[#FFFFFF]">
+        <section className="bottom-0 fixed w-135 sm:w-160 xl:w-270 h-20 sm:h-20 xl:h-18 bg-[#FFFFFF]">
           <div className="w-full h-15 sm:h-14 xl:h-13 bg-[#F0F2F5] rounded-lg flex flex-row justify-between items-center pl-5 pr-5">
             <input
               type="text"

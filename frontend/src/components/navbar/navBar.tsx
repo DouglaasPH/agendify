@@ -16,7 +16,7 @@ function NavBar() {
 
   return (
     <div
-      className="w-full h-17 flex flex-row justify-between items-center pl-1 xl:pl-10 pr-1 xl:pr-10 border-b-1 border-b-[#E5E8EB]"
+      className="w-full h-17 flex flex-row justify-between items-center pl-5 xl:pl-10 pr-5 xl:pr-10 border-b-1 border-b-[#E5E8EB]"
       style={{
         position: inTheChat ? "fixed" : "static",
         backgroundColor: inTheChat ? "#FFFFFF" : "none",
@@ -26,7 +26,7 @@ function NavBar() {
         <img
           src={logo}
           alt="logo"
-          className="hover:opacity-80 cursor-pointer h-[1.3rem] xl:h-[1.8rem]"
+          className="hover:opacity-80 cursor-pointer h-[1.8rem] sm:h-[1.9rem] xl:h-[1.8rem]"
         />
       </div>
       {inTheHome ? <InTheHomePage /> : <></>}
