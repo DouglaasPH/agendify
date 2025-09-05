@@ -1,35 +1,20 @@
-import { useState } from "react";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+
+// Redux
+import type { RootState } from "../../store";
+
+// API
+import { availabilityListApi, type Availability } from "../../api/availability";
 
 type ComponentType = "all" | "free" | "busy";
 
 function AvailabilityPage() {
-  const availability = [
-    {
-      date: "15 de Julho, 2024",
-      start_time: "10:00",
-      end_time: "11:00",
-      status: "free",
-    },
-    {
-      date: "15 de Dezembro, 2024",
-      start_time: "10:00",
-      end_time: "11:00",
-      status: "busy",
-    },
-    {
-      date: "15 de Março, 2024",
-      start_time: "10:00",
-      end_time: "11:00",
-      status: "free",
-    },
-  ];
-
   const [currentComponent, SetCurrentComponent] = useState({
     all: true,
     free: false,
     busy: false,
   });
-
   const handleComponent = (componentClicked: ComponentType) => {
     const newState: {
       all: boolean;
@@ -43,6 +28,20 @@ function AvailabilityPage() {
     newState[componentClicked] = true;
     SetCurrentComponent(newState);
   };
+
+  const access_token = useSelector(
+    (state: RootState) => state.auth.accessToken
+  );
+
+  const [availabilities, setAvailabilities] = useState<Availability[]>([]);
+  useEffect(() => {
+    const fetchAvailabilities = async () => {
+      const allAvailabilities = await availabilityListApi(access_token, {});
+      setAvailabilities(allAvailabilities.data);
+    };
+
+    fetchAvailabilities();
+  }, []);
 
   return (
     <div className="flex justify-center items-center p-[0.4rem] xl:p-0 mb-15">
@@ -94,7 +93,7 @@ function AvailabilityPage() {
           </p>
         </section>
         <section className="w-full rounded-lg border border-[#E5E8EB] flex flex-col">
-          <div className="w-full flex flex-row items-center justify-between p-3 pl-5 pr-20">
+          <div className="w-full flex flex-row items-center justify-between p-3 pl-5 pr-20 border-b border-[#E5E8EB]">
             <p className="font-inter font-medium text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#121417]">
               Date
             </p>
@@ -109,40 +108,48 @@ function AvailabilityPage() {
             </p>
           </div>
           <div>
-            {availability
-              .filter((item) => {
-                if (currentComponent.all) return true;
-                if (currentComponent.free) return item.status === "free";
-                if (currentComponent.busy) return item.status === "busy";
-                return false;
-              })
-              .map((item, index) => (
-                <div
-                  key={index}
-                  className="mb-4 p-2 pl-5 pr-20 border-t border-[#E5E8EB] flex flex-row justify-between"
-                >
-                  <p className="font-inter font-regular text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#61738A]">
-                    {item.date}
-                  </p>
-                  <p className="font-inter font-regular text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#61738A]">
-                    {item.start_time} - {item.end_time}
-                  </p>
-                  <p className="capitalize text-center font-inter font-medium text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#121417] p-2 pl-1 xl:pl-2 pr-1 xl:pr-2 w-[7rem] sm:w-[8rem] xl:w-[9rem] bg-[#E8EDF5] rounded-lg">
-                    {item.status}
-                  </p>
-                  <div className="flex items-center gap-1">
-                    <button className="font-inter font-bold text-[0.6rem] sm:text-[0.7rem] xl:text-[0.95rem] text-[#61738A] cursor-pointer hover:opacity-80">
-                      Edit
-                    </button>
-                    <p className="font-inter font-bold text-[0.6rem] sm:text-[0.7rem] xl:text-[0.95rem] text-[#61738A]">
-                      |
+            {availabilities.length !== 0 ? (
+              availabilities
+                .filter((item) => {
+                  if (currentComponent.all) return true;
+                  if (currentComponent.free) return item.status === "free";
+                  if (currentComponent.busy) return item.status === "busy";
+                  return false;
+                })
+                .map((item, index) => (
+                  <div
+                    key={index}
+                    className="mb-4 p-2 pl-5 pr-20x flex flex-row justify-between"
+                  >
+                    <p className="font-inter font-regular text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#61738A]">
+                      {item.date}
                     </p>
-                    <button className="font-inter font-bold text-[0.6rem] sm:text-[0.7rem] xl:text-[0.95rem] text-[#61738A] cursor-pointer hover:opacity-80">
-                      Delete
-                    </button>
+                    <p className="font-inter font-regular text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#61738A]">
+                      {item.start_time} - {item.end_time}
+                    </p>
+                    <p className="capitalize text-center font-inter font-medium text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#121417] p-2 pl-1 xl:pl-2 pr-1 xl:pr-2 w-[7rem] sm:w-[8rem] xl:w-[9rem] bg-[#E8EDF5] rounded-lg">
+                      {item.status}
+                    </p>
+                    <div className="flex items-center gap-1">
+                      <button className="font-inter font-bold text-[0.6rem] sm:text-[0.7rem] xl:text-[0.95rem] text-[#61738A] cursor-pointer hover:opacity-80">
+                        Edit
+                      </button>
+                      <p className="font-inter font-bold text-[0.6rem] sm:text-[0.7rem] xl:text-[0.95rem] text-[#61738A]">
+                        |
+                      </p>
+                      <button className="font-inter font-bold text-[0.6rem] sm:text-[0.7rem] xl:text-[0.95rem] text-[#61738A] cursor-pointer hover:opacity-80">
+                        Delete
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+            ) : (
+              <div className="h-40 w-full flex justify-center items-center">
+                <p className="font-inter font-bold text-[0.8rem] sm:text-[0.9rem] xl:text-[1.2rem] text-[#61738A] cursor-pointer hover:opacity-80">
+                  No availability.
+                </p>
+              </div>
+            )}
           </div>
         </section>
       </div>

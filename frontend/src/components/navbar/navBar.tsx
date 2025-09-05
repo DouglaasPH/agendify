@@ -1,18 +1,43 @@
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+
+// image
 import logo from "../../assets/logos/1.png";
 
-import "../../css/font.css";
-
 // Components
-import InTheHomePage from "./components/inTheHome";
-import InTheDashboardPages from "./components/inTheDashboardPages";
-import InTheChatPage from "./components/inTheChat";
+import NotLoggedInNavBar from "./components/notLoggedInNavBar";
+import LoggedInNavBar from "./components/loggedInNavBar";
+import InTheChatPage from "./components/inTheChatNavBar";
+
+// redux
+import type { RootState } from "../../store";
 
 function NavBar() {
-  const inTheHome = false;
-  const inTheDashboard = false;
-  const inTheChat = true;
+  const [notLoggedIn, setNotLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [inTheChat, setInTheChat] = useState(false);
+
+  const navigate = useNavigate();
+
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
+
+  const logoClicked = () => navigate("/");
 
   // TODO: Add logic to direct the types of navbar
+  useEffect(() => {
+    if (isAuthenticated) {
+      setNotLoggedIn(false);
+      setLoggedIn(true);
+      setInTheChat(false);
+    } else {
+      setNotLoggedIn(true);
+      setLoggedIn(false);
+      setInTheChat(false);
+    }
+  }, [isAuthenticated]);
 
   return (
     <div
@@ -26,11 +51,12 @@ function NavBar() {
         <img
           src={logo}
           alt="logo"
+          onClick={logoClicked}
           className="hover:opacity-80 cursor-pointer h-[1.8rem] sm:h-[1.9rem] xl:h-[1.8rem]"
         />
       </div>
-      {inTheHome ? <InTheHomePage /> : <></>}
-      {inTheDashboard ? <InTheDashboardPages /> : <></>}
+      {notLoggedIn ? <NotLoggedInNavBar /> : <></>}
+      {loggedIn ? <LoggedInNavBar /> : <></>}
       {inTheChat ? <InTheChatPage /> : <></>}
     </div>
   );

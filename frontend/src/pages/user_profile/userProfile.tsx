@@ -1,3 +1,9 @@
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+// Redux
+import type { RootState } from "../../store";
+
 // vectors
 import emailVector from "../../assets/vectors/email.svg";
 import phoneVector from "../../assets/vectors/phone.svg";
@@ -6,14 +12,37 @@ import blockedVector from "../../assets/vectors/blocked.svg";
 import deleteVector from "../../assets/vectors/delete.svg";
 import logoutVector from "../../assets/vectors/logout.svg";
 import chainVector from "../../assets/vectors/chain.svg";
+import { deleteApi, logoutApi } from "../../api/authApi";
+import { resetUserData } from "../../features/auth/userDataSlice";
+import { logout } from "../../features/auth/authSlice";
 
 function UserProfilePage() {
-  const data_user = {
-    name: "Douglas Phelipe",
-    email: "douglas@gmail.com",
-    phone_number: "(00) 90000-0000",
-    profession: "Dev Full Stack",
-    user_avatar_path: "../../../public/avatars/1.png",
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const data_user = useSelector((state: RootState) => state.userData);
+  const access_token = useSelector(
+    (state: RootState) => state.auth.accessToken
+  );
+  const user_avatar_path = `../../../public/avatars/${data_user.profileAvatarId}.png`;
+
+  const handleDeleteAccount = async () => {
+    try {
+      await deleteApi(access_token);
+      dispatch(resetUserData());
+      dispatch(logout());
+    } catch (error) {
+      return error;
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logoutApi(access_token);
+      dispatch(resetUserData());
+      dispatch(logout());
+    } catch (error) {
+      return error;
+    }
   };
 
   return (
@@ -24,7 +53,7 @@ function UserProfilePage() {
         </h1>
         <section className="flex flex-col items-center gap-3">
           <img
-            src={data_user.user_avatar_path}
+            src={user_avatar_path}
             alt="user avatar"
             className="w-30 sm:w-35 xl:w-45"
           />
@@ -37,7 +66,7 @@ function UserProfilePage() {
             </p>
           </div>
         </section>
-        <section className="w-full flex flex-row justify-between">
+        <section className="w-full xl:w-1/2 flex flex-row justify-between">
           <div className="flex flex-col gap-2">
             <h5 className="w-full font-inter font-bold text-[1rem] xl:text-[1.2rem] text-[#121417]">
               Details
@@ -65,7 +94,7 @@ function UserProfilePage() {
                     Phone Number
                   </h6>
                   <p className="font-inter font-normal text-[0.5rem] sm:text-[0.6rem] xl:text-[0.9rem] text-[#61738A]">
-                    {data_user.phone_number}
+                    {data_user.phoneNumber}
                   </p>
                 </div>
               </div>
@@ -89,7 +118,10 @@ function UserProfilePage() {
               Security
             </h5>
             <div className="flex flex-col gap-2 items-center">
-              <div className="w-53 flex flex-row gap-2 items-center cursor-pointer hover:opacity-60">
+              <div
+                className="w-53 flex flex-row gap-2 items-center cursor-pointer hover:opacity-60"
+                onClick={() => navigate("edit/user-data")}
+              >
                 <div className="bg-[#F0F2F5] rounded-xl p-3 flex justify-center items-center">
                   <img src={blockedVector} alt="blocked vector" />
                 </div>
@@ -97,7 +129,10 @@ function UserProfilePage() {
                   Edit Data
                 </h6>
               </div>
-              <div className="w-53 flex flex-row gap-2 items-center cursor-pointer hover:opacity-60">
+              <div
+                className="w-53 flex flex-row gap-2 items-center cursor-pointer hover:opacity-60"
+                onClick={() => navigate("edit/email")}
+              >
                 <div className="bg-[#F0F2F5] rounded-xl p-3 flex justify-center items-center">
                   <img src={emailVector} alt="email vector" />
                 </div>
@@ -105,7 +140,10 @@ function UserProfilePage() {
                   Change E-mail
                 </h6>
               </div>
-              <div className="w-53 flex flex-row gap-2 items-center cursor-pointer hover:opacity-60">
+              <div
+                className="w-53 flex flex-row gap-2 items-center cursor-pointer hover:opacity-60"
+                onClick={() => navigate("edit/password")}
+              >
                 <div className="bg-[#F0F2F5] rounded-xl p-3 flex justify-center items-center">
                   <img src={chainVector} alt="chain vector" />
                 </div>
@@ -113,7 +151,10 @@ function UserProfilePage() {
                   Change Password
                 </h6>
               </div>
-              <div className="w-53 flex flex-row gap-2 items-center cursor-pointer hover:opacity-60">
+              <div
+                className="w-53 flex flex-row gap-2 items-center cursor-pointer hover:opacity-60"
+                onClick={() => handleDeleteAccount()}
+              >
                 <div className="bg-[#F0F2F5] rounded-xl p-3 flex justify-center items-center">
                   <img src={deleteVector} alt="delete vector" />
                 </div>
@@ -121,7 +162,10 @@ function UserProfilePage() {
                   Delete account
                 </h6>
               </div>
-              <div className="w-53 flex flex-row gap-2 items-center cursor-pointer hover:opacity-60">
+              <div
+                className="w-53 flex flex-row gap-2 items-center cursor-pointer hover:opacity-60"
+                onClick={() => handleLogout()}
+              >
                 <div className="bg-[#F0F2F5] rounded-xl p-3 flex justify-center items-center">
                   <img src={logoutVector} alt="logout vector" />
                 </div>

@@ -1,32 +1,85 @@
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+
+// Redux
+import type { RootState } from "../../store";
+
+// API
+import { appointmentListApi, type Appointment } from "../../api/appointmentApi";
+import { availabilityListApi, type Availability } from "../../api/availability";
+
+interface UserData {
+  appointments_today: number;
+  free_slots: number;
+  next_appointments_quantity: number;
+  next_appointments_data: Appointment[] | null;
+}
+
 function DashboardPage() {
-  const user_data = {
-    appointments_today: 5,
-    free_slots: 3,
-    next_appointments_quantity: 2,
-    next_appointments_data: [
-      {
-        customer: "Sofia",
-        availability: {
-          start_time: "10:00 AM",
-          end_time: "11:00 AM",
-        },
-      },
-      {
-        customer: "Lucas",
-        availability: {
-          start_time: "11:30 AM",
-          end_time: "12:30 AM",
-        },
-      },
-      {
-        customer: "Isabela",
-        availability: {
-          start_time: "02:00 PM",
-          end_time: "03:00 PM",
-        },
-      },
-    ],
-  };
+  const [userData, setUserData] = useState<Partial<UserData>>({
+    appointments_today: 0,
+    free_slots: 0,
+    next_appointments_quantity: 0,
+    next_appointments_data: [],
+  });
+
+  const access_token = useSelector(
+    (state: RootState) => state.auth.accessToken
+  );
+
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      let todayAppointments: Appointment[] = [];
+      let nextAppointment: Appointment[] = [];
+      let freeSlotsAvailabilities: Availability[] = [];
+
+      const today = new Date().toISOString().split("T")[0];
+      const todayDate = new Date(today);
+
+      const allAppointmentsResponse = await appointmentListApi(
+        access_token,
+        {}
+      );
+
+      if (allAppointmentsResponse.data.length !== 0) {
+        todayAppointments = allAppointmentsResponse.data.filter(
+          (appointment: Appointment) =>
+            appointment.availabilities?.date === today
+        );
+        nextAppointment = allAppointmentsResponse.data.filter(
+          (appointment: Appointment) => {
+            if (!appointment.availabilities?.date) return false;
+            return new Date(appointment.availabilities.date) > todayDate;
+          }
+        );
+      }
+
+      const allAvailabilitiesResponse = await availabilityListApi(
+        access_token,
+        {}
+      );
+      if (allAvailabilitiesResponse.data.length !== 0) {
+        freeSlotsAvailabilities = allAvailabilitiesResponse.data.filter(
+          (availability: Availability) => {
+            if (
+              availability.status === "uncoupled" &&
+              new Date(availability.date) >= todayDate
+            )
+              return availability;
+          }
+        );
+      }
+
+      setUserData({
+        appointments_today: todayAppointments.length,
+        next_appointments_quantity: nextAppointment.length,
+        next_appointments_data: nextAppointment,
+        free_slots: freeSlotsAvailabilities.length,
+      });
+    };
+
+    fetchAppointments();
+  }, []);
 
   return (
     <div className="flex justify-center items-center p-[0.4rem] xl:p-0 mb-15">
@@ -45,7 +98,7 @@ function DashboardPage() {
               Appointments Today
             </p>
             <h2 className="font-inter font-bold text-[1.5rem] sm:text-[2rem] xl:text-[2rem] text-[#121417]">
-              {user_data.appointments_today}
+              {userData.appointments_today}
             </h2>
           </div>
           <div className="xl:h-full w-85 flex flex-col justify-center bg-[#F0F2F5] rounded-lg p-8">
@@ -53,7 +106,7 @@ function DashboardPage() {
               Free Slots
             </p>
             <h2 className="font-inter font-bold text-[1.5rem] sm:text-[2rem] xl:text-[2rem] text-[#121417]">
-              {user_data.free_slots}
+              {userData.free_slots}
             </h2>
           </div>
           <div className="xl:h-full w-85 flex flex-col justify-center bg-[#F0F2F5] rounded-lg p-8">
@@ -61,7 +114,7 @@ function DashboardPage() {
               Next Appointments
             </p>
             <h2 className="font-inter font-bold text-[1.5rem] sm:text-[2rem] xl:text-[2rem] text-[#121417]">
-              {user_data.next_appointments_quantity}
+              {userData.next_appointments_quantity}
             </h2>
           </div>
         </section>
@@ -83,13 +136,14 @@ function DashboardPage() {
             Next Appointments
           </h1>
           <div className="flex flex-col justify-between gap-5">
-            {user_data.next_appointments_data.map((data) => (
+            {userData.next_appointments_data?.map((data) => (
               <div>
                 <p className="font-inter font-medium text-[0.7rem] sm:text-[0.8rem] xl:text-[0.9rem] text-[#121417]">
                   Appointment with {data.customer}
                 </p>
                 <p className="font-inter font-normal text-[0.6rem] sm:text-[0.7rem] xl:text-[0.8rem] text-[#61738A]">
-                  {data.availability.start_time} - {data.availability.end_time}
+                  {data.availabilities?.start_time} -{" "}
+                  {data.availabilities?.end_time}
                 </p>
               </div>
             ))}

@@ -1,32 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../store";
+import { appointmentListApi, type Appointment } from "../../api/appointmentApi";
 
 type ComponentType = "all" | "confirmed" | "pending" | "canceled";
 
 function AppointmentsPage() {
-  const availability = [
-    {
-      customer: "Douglas Phelipe",
-      date: "15 de Julho, 2024",
-      start_time: "10:00",
-      end_time: "11:00",
-      status: "confirmed",
-    },
-    {
-      customer: "Alice",
-      date: "15 de Dezembro, 2024",
-      start_time: "10:00",
-      end_time: "11:00",
-      status: "pending",
-    },
-    {
-      customer: "Leone",
-      date: "15 de Março, 2024",
-      start_time: "10:00",
-      end_time: "11:00",
-      status: "canceled",
-    },
-  ];
-
   const [currentComponent, SetCurrentComponent] = useState({
     all: true,
     confirmed: false,
@@ -49,6 +28,21 @@ function AppointmentsPage() {
     newState[componentClicked] = true;
     SetCurrentComponent(newState);
   };
+
+  const access_token = useSelector(
+    (state: RootState) => state.auth.accessToken
+  );
+
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      const allAppointments = await appointmentListApi(access_token, {});
+      setAppointments(allAppointments.data);
+    };
+
+    fetchAppointments();
+  }, []);
 
   return (
     <div className="flex justify-center items-center p-[0.4rem] xl:p-0 mb-15">
@@ -112,7 +106,7 @@ function AppointmentsPage() {
           </p>
         </section>
         <section className="w-full rounded-lg border border-[#E5E8EB] flex flex-col">
-          <div className="w-full flex flex-row items-center justify-between p-3 pl-5 gap-10">
+          <div className="w-full flex flex-row items-center justify-between p-3 pl-5 gap-10 border-b border-[#E5E8EB]">
             <p className="w-1/5 font-inter font-medium text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#121417]">
               Customer
             </p>
@@ -130,46 +124,56 @@ function AppointmentsPage() {
             </p>
           </div>
           <div>
-            {availability
-              .filter((item) => {
-                if (currentComponent.all) return true;
-                if (currentComponent.confirmed)
-                  return item.status === "confirmed";
-                if (currentComponent.pending) return item.status === "pending";
-                if (currentComponent.canceled)
-                  return item.status === "canceled";
-                return false;
-              })
-              .map((item, index) => (
-                <div
-                  key={index}
-                  className="mb-4 p-2 pl-5 pr-10 border-t border-[#E5E8EB] flex flex-row justify-between"
-                >
-                  <p className="w-1/5 font-inter font-regular text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#121417]">
-                    {item.customer}
-                  </p>
-                  <p className="w-1/5 font-inter font-regular text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#61738A]">
-                    {item.date}
-                  </p>
-                  <p className="w-1/5 font-inter font-regular text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#61738A]">
-                    {item.start_time} - {item.end_time}
-                  </p>
-                  <p className="w-1/5 capitalize text-center font-inter font-medium text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#121417] p-2 pl-1 xl:pl-2 pr-1 xl:pr-2 bg-[#E8EDF5] rounded-lg">
-                    {item.status}
-                  </p>
-                  <div className="w-1/5 flex items-center gap-1">
-                    <button className="font-inter font-bold text-[0.6rem] sm:text-[0.7rem] xl:text-[0.95rem] text-[#61738A] cursor-pointer hover:opacity-80">
-                      Mark as completed
-                    </button>
-                    <p className="font-inter font-bold text-[0.6rem] sm:text-[0.7rem] xl:text-[0.95rem] text-[#61738A]">
-                      |
+            {appointments.length !== 0 ? (
+              appointments
+                .filter((item) => {
+                  if (currentComponent.all) return true;
+                  if (currentComponent.confirmed)
+                    return item.status === "confirmed";
+                  if (currentComponent.pending)
+                    return item.status === "pending";
+                  if (currentComponent.canceled)
+                    return item.status === "canceled";
+                  return false;
+                })
+                .map((item, index) => (
+                  <div
+                    key={index}
+                    className="mb-4 p-2 pl-5 pr-10 flex flex-row justify-between"
+                  >
+                    <p className="w-1/5 font-inter font-regular text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#121417]">
+                      {item.customer}
                     </p>
-                    <button className="font-inter font-bold text-[0.6rem] sm:text-[0.7rem] xl:text-[0.95rem] text-[#61738A] cursor-pointer hover:opacity-80">
-                      Cancel
-                    </button>
+                    <p className="w-1/5 font-inter font-regular text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#61738A]">
+                      {item.availabilities.date}
+                    </p>
+                    <p className="w-1/5 font-inter font-regular text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#61738A]">
+                      {item.availabilities.start_time} -{" "}
+                      {item.availabilities.end_time}
+                    </p>
+                    <p className="w-1/5 capitalize text-center font-inter font-medium text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#121417] p-2 pl-1 xl:pl-2 pr-1 xl:pr-2 bg-[#E8EDF5] rounded-lg">
+                      {item.status}
+                    </p>
+                    <div className="w-1/5 flex items-center gap-1">
+                      <button className="font-inter font-bold text-[0.6rem] sm:text-[0.7rem] xl:text-[0.95rem] text-[#61738A] cursor-pointer hover:opacity-80">
+                        Mark as completed
+                      </button>
+                      <p className="font-inter font-bold text-[0.6rem] sm:text-[0.7rem] xl:text-[0.95rem] text-[#61738A]">
+                        |
+                      </p>
+                      <button className="font-inter font-bold text-[0.6rem] sm:text-[0.7rem] xl:text-[0.95rem] text-[#61738A] cursor-pointer hover:opacity-80">
+                        Cancel
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+            ) : (
+              <div className="h-40 w-full flex justify-center items-center">
+                <p className="font-inter font-bold text-[0.8rem] sm:text-[0.9rem] xl:text-[1.2rem] text-[#61738A] cursor-pointer hover:opacity-80">
+                  No Appointment.
+                </p>
+              </div>
+            )}
           </div>
         </section>
       </div>

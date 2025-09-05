@@ -1,7 +1,18 @@
 // font
+import { useNavigate } from "react-router-dom";
 import "../../css/font.css";
+import { useDispatch } from "react-redux";
+import { updateAcceptedTermsOfUse } from "../../features/auth/registerSlice";
 
 function AcceptTermsOfUsePage() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleAccepted = () => {
+    dispatch(updateAcceptedTermsOfUse({ acceptedTermsOfUse: true }));
+    navigate("/register/choose-your-avatar");
+  };
+
   return (
     <div className="flex justify-center items-center p-[0.4rem] mb-[8rem] xl:p-0">
       <div className="w-92 xl:w-270 xl:mt-12 mt-8 flex flex-col justify-center items-center gap-20">
@@ -67,7 +78,10 @@ function AcceptTermsOfUsePage() {
             </p>
           </div>
         </div>
-        <button className="p-3 pl-3 xl:pl-4 pr-3 xl:pr-4 w-35 bg-[#0D78F2] hover:opacity-95 rounded-lg text-[#FFFFFF] font-inter font-bold text-[0.7rem] xl:text-[0.8rem] cursor-pointer">
+        <button
+          className="p-3 pl-3 xl:pl-4 pr-3 xl:pr-4 w-35 bg-[#0D78F2] hover:opacity-95 rounded-lg text-[#FFFFFF] font-inter font-bold text-[0.7rem] xl:text-[0.8rem] cursor-pointer"
+          onClick={() => handleAccepted()}
+        >
           Accept terms
         </button>
       </div>
