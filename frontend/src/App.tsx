@@ -50,6 +50,7 @@ import { resetUserData, updateUserData } from "./features/auth/userDataSlice";
 // API
 import { getUserDataApi, refreshTokenApi } from "./api/authApi";
 import { updateLoading } from "./features/loadingSlice";
+import CreateNewAvailabilityPage from "./pages/create_new_availability/createNewAvailability";
 
 const browserRoutes = createBrowserRouter(
   createRoutesFromElements(
@@ -204,14 +205,24 @@ const browserRoutes = createBrowserRouter(
             </>
           }
         />
-        <Route
-          path="availability"
-          element={
-            <>
-              <NavBar /> <AvailabilityPage /> <FooterBar />
-            </>
-          }
-        />
+        <Route path="availability">
+          <Route
+            index
+            element={
+              <>
+                <NavBar /> <AvailabilityPage /> <FooterBar />
+              </>
+            }
+          />
+          <Route
+            path="create"
+            element={
+              <>
+                <NavBar /> <CreateNewAvailabilityPage /> <FooterBar />
+              </>
+            }
+          />
+        </Route>
         <Route
           path="appointment"
           element={
@@ -247,8 +258,10 @@ function App() {
         );
         dispatch(updateUserData(userDataResponse.data));
       } catch (error) {
-        dispatch(logout());
-        dispatch(resetUserData());
+        if (error.response.status == 401) {
+          dispatch(logout());
+          dispatch(resetUserData());
+        }
       }
     };
 

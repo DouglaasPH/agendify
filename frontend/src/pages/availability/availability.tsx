@@ -6,10 +6,12 @@ import type { RootState } from "../../store";
 
 // API
 import { availabilityListApi, type Availability } from "../../api/availability";
+import { useNavigate } from "react-router-dom";
 
 type ComponentType = "all" | "free" | "busy";
 
 function AvailabilityPage() {
+  const navigate = useNavigate();
   const [currentComponent, SetCurrentComponent] = useState({
     all: true,
     free: false,
@@ -50,7 +52,10 @@ function AvailabilityPage() {
           <h1 className="font-inter font-bold text-[1.8rem] sm:text-[2rem] xl:text-[2.5rem] text-[#121417]">
             Availability
           </h1>
-          <button className="p-2 pl-1 xl:pl-2 pr-1 xl:pr-2 w-[7rem] sm:w-[8rem] xl:w-[9rem] bg-[#E8EDF5] hover:opacity-80 rounded-lg text-[#121417] font-inter font-bold text-[0.7rem] sm:text-[0.7rem] xl:text-[0.8rem] cursor-pointer">
+          <button
+            className="p-2 pl-1 xl:pl-2 pr-1 xl:pr-2 w-[7rem] sm:w-[8rem] xl:w-[9rem] bg-[#E8EDF5] hover:opacity-80 rounded-lg text-[#121417] font-inter font-bold text-[0.7rem] sm:text-[0.7rem] xl:text-[0.8rem] cursor-pointer"
+            onClick={() => navigate("create")}
+          >
             New availability
           </button>
         </section>

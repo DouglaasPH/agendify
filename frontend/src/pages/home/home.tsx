@@ -70,7 +70,10 @@ function HomePage() {
               your schedule, attract more clients, and focus on what you do
               best.
             </p>
-            <button className="p-[0.2rem] sm:p-[0.5rem] xl:p-3 pl-[0.3rem] sm:pl-[1rem] xl:pl-7 pr-[0.3rem] sm:pr-[1rem] xl:pr-7 bg-[#0D78F2] hover:opacity-95 rounded-sm xl:rounded-lg text-[#FFFFFF] font-inter font-bold text-[0.5rem] sm:text-[0.7rem] lg:text-[0.9rem]  xl:text-sm cursor-pointer">
+            <button
+              className="p-[0.2rem] sm:p-[0.5rem] xl:p-3 pl-[0.3rem] sm:pl-[1rem] xl:pl-7 pr-[0.3rem] sm:pr-[1rem] xl:pr-7 bg-[#0D78F2] hover:opacity-95 rounded-sm xl:rounded-lg text-[#FFFFFF] font-inter font-bold text-[0.5rem] sm:text-[0.7rem] lg:text-[0.9rem]  xl:text-sm cursor-pointer"
+              onClick={() => navigate("login")}
+            >
               Start now
             </button>
           </div>
