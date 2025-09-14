@@ -34,7 +34,6 @@ def toSchedule(data: ToSchedule, db: Session = Depends(get_db)):
 
 @router.get("/")
 def listAppointments(
-    user_id: Optional[int] = Query(None),
     availabilities_id: Optional[int] = Query(None),
     status: Optional[str] = Query(None),
     customer: Optional[str] = Query(None),
@@ -46,13 +45,9 @@ def listAppointments(
     current_user: Users = Depends(get_current_user), 
     db: Session = Depends(get_db)
 ):
-    if user_id != current_user.id:
-        raise HTTPException(status_code=403, detail="invalid user_id. The user has a different id.")
-
     query = db.query(Appointments).filter(Appointments.user_id == current_user.id).join(Appointments.availabilities).options(joinedload(Appointments.availabilities))
+    query = query.filter(Appointments.user_id == current_user.id)
     
-    if user_id:
-        query = query.filter(Appointments.user_id == user_id)
     if availabilities_id:
         query = query.filter(Appointments.availabilities_id == availabilities_id)
     if status:

@@ -1,12 +1,22 @@
-import { useState } from "react";
+//import { useState } from "react";
 
 // Vectors
-import selectedVector from "../../assets/vectors/selected.svg";
-import unselectedVector from "../../assets/vectors/unselected.svg";
+//import selectedVector from "../../assets/vectors/selected.svg";
+//import unselectedVector from "../../assets/vectors/unselected.svg";
 
 function CreateNewAvailabilityPage() {
-  const [repetition, setRepetition] = useState("doesNotRepeat");
+  //const [repetition, setRepetition] = useState("doesNotRepeat");
 
+  return (
+    <div>
+      <input type="date" />
+    </div>
+  );
+}
+
+export default CreateNewAvailabilityPage;
+
+/*
   return (
     <div className="flex justify-center items-center p-[0.4rem] xl:p-0 mb-15">
       <div className="w-92 sm:w-140 md:w-170 lg:w-220 xl:w-270 xl:mt-12 mt-8 flex flex-col justify-center items-center gap-20">
@@ -295,6 +305,4 @@ function CreateNewAvailabilityPage() {
       </div>
     </div>
   );
-}
-
-export default CreateNewAvailabilityPage;
+*/

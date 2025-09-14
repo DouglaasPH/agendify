@@ -17,7 +17,7 @@ dependencies = [
     "python-dotenv",
     "alembic (>=1.16.4,<2.0.0)",
     "databases[aiosqlite]",
-    "python-multipart"
+    "python-multipart",
 ]
 
 
