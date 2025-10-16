@@ -1,164 +1,343 @@
+// React
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
 // Redux
 import type { RootState } from "../../store";
 
-// API
-import { availabilityListApi, type Availability } from "../../api/availability";
-import { useNavigate } from "react-router-dom";
+// utils
+import { formatDate, formatHours } from "@/lib/utils";
 
-type ComponentType = "all" | "free" | "busy";
+// motion
+import { motion } from "motion/react";
+
+// API
+import { availabilityListApi } from "@/api/availability";
+
+// Components
+import UserSectionComponent from "@/components/user_section/UserSectionComponent";
+import Cards from "./components/cards";
+import Search from "./components/search";
+import AvailabilitySchedule from "./components/availabilitySchedule";
+import NoAvailabilitiesFound from "./components/noAvailabilitiesFound";
+import PaginationComponent from "./components/pagination";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import TitleAndDescriptionComponent from "./components/titleAndDescriptionComponent";
+import { Card } from "@/components/ui/card";
+
+export interface AvailabilitiesData {
+  id: number;
+  firstColumn: { weekday: string; dateFormatted: string };
+  secondColumn: { start_time: string; end_time: string };
+  thirdColumn: { slot_duration: number };
+  fourthColumn: { status: string };
+  fifthColumn: { customer: string | undefined };
+}
+
+export type Filter = [string, string, [string, string]];
 
 function AvailabilityPage() {
-  const navigate = useNavigate();
-  const [currentComponent, SetCurrentComponent] = useState({
-    all: true,
-    free: false,
-    busy: false,
-  });
-  const handleComponent = (componentClicked: ComponentType) => {
-    const newState: {
-      all: boolean;
-      free: boolean;
-      busy: boolean;
-    } = {
-      all: false,
-      free: false,
-      busy: false,
-    };
-    newState[componentClicked] = true;
-    SetCurrentComponent(newState);
-  };
-
   const access_token = useSelector(
     (state: RootState) => state.auth.accessToken
   );
 
-  const [availabilities, setAvailabilities] = useState<Availability[]>([]);
+  const [filters, setFilters] = useState<Filter>([
+    "All Status",
+    "All Dates",
+    ["Date", "down"],
+  ]);
+  const [amountOfSections, setAmountOfSections] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [availabilitiesData, setAvailabilitiesData] = useState<
+    AvailabilitiesData[]
+  >([]);
+  const [tableDataToView, setTableDataToView] = useState<AvailabilitiesData[]>(
+    []
+  );
+
+  const maxVisible = 3;
+  const start_pagination_item = Math.max(
+    0,
+    Math.min(currentPage - 2, amountOfSections - maxVisible)
+  );
+  const end_pagination_item = start_pagination_item + maxVisible;
+
+  const handleSetFilters = (
+    index: number,
+    typeOrder: string,
+    direction: string
+  ) => {
+    let newFilters: Filter = ["", "", ["", ""]];
+    if (index === 0) {
+      newFilters = [typeOrder, filters[1], filters[2]];
+    } else if (index === 1) {
+      newFilters = [filters[0], typeOrder, filters[2]];
+    } else if (index === 2) {
+      newFilters = [filters[0], filters[1], [typeOrder, direction]];
+    } else {
+      newFilters = filters;
+    }
+    setFilters(newFilters);
+  };
+
+  const handleClearFilters = () => {
+    setFilters(["All Status", "All Dates", ["Date", "down"]]);
+    setTableDataToView(availabilitiesData);
+  };
+
+  const handleSortRows = (
+    selectionIndex: number,
+    typeOrder: string,
+    direction: string
+  ) => {
+    handleSetFilters(selectionIndex, typeOrder, direction);
+
+    const precedence: Record<string, number> = {
+      Available: 1,
+      Occupied: 2,
+      Past: 3,
+    };
+
+    let dataToView: AvailabilitiesData[] = [];
+
+    if (selectionIndex === 0) {
+      switch (typeOrder) {
+        case "All Status":
+          dataToView = availabilitiesData;
+          break;
+        case "Available":
+          dataToView = tableDataToView.filter(
+            (data) => data.fourthColumn.status === "Available"
+          );
+          break;
+        case "Occupied":
+          dataToView = tableDataToView.filter(
+            (data) => data.fourthColumn.status === "Occupied"
+          );
+          break;
+        case "Past":
+          dataToView = tableDataToView.filter(
+            (data) => data.fourthColumn.status === "Past"
+          );
+          break;
+      }
+    } else if (selectionIndex === 1) {
+      const now = new Date();
+      const startOfWeek = new Date(now);
+      const endOfWeek = new Date(now);
+      const currentMonth = now.getMonth();
+      const currentYear = now.getFullYear();
+
+      switch (typeOrder) {
+        case "All Dates":
+          dataToView = availabilitiesData;
+          break;
+        case "This Week":
+          startOfWeek.setDate(now.getDate() - now.getDay());
+          endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+          dataToView = tableDataToView.filter((availabilityData) => {
+            const date = new Date(availabilityData.firstColumn.dateFormatted);
+            return date >= startOfWeek && date <= endOfWeek;
+          });
+          break;
+        case "This Month":
+          dataToView = tableDataToView.filter((availabilityData) => {
+            const date = new Date(availabilityData.firstColumn.dateFormatted);
+            return (
+              date.getMonth() === currentMonth &&
+              date.getFullYear() === currentYear
+            );
+          });
+          break;
+        case "Past":
+          dataToView = tableDataToView.filter((availabilityData) => {
+            const date = new Date(availabilityData.firstColumn.dateFormatted);
+
+            return (
+              date.getFullYear() < currentYear ||
+              (date.getFullYear() === currentYear &&
+                date.getMonth() < currentMonth)
+            );
+          });
+          break;
+      }
+    } else if (selectionIndex === 2) {
+      switch (typeOrder) {
+        case "Date":
+          if (direction === "up") {
+            dataToView = tableDataToView.sort(
+              (a, b) =>
+                new Date(a.firstColumn.dateFormatted).getTime() -
+                new Date(b.firstColumn.dateFormatted).getTime()
+            );
+          } else {
+            dataToView = tableDataToView.sort(
+              (a, b) =>
+                new Date(b.firstColumn.dateFormatted).getTime() -
+                new Date(a.firstColumn.dateFormatted).getTime()
+            );
+          }
+          break;
+        case "Time":
+          if (direction === "up") {
+            dataToView = tableDataToView.sort(
+              (a, b) =>
+                new Date(a.secondColumn.start_time).getTime() -
+                new Date(b.secondColumn.start_time).getTime()
+            );
+          } else {
+            dataToView = tableDataToView.sort(
+              (a, b) =>
+                new Date(b.secondColumn.start_time).getTime() -
+                new Date(a.secondColumn.start_time).getTime()
+            );
+          }
+          break;
+        case "Duration":
+          if (direction === "up") {
+            dataToView = tableDataToView.sort(
+              (a, b) =>
+                a.thirdColumn.slot_duration - b.thirdColumn.slot_duration
+            );
+          } else {
+            dataToView = tableDataToView.sort(
+              (a, b) =>
+                b.thirdColumn.slot_duration - a.thirdColumn.slot_duration
+            );
+          }
+          break;
+        case "Status":
+          if (direction === "up") {
+            dataToView = tableDataToView.sort(
+              (a, b) =>
+                precedence[a.fourthColumn.status] -
+                precedence[b.fourthColumn.status]
+            );
+          } else {
+            dataToView = tableDataToView.sort(
+              (a, b) =>
+                precedence[b.fourthColumn.status] -
+                precedence[a.fourthColumn.status]
+            );
+          }
+          break;
+      }
+    }
+
+    setTableDataToView(dataToView);
+  };
+
   useEffect(() => {
     const fetchAvailabilities = async () => {
       const allAvailabilities = await availabilityListApi(access_token, {});
-      setAvailabilities(allAvailabilities.data);
-    };
 
+      allAvailabilities.data.sort(
+        (a, b) =>
+          new Date(b.start_time).getTime() - new Date(a.start_time).getTime()
+      );
+
+      const data: AvailabilitiesData[] = [];
+
+      allAvailabilities.data.forEach((availability) => {
+        const transformDate = formatDate(availability.start_time);
+        const transformStartTime = formatHours(availability.start_time);
+        const transformEndTime = formatHours(availability.end_time);
+        const customer = availability.appointments?.customer;
+
+        data.push({
+          id: availability.id,
+          firstColumn: transformDate,
+          secondColumn: {
+            start_time: transformStartTime,
+            end_time: transformEndTime,
+          },
+          thirdColumn: {
+            slot_duration: availability.slot_duration_minutes,
+          },
+          fourthColumn: {
+            status:
+              availability.status.charAt(0).toUpperCase() +
+              availability.status.slice(1),
+          },
+          fifthColumn: {
+            customer: customer,
+          },
+        });
+      });
+
+      setAvailabilitiesData(data);
+      setTableDataToView(data);
+    };
     fetchAvailabilities();
-  }, []);
+  }, [access_token]);
+
+  useEffect(() => {
+    setAmountOfSections(Math.ceil(tableDataToView.length / 6));
+  }, [tableDataToView]);
 
   return (
-    <div className="flex justify-center items-center p-[0.4rem] xl:p-0 mb-15">
-      <div className="w-120 sm:w-150 xl:w-270 xl:mt-12 mt-8 flex flex-col justify-center items-center gap-10">
-        <section className="w-full flex justify-between items-center">
-          <h1 className="font-inter font-bold text-[1.8rem] sm:text-[2rem] xl:text-[2.5rem] text-[#121417]">
-            Availability
-          </h1>
-          <button
-            className="p-2 pl-1 xl:pl-2 pr-1 xl:pr-2 w-[7rem] sm:w-[8rem] xl:w-[9rem] bg-[#E8EDF5] hover:opacity-80 rounded-lg text-[#121417] font-inter font-bold text-[0.7rem] sm:text-[0.7rem] xl:text-[0.8rem] cursor-pointer"
-            onClick={() => navigate("create")}
-          >
-            New availability
-          </button>
-        </section>
-        <section className="h-12 w-full flex items-center gap-9 border-b-1 border-b-[#E5E8EB]">
-          <p
-            className="h-full text-center font-inter font-bold text-[0.8rem] sm:text-[0.8rem] xl:text-[0.9rem] transition duration-300 ease-in-out cursor-pointer hover:opacity-80"
-            onClick={() => handleComponent("all")}
-            style={{
-              color: currentComponent.all ? "#121417" : "#61738A",
-              borderBottom: currentComponent.all
-                ? "3px solid #121417"
-                : "3px solid #61738A",
-            }}
-          >
-            All
-          </p>
-          <p
-            className="h-full text-center font-inter font-bold text-[0.8rem] sm:text-[0.8rem] xl:text-[0.9rem] transition duration-300 ease-in-out cursor-pointer hover:opacity-80"
-            onClick={() => handleComponent("free")}
-            style={{
-              color: currentComponent.free ? "#121417" : "#61738A",
-              borderBottom: currentComponent.free
-                ? "3px solid #121417"
-                : "3px solid #61738A",
-            }}
-          >
-            Free
-          </p>
-          <p
-            className="h-full text-center font-inter font-bold text-[0.8rem] sm:text-[0.8rem] xl:text-[0.9rem] transition duration-300 ease-in-out cursor-pointer hover:opacity-80"
-            onClick={() => handleComponent("busy")}
-            style={{
-              color: currentComponent.busy ? "#121417" : "#61738A",
-              borderBottom: currentComponent.busy
-                ? "3px solid #121417"
-                : "3px solid #61738A",
-            }}
-          >
-            Busy
-          </p>
-        </section>
-        <section className="w-full rounded-lg border border-[#E5E8EB] flex flex-col">
-          <div className="w-full flex flex-row items-center justify-between p-3 pl-5 pr-20 border-b border-[#E5E8EB]">
-            <p className="font-inter font-medium text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#121417]">
-              Date
-            </p>
-            <p className="font-inter font-medium text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#121417]">
-              Time
-            </p>
-            <p className="font-inter font-medium text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#121417]">
-              Status
-            </p>
-            <p className="font-inter font-medium text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#61738A]">
-              Actions
-            </p>
-          </div>
-          <div>
-            {availabilities.length !== 0 ? (
-              availabilities
-                .filter((item) => {
-                  if (currentComponent.all) return true;
-                  if (currentComponent.free) return item.status === "free";
-                  if (currentComponent.busy) return item.status === "busy";
-                  return false;
-                })
-                .map((item, index) => (
-                  <div
-                    key={index}
-                    className="mb-4 p-2 pl-5 pr-20x flex flex-row justify-between"
-                  >
-                    <p className="font-inter font-regular text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#61738A]">
-                      {item.date}
-                    </p>
-                    <p className="font-inter font-regular text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#61738A]">
-                      {item.start_time} - {item.end_time}
-                    </p>
-                    <p className="capitalize text-center font-inter font-medium text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#121417] p-2 pl-1 xl:pl-2 pr-1 xl:pr-2 w-[7rem] sm:w-[8rem] xl:w-[9rem] bg-[#E8EDF5] rounded-lg">
-                      {item.status}
-                    </p>
-                    <div className="flex items-center gap-1">
-                      <button className="font-inter font-bold text-[0.6rem] sm:text-[0.7rem] xl:text-[0.95rem] text-[#61738A] cursor-pointer hover:opacity-80">
-                        Edit
-                      </button>
-                      <p className="font-inter font-bold text-[0.6rem] sm:text-[0.7rem] xl:text-[0.95rem] text-[#61738A]">
-                        |
-                      </p>
-                      <button className="font-inter font-bold text-[0.6rem] sm:text-[0.7rem] xl:text-[0.95rem] text-[#61738A] cursor-pointer hover:opacity-80">
-                        Delete
-                      </button>
-                    </div>
-                  </div>
-                ))
+    <main className="flex flex-col gap-10 pb-50">
+      {/* header section */}
+      {/* Title, description and button of add new availability */}
+      <TitleAndDescriptionComponent />
+
+      {/* main section */}
+      <section className="flex flex-col justify-center items-center gap-10 px-10 lg:px-20 w-full">
+        {/* Cards */}
+        <Cards availabilitiesData={availabilitiesData} />
+
+        {/* search section */}
+        <Search
+          filters={filters}
+          handleSortRows={handleSortRows}
+          availabilitiesData={availabilitiesData}
+          tableDataToView={tableDataToView}
+          setTableDataToView={setTableDataToView}
+        />
+
+        {/* Availability Schedule OR No Availabilities Found */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.9, duration: 0.4 }}
+          className="w-full"
+        >
+          <Card className="w-full">
+            {amountOfSections > 0 ? (
+              <AvailabilitySchedule
+                availabilitiesData={availabilitiesData}
+                tableDataToView={tableDataToView}
+                setTableDataToView={setTableDataToView}
+                setAvailabilitiesData={setAvailabilitiesData}
+                currentPage={currentPage}
+                amountOfSections={amountOfSections}
+                filters={filters}
+                handleSortRows={handleSortRows}
+                start_pagination_item={start_pagination_item}
+                end_pagination_item={end_pagination_item}
+                access_token={access_token}
+              />
             ) : (
-              <div className="h-40 w-full flex justify-center items-center">
-                <p className="font-inter font-bold text-[0.8rem] sm:text-[0.9rem] xl:text-[1.2rem] text-[#61738A] cursor-pointer hover:opacity-80">
-                  No availability.
-                </p>
-              </div>
+              <NoAvailabilitiesFound handleClearFilters={handleClearFilters} />
             )}
-          </div>
-        </section>
-      </div>
-    </div>
+          </Card>
+        </motion.div>
+
+        {/* Pagination Section */}
+        {amountOfSections > 0 ? (
+          <PaginationComponent
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            amountOfSections={amountOfSections}
+            start_pagination_item={start_pagination_item}
+            end_pagination_item={end_pagination_item}
+          />
+        ) : null}
+      </section>
+    </main>
   );
 }
 

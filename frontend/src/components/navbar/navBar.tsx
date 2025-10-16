@@ -1,9 +1,7 @@
+// react
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-
-// image
-import logo from "../../assets/logos/1.png";
 
 // Components
 import NotLoggedInNavBar from "./components/notLoggedInNavBar";
@@ -12,6 +10,9 @@ import InTheChatPage from "./components/inTheChatNavBar";
 
 // redux
 import type { RootState } from "../../store";
+
+// motion
+import { motion } from "motion/react";
 
 function NavBar() {
   const [notLoggedIn, setNotLoggedIn] = useState(false);
@@ -39,26 +40,30 @@ function NavBar() {
     }
   }, [isAuthenticated]);
 
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <div
-      className="w-full h-17 flex flex-row justify-between items-center pl-5 xl:pl-10 pr-5 xl:pr-10 border-b-1 border-b-[#E5E8EB]"
-      style={{
-        position: inTheChat ? "fixed" : "static",
-        backgroundColor: inTheChat ? "#FFFFFF" : "none",
-      }}
+    <motion.div
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all w-screen duration-500 h-17 border-b-2 border-gray-200 ${
+        isScrolled
+          ? "bg-white/95 backdrop-blur-xl shadow-2xl"
+          : "bg-white/80 backdrop-blur-sm"
+      }`}
     >
-      <div>
-        <img
-          src={logo}
-          alt="logo"
-          onClick={logoClicked}
-          className="hover:opacity-80 cursor-pointer h-[1.8rem] sm:h-[1.9rem] xl:h-[1.8rem]"
-        />
-      </div>
-      {notLoggedIn ? <NotLoggedInNavBar /> : <></>}
-      {loggedIn ? <LoggedInNavBar /> : <></>}
-      {inTheChat ? <InTheChatPage /> : <></>}
-    </div>
+      <LoggedInNavBar />
+    </motion.div>
   );
 }
 

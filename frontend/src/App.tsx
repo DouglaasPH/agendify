@@ -19,38 +19,67 @@ import NavBar from "./components/navbar/navBar";
 import FooterBar from "./components/footerbar/footerBar";
 
 // Pages
-import HomePage from "./pages/home/home";
-import AboutUsPage from "./pages/about_us/aboutUs";
-import HelpCenterPage from "./pages/help_center/helpCenter";
-import ContactPage from "./pages/contact/contact";
-import PrivacyPolicyPage from "./pages/privacy_policy/privacyPolicy";
-import AcceptTermsOfUsePage from "./pages/accept_terms_of_use/acceptTermsOfUse";
-import LoginPage from "./pages/login/login";
+import HomePage from "./pages/home/homePage";
+import AboutUsPage from "./pages/about_us/aboutUsPage";
+import HelpCenterPage from "./pages/help_center/helpCenterPage";
+import ContactPage from "./pages/contact/contactPage";
+import TermsOfUsePage from "./pages/termsOfUsePage/termsOfUsePage";
+import AcceptTermsOfUsePage from "./pages/accept_terms_of_use/acceptTermsOfUsePage";
+import LoginPage from "./pages/loginPage/loginPage";
 import RegisterPage from "./pages/register/register";
-import ChooseYourAvatarPage from "./pages/choose_your_avatar/chooseYourAvatar";
-import UserProfilePage from "./pages/user_profile/userProfile";
-import EditDataPage from "./pages/edit_data/edit_data";
+import ChooseYourAvatarPage from "./pages/choose_your_avatar/chooseYourAvatarPage";
+import UserProfilePage from "./pages/user_profile/userProfilePage";
+import EditDataPage from "./pages/edit_data/edit_dataPage";
 import EditEmailPage from "./pages/edit_email/editEmail";
-//import VerifyYourEmailPage from "./pages/verify_your_email/verifyYourEmail";
-//import EmailChangeNoticePage from "./pages/email_change_notice/emailChangeNotice";
-//import EmailVerifiedSuccesfullyPage from "./pages/email_verified_successfully/emailVerifiedSuccessfully";
+import EmailVerifiedSuccesfullyPage from "./pages/email_verified_successfully/emailVerifiedSuccessfully";
 import ForgotYourPasswordWithoutLoginPage from "./pages/forgot_your_password_without_login/forgotYourPassword_without_login";
-import ResetPasswordWithoutLoginPage from "./pages/reset_password_without_login/resetPasswordWithoutLogin";
-import ResetPasswordWithLoginPage from "./pages/reset_password_with_login/resetPasswordWithLogin";
+import ResetPasswordWithoutLoginPage from "./pages/reset_password_without_login/resetPasswordWithoutLoginPage";
+import ResetPasswordWithLoginPage from "./pages/reset_password_with_login/resetPasswordWithLoginPage";
 import PasswordChangedSuccessfullyPage from "./pages/password_changed_successfully/passwordChangedSuccessfully";
 import DashboardPage from "./pages/dashboard/dashboard";
 import AvailabilityPage from "./pages/availability/availability";
 import AppointmentsPage from "./pages/appointments/appointments";
 import ChatPage from "./pages/chat/chat";
+import CreateNewAvailabilityPage from "./pages/create_new_availability/createNewAvailability";
+import PrivacyPolicyPage from "./pages/privacy_policy/privacyPolicy";
 
 // Redux
 import { logout, setAccessToken } from "./features/auth/authSlice";
 import { resetUserData, updateUserData } from "./features/auth/userDataSlice";
+import { updateLoading } from "./features/loadingSlice";
 
 // API
 import { getUserDataApi, refreshTokenApi } from "./api/authApi";
-import { updateLoading } from "./features/loadingSlice";
-import CreateNewAvailabilityPage from "./pages/create_new_availability/createNewAvailability";
+
+// URLs
+// /terms-of-use OK
+// privacy-policy OK
+// /about-us OK
+// /contact OK
+// /help-center OK
+
+// /login OK
+
+// /register OK
+// /register/accept-terms-of-use OK
+// /register/choose-your-avatar OK
+
+// /forgot-your-password OK
+// /forgot-your-password/reset-password OK
+
+// /user/profile OK
+// /user/edit/user-data OK
+// /user/edit/email OK
+// /user/edit/email/succesfully OK
+// /user/edit/password OK
+// /user/password-changed-succesfully-notice OK
+
+// /user/dashboard OK
+// /user/availability OK
+// /user/availability/create PENDING
+// /user/appointment PENDING
+
+// chat PENDING
 
 const browserRoutes = createBrowserRouter(
   createRoutesFromElements(
@@ -88,6 +117,14 @@ const browserRoutes = createBrowserRouter(
         }
       />
       <Route
+        path="terms-of-use"
+        element={
+          <>
+            <NavBar /> <TermsOfUsePage /> <FooterBar />
+          </>
+        }
+      />
+      <Route
         path="privacy-policy"
         element={
           <>
@@ -100,7 +137,7 @@ const browserRoutes = createBrowserRouter(
           path="login"
           element={
             <>
-              <NavBar /> <LoginPage /> <FooterBar />
+              <LoginPage />
             </>
           }
         />
@@ -109,7 +146,7 @@ const browserRoutes = createBrowserRouter(
             index
             element={
               <>
-                <NavBar /> <RegisterPage /> <FooterBar />
+                <RegisterPage />
               </>
             }
           />
@@ -118,7 +155,7 @@ const browserRoutes = createBrowserRouter(
               path="accept-terms-of-use"
               element={
                 <>
-                  <NavBar /> <AcceptTermsOfUsePage /> <FooterBar />
+                  <AcceptTermsOfUsePage />
                 </>
               }
             />
@@ -126,7 +163,7 @@ const browserRoutes = createBrowserRouter(
               path="choose-your-avatar"
               element={
                 <>
-                  <NavBar /> <ChooseYourAvatarPage /> <FooterBar />
+                  <ChooseYourAvatarPage />
                 </>
               }
             />
@@ -137,7 +174,7 @@ const browserRoutes = createBrowserRouter(
             index
             element={
               <>
-                <NavBar /> <ForgotYourPasswordWithoutLoginPage /> <FooterBar />
+                <ForgotYourPasswordWithoutLoginPage />
               </>
             }
           />
@@ -145,13 +182,13 @@ const browserRoutes = createBrowserRouter(
             path="reset-password"
             element={
               <>
-                <NavBar /> <ResetPasswordWithoutLoginPage /> <FooterBar />
+                <ResetPasswordWithoutLoginPage />
               </>
             }
           />
         </Route>
       </Route>
-      <Route path="user" element={<VerifyAuthentication />}>
+      <Route path="user">
         <Route path="profile">
           <Route
             index
@@ -171,32 +208,40 @@ const browserRoutes = createBrowserRouter(
                 </>
               }
             />
-            <Route
-              path="email"
-              element={
-                <>
-                  <NavBar /> <EditEmailPage /> <FooterBar />
-                </>
-              }
-            />
-            <Route
-              path="password"
-              element={
-                <>
-                  <NavBar /> <ResetPasswordWithLoginPage /> <FooterBar />
-                </>
-              }
-            />
+            <Route path="email">
+              <Route
+                index
+                element={
+                  <>
+                    <NavBar /> <EditEmailPage /> <FooterBar />
+                  </>
+                }
+              />
+              <Route
+                path="succesfully"
+                element={<EmailVerifiedSuccesfullyPage />}
+              />
+            </Route>
+            <Route path="password">
+              <Route
+                index
+                element={
+                  <>
+                    <NavBar /> <ResetPasswordWithLoginPage /> <FooterBar />
+                  </>
+                }
+              />
+              <Route
+                path="succesfully"
+                element={
+                  <>
+                    <NavBar /> <PasswordChangedSuccessfullyPage /> <FooterBar />
+                  </>
+                }
+              />
+            </Route>
           </Route>
         </Route>
-        <Route
-          path="password-changed-succesfully-notice"
-          element={
-            <>
-              <NavBar /> <PasswordChangedSuccessfullyPage /> <FooterBar />
-            </>
-          }
-        />
         <Route
           path="dashboard"
           element={
@@ -277,3 +322,6 @@ function App() {
 }
 
 export default App;
+
+// user/
+// element={<VerifyAuthentication />}

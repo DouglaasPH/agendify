@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import sendVector from "../../../src/assets/vectors/send.svg";
 
 function ChatPage() {
   const [messages, SetMessages] = useState([
@@ -57,13 +56,7 @@ function ChatPage() {
             <button
               onClick={handleSend}
               className="bg-[#0D78F2] h-9 w-12 sm:h-9 sm:w-12 xl:h-9 xl:w-13 flex justify-center items-center rounded-xl cursor-pointer hover:opacity-95"
-            >
-              <img
-                src={sendVector}
-                alt=""
-                className=" h-[24px] w-[25px] sm:w-[23px] sm:h-[24] xl:w-[25px] xl:h-[24px]"
-              />
-            </button>
+            ></button>
           </div>
         </section>
       </div>

@@ -1,31 +1,144 @@
+// react
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+// motion
+import { motion } from "motion/react";
 
 // Redux
+import { useSelector } from "react-redux";
 import type { RootState } from "../../store";
+
+// lucide
+import {
+  Calendar,
+  CalendarCheck,
+  CalendarPlus,
+  ChartColumn,
+  ChevronRight,
+  Clock,
+  Clock3,
+  MessageCircle,
+  TrendingUp,
+  Users,
+} from "lucide-react";
+
+// shadcn/ui
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+
+// components (graphics and user section)
+import PieChartGraphicComponent from "./components/pieChartGraphicComponent";
+import SimpleLineChartGraphicCompoent from "./components/simpleLineChartGraphicComponent";
+import UserSectionComponent from "@/components/user_section/UserSectionComponent";
 
 // API
 import { appointmentListApi, type Appointment } from "../../api/appointmentApi";
 import { availabilityListApi, type Availability } from "../../api/availability";
 
 interface UserData {
-  appointments_today: number;
-  free_slots: number;
-  next_appointments_quantity: number;
-  next_appointments_data: Appointment[] | null;
+  appointments_today: Appointment[] | null;
+  available_slots: Availability[] | null;
+  next_appointments: Appointment[] | null;
+}
+
+interface TodaySchedule {
+  customer: string | undefined;
+  start_time: string;
+  status: string | undefined;
+}
+
+interface AvailableSlots {
+  start_time: string;
+  slot_duration_minutes: number;
 }
 
 function DashboardPage() {
-  const [userData, setUserData] = useState<Partial<UserData>>({
-    appointments_today: 0,
-    free_slots: 0,
-    next_appointments_quantity: 0,
-    next_appointments_data: [],
-  });
-
   const access_token = useSelector(
     (state: RootState) => state.auth.accessToken
   );
+  const navigate = useNavigate();
+
+  const [userData2, setUserData2] = useState<UserData>({
+    appointments_today: [],
+    available_slots: [],
+    next_appointments: [],
+  });
+  const cards = [
+    {
+      label: "Today's Appointments",
+      quantity: userData2.appointments_today?.length,
+      icon: Calendar,
+      gradientColor: "from-blue-600 via-blue-400 to-blue-500",
+    },
+    {
+      label: "Available Slots",
+      quantity: userData2.available_slots?.length,
+      icon: Clock3,
+      gradientColor: "from-green-600 via-green-400 to-green-500",
+    },
+    {
+      label: "Next Appointments",
+      quantity: userData2.next_appointments?.length,
+      icon: Users,
+      gradientColor: "from-purple-600 via-purple-400 to-purple-500",
+    },
+  ];
+
+  const todaySchedule: TodaySchedule[] = [];
+  userData2.appointments_today?.map((current) => {
+    if (current.availabilities.start_time) {
+      const date = new Date(current.availabilities?.start_time);
+      const time = date.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      });
+
+      todaySchedule.push({
+        customer: current.customer,
+        start_time: time,
+        status: current.status,
+      });
+    }
+  });
+
+  const availableSlots: AvailableSlots[] = [];
+  userData2.available_slots?.map((current) => {
+    if (current.start_time) {
+      const date = new Date(current.start_time);
+
+      const today = new Date();
+      const isSameDay =
+        date.getFullYear() === today.getFullYear() &&
+        date.getMonth() === today.getMonth() &&
+        date.getDate() === today.getDate();
+
+      if (isSameDay) {
+        const time = date.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        });
+
+        availableSlots.push({
+          start_time: time,
+          slot_duration_minutes: current.slot_duration_minutes,
+        });
+      }
+    }
+  });
+
+  const [simpleLineData, setSimpleLineData] = useState([
+    { day: "Mon", appointments: 0 },
+    { day: "Tue", appointments: 0 },
+    { day: "Wed", appointments: 0 },
+    { day: "Thu", appointments: 0 },
+    { day: "Fri", appointments: 0 },
+    { day: "Sat", appointments: 0 },
+    { day: "Sun", appointments: 0 },
+  ]);
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -52,105 +165,279 @@ function DashboardPage() {
             return new Date(appointment.availabilities.date) > todayDate;
           }
         );
-      }
 
-      const allAvailabilitiesResponse = await availabilityListApi(
-        access_token,
-        {}
-      );
-      if (allAvailabilitiesResponse.data.length !== 0) {
-        freeSlotsAvailabilities = allAvailabilitiesResponse.data.filter(
-          (availability: Availability) => {
-            if (
-              availability.status === "uncoupled" &&
-              new Date(availability.date) >= todayDate
-            )
-              return availability;
-          }
+        {
+          /*  data for simple line graphic */
+        }
+        const todayy = new Date();
+        const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        const firstDayOfWeek = new Date(todayy);
+        firstDayOfWeek.setDate(todayy.getDate() - todayy.getDay()); // domingo da semana atual
+        firstDayOfWeek.setHours(0, 0, 0, 0);
+
+        const lastDayOfWeek = new Date(firstDayOfWeek);
+        lastDayOfWeek.setDate(firstDayOfWeek.getDate() + 6); // sábado da semana atual
+        lastDayOfWeek.setHours(23, 59, 59, 999);
+
+        const updatedData = simpleLineData.map((dayObj) => {
+          const dayIndex = weekDays.indexOf(dayObj.day);
+
+          const appointmentsCount = allAppointmentsResponse.data.filter(
+            (appointment: Appointment) => {
+              if (!appointment.availabilities?.start_time) return false;
+              const appointmentDate = new Date(
+                appointment.availabilities.start_time
+              );
+
+              // só contar se estiver dentro da semana atual
+              if (
+                appointmentDate < firstDayOfWeek ||
+                appointmentDate > lastDayOfWeek
+              )
+                return false;
+
+              return appointmentDate.getDay() === dayIndex;
+            }
+          ).length;
+
+          return {
+            ...dayObj,
+            appointments: appointmentsCount,
+          };
+        });
+
+        setSimpleLineData(updatedData);
+        const allAvailabilitiesResponse = await availabilityListApi(
+          access_token,
+          {}
         );
+
+        if (allAvailabilitiesResponse.data.length !== 0) {
+          freeSlotsAvailabilities = allAvailabilitiesResponse.data.filter(
+            (availability: Availability) => {
+              if (
+                availability.status === "uncoupled" &&
+                new Date(availability.date) >= todayDate
+              )
+                return availability;
+            }
+          );
+        }
+
+        setUserData2({
+          appointments_today: todayAppointments,
+          next_appointments: nextAppointment,
+          available_slots: freeSlotsAvailabilities,
+        });
       }
-
-      setUserData({
-        appointments_today: todayAppointments.length,
-        next_appointments_quantity: nextAppointment.length,
-        next_appointments_data: nextAppointment,
-        free_slots: freeSlotsAvailabilities.length,
-      });
     };
-
     fetchAppointments();
-  }, []);
+  }, [access_token]);
 
   return (
-    <div className="flex justify-center items-center p-[0.4rem] xl:p-0 mb-15">
-      <div className="w-92 xl:w-270 xl:mt-12 mt-8 flex flex-col justify-center items-center gap-20">
-        <section className="w-full">
-          <h1 className="font-inter font-bold text-[1.5rem] sm:text-[2rem] xl:text-[2.5rem] text-[#121417]">
-            Overview
-          </h1>
-          <p className="font-inter font-normal text-[0.7rem] sm:text-[0.8rem] xl:text-[0.9rem] text-[#61738A]">
-            Here's a summary of your day and upcoming appointments.
-          </p>
-        </section>
-        <section className=" xl:h-40 w-full flex flex-col xl:flex-row justify-between items-center xl:gap-0 gap-10">
-          <div className="xl:h-full w-85 flex flex-col justify-center bg-[#F0F2F5] rounded-lg p-8">
-            <p className="font-inter font-medium text-[0.8rem] sm:text-[0.9rem] xl:text-[1rem] text-[#121417]">
-              Appointments Today
-            </p>
-            <h2 className="font-inter font-bold text-[1.5rem] sm:text-[2rem] xl:text-[2rem] text-[#121417]">
-              {userData.appointments_today}
-            </h2>
-          </div>
-          <div className="xl:h-full w-85 flex flex-col justify-center bg-[#F0F2F5] rounded-lg p-8">
-            <p className="font-inter font-medium text-[0.8rem] sm:text-[0.9rem] xl:text-[1rem] text-[#121417]">
-              Free Slots
-            </p>
-            <h2 className="font-inter font-bold text-[1.5rem] sm:text-[2rem] xl:text-[2rem] text-[#121417]">
-              {userData.free_slots}
-            </h2>
-          </div>
-          <div className="xl:h-full w-85 flex flex-col justify-center bg-[#F0F2F5] rounded-lg p-8">
-            <p className="font-inter font-medium text-[0.8rem] sm:text-[0.9rem] xl:text-[1rem] text-[#121417]">
-              Next Appointments
-            </p>
-            <h2 className="font-inter font-bold text-[1.5rem] sm:text-[2rem] xl:text-[2rem] text-[#121417]">
-              {userData.next_appointments_quantity}
-            </h2>
-          </div>
-        </section>
-        <section className="w-full flex flex-col justify-between gap-10">
-          <h1 className="font-inter font-bold text-[1.2rem] sm:text-[1.5rem] xl:text-[1.8rem] text-[#121417]">
-            Quick Actions
-          </h1>
-          <div className="w-full flex flex-row justify-between">
-            <button className="p-3 pl-2 xl:pl-3 pr-2 xl:pr-3 w-[8rem] sm:w-[8rem] xl:w-[10rem] bg-[#0D78F2] hover:opacity-90 rounded-lg text-[#FFFFFF] font-inter font-bold text-[0.6rem] sm:text-[0.7rem] xl:text-[0.8rem] cursor-pointer">
-              Manage availability
-            </button>
-            <button className="p-3 pl-2 xl:pl-3 pr-2 xl:pr-3 w-[8rem] sm:w-[8rem] xl:w-[10rem] bg-[#E8EDF5] hover:opacity-80 rounded-lg text-[#121417] font-inter font-bold text-[0.6rem] sm:text-[0.7rem] xl:text-[0.8rem] cursor-pointer">
-              Manage customers
-            </button>
-          </div>
-        </section>
-        <section className="w-full flex flex-col justify-between gap-10">
-          <h1 className="font-inter font-bold text-[1.2rem] sm:text-[1.5rem] xl:text-[1.8rem] text-[#121417]">
-            Next Appointments
-          </h1>
-          <div className="flex flex-col justify-between gap-5">
-            {userData.next_appointments_data?.map((data) => (
-              <div>
-                <p className="font-inter font-medium text-[0.7rem] sm:text-[0.8rem] xl:text-[0.9rem] text-[#121417]">
-                  Appointment with {data.customer}
-                </p>
-                <p className="font-inter font-normal text-[0.6rem] sm:text-[0.7rem] xl:text-[0.8rem] text-[#61738A]">
-                  {data.availabilities?.start_time} -{" "}
-                  {data.availabilities?.end_time}
-                </p>
-              </div>
+    <main className="flex flex-col gap-10">
+      {/* header section */}
+      <UserSectionComponent />
+
+      {/* main section */}
+      <section className="grid lg:grid-cols-1 xl:grid-cols-[75%_25%] gap-10 px-10 lg:px-20">
+        {/* quick overviews */}
+        <div className="flex flex-col gap-10">
+          {/* Title */}
+          <motion.h1
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4, delay: 1.2 }}
+            className="font-normal text-2xl leading-tight"
+          >
+            📊 Quick Overview
+          </motion.h1>
+          {/* Cards */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-10">
+            {cards.map((card, index) => (
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: index * 0.1 + 1.2 }}
+              >
+                <Card
+                  className={`relative bg-gradient-to-r ${card.gradientColor} text-white px-8 py-5`}
+                >
+                  <p className="text-sm text-foreground text-white">
+                    {card.label}
+                  </p>
+                  <card.icon className="absolute bottom-12 right-5 -translate-x-1/2 size-10 text-white/80" />
+                  <p className="font-small text-5xl">{card.quantity}</p>
+                </Card>
+              </motion.div>
             ))}
           </div>
-        </section>
-      </div>
-    </div>
+          {/* graphics */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-10">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4, delay: 1.6 }}
+            >
+              <Card className="w-full bg-white p-4 h-80 flex justify-center shadow-xl">
+                <h1 className="flex gap-2 text-xl items-center text-gray-700">
+                  <ChartColumn className="text-blue-500" /> Availability
+                  Overview
+                </h1>
+                <PieChartGraphicComponent
+                  available={
+                    userData2.available_slots?.length != undefined
+                      ? userData2.available_slots?.length
+                      : 0
+                  }
+                  booked={
+                    userData2.appointments_today?.length != undefined &&
+                    userData2.next_appointments?.length != undefined
+                      ? userData2.appointments_today?.length +
+                        userData2.next_appointments?.length
+                      : 0
+                  }
+                />
+              </Card>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4, delay: 1.7 }}
+            >
+              <Card className="w-full bg-white p-4 h-80 flex justify-center shadow-xl">
+                <h1 className="flex gap-2 text-xl items-center text-gray-700">
+                  <TrendingUp className="text-blue-500" /> Weekly Appointments
+                </h1>
+                <SimpleLineChartGraphicCompoent graphic_data={simpleLineData} />
+              </Card>
+            </motion.div>
+          </div>
+        </div>
+
+        {/* today's Highlights and Quick Actions */}
+        <div className="flex flex-col gap-10">
+          {/* title */}
+          <motion.h1
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4, delay: 1.2 }}
+            className="font-normal text-2xl leading-tight"
+          >
+            📅 Today's Highlights
+          </motion.h1>
+          {/* first card: Today's Schedule */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4, delay: 1.3 }}
+          >
+            <Card className="p-4 flex flex-col gap-15">
+              <h1 className="font-normal text-xl leading-tight flex gap-2 items-center">
+                <CalendarCheck className="text-blue-500 size-6" />
+                Today's Schedule
+              </h1>
+              <div className="flex flex-col gap-5">
+                {/* all upcoming appointments of the day */}
+                <div className="flex flex-col gap-4 pb-10 border-b-1 border-b-gray-200">
+                  <p className="text-foregroud text-sm text-gray-400">
+                    Upcoming Appointments
+                  </p>
+                  {/* container */}
+                  <div className="flex flex-col gap-5">
+                    {todaySchedule.map((currentSchedule) => (
+                      <Card className="border-none bg-gray-50 flex flex-row justify-between px-5">
+                        <div className="flex flex-row gap-5 items-center">
+                          <p className="text-xl font-medium text-blue-600">
+                            {currentSchedule.start_time}
+                          </p>
+                          <p className="text-md leading-tight">
+                            {currentSchedule.customer}
+                          </p>
+                        </div>
+                        <Badge className="text-white bg-blue-600">
+                          {currentSchedule.status}
+                        </Badge>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+                {/* Available Slots */}
+                <div className="flex flex-col gap-4">
+                  <p className="text-foregroud text-sm text-gray-400">
+                    Available Slots
+                  </p>
+                  {/* container */}
+                  <div className="flex flex-col gap-5">
+                    {availableSlots.map((currentAvailable) => (
+                      <Card className="h-auto border-green-200 bg-green-50 flex flex-row justify-between items-center px-5 py-2">
+                        <p className="text-lg font-normal text-green-600 flex items-center gap-2">
+                          <Clock className="size-5" />
+                          {currentAvailable.start_time}
+                        </p>
+                        <p className="text-green-600 text-sm">
+                          {currentAvailable.slot_duration_minutes} min
+                        </p>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </motion.div>
+
+          {/* Quick Actions */}
+          <div className="flex flex-col gap-10">
+            <motion.h1
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4, delay: 1.2 }}
+              className="font-normal text-2xl leading-tight"
+            >
+              ⚡ Quick Actions
+            </motion.h1>
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.4, delay: 1.3 }}
+            >
+              <Card className="px-5">
+                <Button
+                  variant="outline"
+                  className="rounded-2xl flex items-center justify-between"
+                  onClick={() => navigate("/user/availability")}
+                >
+                  <span className="flex gap-2 items-center text-gray-600 font-medium">
+                    <Calendar className="text-blue-600" /> Manage Availabilities
+                  </span>
+                  <ChevronRight />
+                </Button>
+                <Button
+                  variant="outline"
+                  className="rounded-2xl flex items-center justify-between"
+                  onClick={() => navigate("/user/appointment")}
+                >
+                  <span className="flex gap-2 items-center text-gray-600 font-medium">
+                    <CalendarPlus className="text-green-600" />
+                    Manage Appointments
+                  </span>
+                  <ChevronRight />
+                </Button>
+                <Button
+                  variant="outline"
+                  className="rounded-2xl flex items-center justify-between"
+                >
+                  <span className="flex gap-2 items-center text-gray-600 font-medium">
+                    <MessageCircle className="text-purple-600" /> User Chat
+                  </span>
+                  <ChevronRight />
+                </Button>
+              </Card>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }
 

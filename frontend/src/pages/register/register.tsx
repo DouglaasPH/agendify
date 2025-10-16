@@ -6,6 +6,29 @@ import { useNavigate } from "react-router-dom";
 import { updateRegister } from "../../features/auth/registerSlice";
 import { checkEmailApi } from "../../api/authApi";
 
+// shadcn/ui
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+
+// motion
+import { motion } from "motion/react";
+
 function RegisterPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -15,30 +38,74 @@ function RegisterPage() {
   const [profession, setProfession] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [validateName, setValidateName] = useState<null | boolean>(null);
   const [validateEmail, setValidateEmail] = useState<null | boolean>(null);
   const [validatePhoneNumber, setValidatePhoneNumber] = useState<
     null | boolean
   >(null);
-  const [validatePassword, setValidatePassword] = useState<null | boolean>(
+  const [validateConfirmationPassword, setValidateConfirmationPassword] =
+    useState<null | boolean>(null);
+  const [validateProfession, setValidateProfession] = useState<null | boolean>(
     null
   );
   const [emailExists, SetEmailExists] = useState<null | boolean>(null);
 
-  const handleInsertEmail = (inputValue: string) => {
-    setEmail(inputValue);
+  const handleValidateName = () => {
+    let state = false;
 
-    const regex = /^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$/;
+    if (fullName !== "") {
+      state = true;
+    }
 
-    if (inputValue.length === 0) setValidateEmail(null);
-    else if (regex.test(email)) setValidateEmail(true);
-    else setValidateEmail(false);
+    setValidateName(state);
+    return state;
   };
 
-  const handleInsertConfirmPassword = (inputValue: string) => {
-    setConfirmPassword(inputValue);
-    if (inputValue.length === 0) setValidatePassword(null);
-    else if (password == inputValue) setValidatePassword(true);
-    else setValidatePassword(false);
+  const handleValidateEmail = () => {
+    const regex = /^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$/;
+    let state = false;
+
+    if (regex.test(email)) {
+      state = true;
+    }
+
+    setValidateEmail(state);
+    return state;
+  };
+
+  const handleValidatePhoneNumber = () => {
+    let state = false;
+
+    if (phoneNumber.length === 0) {
+      state = false;
+    } else if (phoneNumber.length === 18) {
+      state = true;
+    }
+
+    setValidatePhoneNumber(state);
+    return state;
+  };
+
+  const handleValidateProfession = () => {
+    let state = false;
+
+    if (profession !== "") {
+      state = true;
+    }
+
+    setValidateProfession(state);
+    return state;
+  };
+
+  const handleValidateConfirmationPassword = () => {
+    let state = false;
+
+    if (password == confirmPassword) {
+      state = true;
+    }
+
+    setValidateConfirmationPassword(state);
+    return state;
   };
 
   const handleInsertPhoneNumber = (caracter: string) => {
@@ -72,25 +139,15 @@ function RegisterPage() {
     } else return;
 
     setPhoneNumber(newValue);
-
-    if (newValue.length === 0) setValidatePhoneNumber(null);
-    else if (newValue.length === 18) setValidatePhoneNumber(true);
-    else setValidatePhoneNumber(false);
   };
 
   const handleRegister = async () => {
-    console.log(
-      "response",
-      validateEmail,
-      validatePhoneNumber,
-      validatePassword
-    );
     if (
-      fullName != "" &&
-      profession != "" &&
-      validateEmail &&
-      validatePhoneNumber &&
-      validatePassword
+      handleValidateName() &&
+      handleValidateEmail() &&
+      handleValidatePhoneNumber() &&
+      handleValidateProfession() &&
+      handleValidateConfirmationPassword()
     ) {
       try {
         const response = await checkEmailApi(email);
@@ -115,108 +172,164 @@ function RegisterPage() {
   };
 
   return (
-    <div className="flex justify-center items-center p-[0.4rem] xl:p-0 mb-20">
-      <div className="w-92 xl:w-270 xl:mt-12 mt-8 flex flex-col justify-center items-center gap-7">
-        <h1 className="text-center font-inter font-bold text-[1.5rem] sm:text-[2rem] xl:text-[1.8rem] text-[#121417]">
-          Create your account
-        </h1>
-        <section className="flex flex-col items-center gap-5 w-full xl:w-1/3">
-          <input
-            type="text"
-            placeholder="Full name"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            className="font-inter font-normal text-[0.6rem] sm:text-[0.7rem] xl:text-[0.8rem] placeholder-[#61738A] text-[#121417] border-none bg-[#F0F2F5] rounded-md p-3 w-full focus:outline-none"
-          />
-          <input
-            type="text"
-            placeholder="E-mail"
-            value={email}
-            onChange={(e) => handleInsertEmail(e.target.value)}
-            className={`font-inter font-normal text-[0.6rem] sm:text-[0.7rem] xl:text-[0.8rem] placeholder-[#61738A] text-[#121417] focus:outline-none ${
-              validateEmail == null || validateEmail
-                ? "border-none"
-                : "border-2 border-red-800 focus:border-red-800"
-            } bg-[#F0F2F5] rounded-md p-3 w-full`}
-          />
-          <input
-            type="text"
-            placeholder="Phone number"
-            value={phoneNumber}
-            onKeyDown={(e) => handleInsertPhoneNumber(e.key)}
-            className={`font-inter font-normal text-[0.6rem] sm:text-[0.7rem] xl:text-[0.8rem] placeholder-[#61738A] text-[#121417] focus:outline-none ${
-              validatePhoneNumber == null || validatePhoneNumber
-                ? "border-none"
-                : "border-2 border-red-800 focus:border-red-800"
-            } bg-[#F0F2F5] rounded-md p-3 w-full`}
-          />
-          <input
-            type="text"
-            placeholder="Profession"
-            value={profession}
-            onChange={(e) => setProfession(e.target.value)}
-            className="font-inter font-normal text-[0.6rem] sm:text-[0.7rem] xl:text-[0.8rem] placeholder-[#61738A] text-[#121417] border-none bg-[#F0F2F5] rounded-md p-3 w-full focus:outline-none"
-          />
-          <input
-            type="text"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="font-inter font-normal text-[0.6rem] sm:text-[0.7rem] xl:text-[0.8rem] placeholder-[#61738A] text-[#121417] border-none bg-[#F0F2F5] rounded-md p-3 w-full focus:outline-none"
-          />
-          <input
-            type="text"
-            placeholder="Confirm password"
-            value={confirmPassword}
-            onChange={(e) => handleInsertConfirmPassword(e.target.value)}
-            className={`font-inter font-normal text-[0.6rem] sm:text-[0.7rem] xl:text-[0.8rem] placeholder-[#61738A] text-[#121417] focus:outline-none ${
-              validatePassword == null || validatePassword
-                ? "border-none"
-                : "border-2 border-red-800 focus:border-red-800"
-            } bg-[#F0F2F5] rounded-md p-3 w-full`}
-          />
-        </section>
-        <section className="w-full xl:w-1/3 flex flex-col justify-between items-center gap-3">
-          <button
-            className="p-2 pl-2 xl:pl-3 pr-2 xl:pr-3 w-full bg-[#0D78F2] hover:opacity-95 rounded-lg text-[#FFFFFF] font-inter font-bold text-[0.7rem] xl:text-[0.8rem] cursor-pointer"
-            onClick={() => handleRegister()}
-          >
-            Register
-          </button>
-          <p className="text-end font-inter font-regular text-[0.6rem] sm:text-[0.5rem] xl:text-[0.7rem] text-[#61738A] cursor-pointer">
-            Already have an account?{" "}
-            <button
-              className="underline cursor-pointer"
-              onClick={() => navigate("/login")}
-            >
-              Log in
-            </button>
-          </p>
-        </section>
-      </div>
-
-      {emailExists !== null && emailExists ? (
-        <div className="fixed inset-0 bg-black/50 flex flex-row justify-center items-center">
-          <div className=" bg-[#f1f1f1] w-120 sm:w-150 xl:w-150 sm:h-60 h-50 xl:h-60 p-10 rounded-lg   flex flex-col items-center justify-between">
-            <h1 className="text-center font-inter font-bold text-[1.6rem] sm:text-[2rem] xl:text-[1.8rem] text-[#121417]">
-              The email already exists
-            </h1>
-            <button
-              onClick={() => SetEmailExists(null)}
-              className="p-2 sm:p-2 pl-2 xl:pl-3 pr-2 xl:pr-3 w-45 bg-[#0D78F2] hover:opacity-95 rounded-lg text-[#FFFFFF] font-inter font-bold text-[0.7rem] sm:text-[0.8rem] xl:text-[0.7rem] cursor-pointer"
-            >
-              Try again
-            </button>
-            <a
-              className="font-inter font-regular text-[0.6rem] sm:text-[0.7rem] xl:text-[0.8rem] text-[#61738A] cursor-pointer underline"
-              onClick={() => navigate("/forgot-your-password")}
-            >
-              I forgot my password
-            </a>
+    <>
+      {emailExists ? (
+        <div className="fixed w-full h-full flex justify-center top-0 pointer-events-none z-99999">
+          <div className="w-full max-w-sm mt-4">
+            <AlertDialog open={emailExists} onOpenChange={SetEmailExists}>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Existing email!</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    The email address you entered already exists in our
+                    database. Please try a new email address.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogAction>Continue</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </div>
       ) : null}
-    </div>
+      <main className="p-5 h-screen w-full">
+        <motion.div
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="w-full h-full flex justify-center items-center"
+        >
+          <Card className="w-full max-w-sm">
+            <CardHeader>
+              <div className="flex flex-col items-center gap-2 text-center">
+                <h1 className="text-3xl font-normal">Create your account</h1>
+                <p className="text-muted-foreground text-sm text-balance">
+                  Enter your information to get started
+                </p>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <form>
+                <div className="flex flex-col gap-6">
+                  <div className="grid gap-2">
+                    <Label htmlFor="name">Name</Label>
+                    <Input
+                      id="name"
+                      type="name"
+                      placeholder="Name"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      required
+                    />
+                    {validateName == false ? (
+                      <Label className="text-red-800">Add your name.</Label>
+                    ) : null}
+                  </div>
+                  <div className="flex flex-col gap-6">
+                    <div className="grid gap-2">
+                      <Label htmlFor="email">Email</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="m@example.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                      />
+                      {validateEmail == false ? (
+                        <Label className="text-red-800">Invalid email.</Label>
+                      ) : null}
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-6">
+                    <div className="grid gap-2">
+                      <Label htmlFor="phoneNumber">Phone Number</Label>
+                      <Input
+                        id="phoneNumber"
+                        type="phoneNumber"
+                        placeholder="+00 00 90000-0000"
+                        value={phoneNumber}
+                        onKeyDown={(e) => handleInsertPhoneNumber(e.key)}
+                        required
+                      />
+                      {validatePhoneNumber == false ? (
+                        <Label className="text-red-800">
+                          Incomplete phone number.
+                        </Label>
+                      ) : null}
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-6">
+                    <div className="grid gap-2">
+                      <Label htmlFor="profession">Profession</Label>
+                      <Input
+                        id="profession"
+                        type="profession"
+                        placeholder="Your profession"
+                        value={profession}
+                        onChange={(e) => setProfession(e.target.value)}
+                        required
+                      />
+                      {validateProfession == false ? (
+                        <Label>Add your profession.</Label>
+                      ) : null}
+                    </div>
+                  </div>
+
+                  <div className="grid gap-2">
+                    <Label htmlFor="password">Password</Label>
+                    <Input
+                      id="password"
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <div className="grid gap-2">
+                    <Label htmlFor="confirmPassword">Confirm Password</Label>
+                    <Input
+                      id="confirmPassword"
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      required
+                    />
+                    {validateConfirmationPassword == false ? (
+                      <Label htmlFor="password" className="text-red-800">
+                        Different passwords.
+                      </Label>
+                    ) : null}
+                  </div>
+                </div>
+              </form>
+              <div className="mt-8 w-full">
+                <Button
+                  variant="default"
+                  className="w-full"
+                  onClick={() => handleRegister()}
+                >
+                  Create Account
+                </Button>
+              </div>
+            </CardContent>
+            <CardFooter className="flex justify-center items-center">
+              <div className="mt-4 text-center text-sm">
+                Already have an account?{" "}
+                <a
+                  href="/login"
+                  className="hover:underline hover:underline-offset-4 text-blue-600 font-medium"
+                >
+                  Sign in
+                </a>
+              </div>
+            </CardFooter>
+          </Card>
+        </motion.div>
+      </main>
+    </>
   );
 }
 

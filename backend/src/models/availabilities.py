@@ -7,8 +7,9 @@ from database import Base
 
 
 class Status(enum.Enum):
-    busy = "busy"
-    uncoupled= "uncoupled"
+    available = "available"
+    occupied = "occupied"
+    past = "past"
 
 class Availabilities(Base):
     __tablename__ = "availabilities"
@@ -19,6 +20,6 @@ class Availabilities(Base):
     start_time = Column(DateTime, nullable=False)
     end_time = Column(DateTime, nullable=False)
     slot_duration_minutes = Column(Integer, nullable=False)
-    status = Column(Enum(Status), default=Status.busy, nullable=False)
+    status = Column(Enum(Status), native_enum=False, default=Status.available, nullable=False)
     
     appointments = relationship("Appointments", back_populates="availabilities", uselist=False)

@@ -1,53 +1,135 @@
+// components
+import LogoComponent from "@/components/logo/Logo";
+
+// shadcn/ui
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+
+// lucide
+import { ArrowRight, Menu } from "lucide-react";
+
+// motion
+import { motion } from "motion/react";
 import { useNavigate } from "react-router-dom";
 
 function NotLoggedInNavBar() {
   const navigate = useNavigate();
 
-  const homeButtonClicked = () => navigate("/");
-
-  const aboutUsButtonClicked = () => navigate("/about-us");
-
-  const faqButtonClicked = () => navigate("/help-center");
-
-  const createAccountButtonClicked = () => navigate("/register");
-
-  const loginButtonClicked = () => navigate("/login");
+  const navLinks = [
+    { label: "Start", href: "#start" },
+    { label: "About", href: "#about" },
+    { label: "Features", href: "#features" },
+    { label: "Contact", href: "#contact" },
+  ];
 
   return (
-    <div className="w-65 xl:w-110 h-11 flex flex-row justify-between items-center">
-      <button
-        className="font-inter font-medium text-[0.55rem] xl:text-sm cursor-pointer hover:opacity-75"
-        onClick={homeButtonClicked}
+    <nav className="flex justify-between px-10 md:px-0 md:justify-around items-center h-full">
+      <LogoComponent />
+
+      {/* desktop layout */}
+      <section className="md:flex sm:hidden hidden gap-15">
+        {navLinks.map((link, index) => (
+          <motion.a
+            key={link.label}
+            href={link.href}
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.0, duration: 0.2 }}
+            className="relative text-gray-300 hover:text-white transition-all duration-300 group py-2"
+          >
+            <span className="relative z-10 text-white">{link.label}</span>
+            <motion.div
+              className="absolute bottom-0 left-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-300"
+              whileHover={{ width: "100%" }}
+            />
+          </motion.a>
+        ))}
+      </section>
+
+      {/* desktop layout */}
+      <motion.section
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.2, duration: 0.3 }}
+        className="md:flex sm:hidden hidden"
       >
-        Home
-      </button>
-      <button
-        className="font-inter font-medium text-[0.55rem] xl:text-sm cursor-pointer hover:opacity-75"
-        onClick={aboutUsButtonClicked}
-      >
-        About us
-      </button>
-      <button
-        className="font-inter font-medium text-[0.55rem] xl:text-sm cursor-pointer hover:opacity-75"
-        onClick={faqButtonClicked}
-      >
-        FAQ
-      </button>
-      <div className="w-33 xl:w-52 flex flex-row  justify-between items-center">
-        <button
-          className="p-2 pl-2 xl:pl-3 pr-2 xl:pr-3 bg-[#0D78F2] hover:opacity-95 rounded-lg text-[#FFFFFF] font-inter font-bold text-[0.55rem] xl:text-sm cursor-pointer"
-          onClick={createAccountButtonClicked}
+        <Button
+          variant="outline"
+          className="w-30"
+          onClick={() => navigate("/login")}
         >
-          Create Account
-        </button>
-        <button
-          className="p-2 pl-2 xl:pl-3 pr-2 xl:pr-3 bg-[#F0F2F5] hover:opacity-80 rounded-lg text-[#121417] font-inter font-bold text-[0.55rem] xl:text-sm cursor-pointer"
-          onClick={loginButtonClicked}
-        >
-          Login
-        </button>
-      </div>
-    </div>
+          Start Now <ArrowRight className="w-4 h-4" />
+        </Button>
+      </motion.section>
+
+      {/* mobile layout */}
+      <motion.section
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.2, duration: 0.3 }}
+        className="sm:flex md:hidden flex"
+      >
+        <Sheet>
+          <SheetTrigger>
+            <Button className="bg-white/8 border-1 border-white/20 w-10">
+              <Menu className="size-5" />
+            </Button>
+          </SheetTrigger>
+
+          <SheetContent className="grid grid-rows-[1fr_4fr_1fr] border-none bg-gradient-to-b from-black to-gray-900 [&>button]:text-white [&>button>svg]:w-8 [&>button>svg]:h-8">
+            <SheetHeader className="flex justify-center border-b-1 border-b-white/10">
+              <LogoComponent />
+            </SheetHeader>
+            <section className="px-8 pb-4 flex flex-col gap-10 border-b-1 border-b-white/10">
+              {navLinks.map((link, index) => (
+                <motion.a
+                  key={link.label}
+                  href={link.href}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.2, duration: 0.4 }}
+                  className="text-gray-300 hover:bg-red transition-all duration-300 hover:bg-white/5 rounded-lg pl-5 w-full h-15 flex justify-start items-center"
+                >
+                  <span className="relative z-10 text-white text-lg">
+                    {link.label}
+                  </span>
+                </motion.a>
+              ))}
+            </section>
+            <section className="flex flex-col justify-evenly items-center">
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.2 }}
+                className="w-5/8 flex justify-center items-center"
+              >
+                <Button
+                  variant="secondary"
+                  className="cursor-pointer font-semibold text-lg w-full rounded-full"
+                  onClick={() => navigate("/login")}
+                >
+                  Start now
+                  <ArrowRight className="size-4" />
+                </Button>
+              </motion.div>
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6, duration: 0.2 }}
+                className="text-muted-foreground text-sm text-white/50"
+              >
+                Free trial for 15 days
+              </motion.p>
+            </section>
+          </SheetContent>
+        </Sheet>
+      </motion.section>
+    </nav>
   );
 }
 

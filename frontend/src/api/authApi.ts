@@ -2,7 +2,7 @@ import api from "./api";
 import { ROUTES } from "./routes";
 
 interface LoginData {
-  username: string;
+  email: string;
   password: string;
 }
 
@@ -45,7 +45,6 @@ interface PutUserData {
 
 interface PutUserEmail {
   email: string;
-  password: string;
 }
 
 interface PutUserEmailResponse {
@@ -63,7 +62,7 @@ export const loginApi = async (
   user_data: LoginData
 ): Promise<LoginResponse> => {
   const formData = new FormData();
-  formData.append("username", user_data.username);
+  formData.append("username", user_data.email);
   formData.append("password", user_data.password);
 
   return await api.post(ROUTES.auth.login, formData, {

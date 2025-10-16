@@ -2,7 +2,7 @@ from datetime import date, datetime
 from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
 
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload, outerjoin
 
 from database import get_db
 from models.users import Users
@@ -45,7 +45,8 @@ def listAvailability(
     current_user: Users = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    query = db.query(Availabilities).filter(Availabilities.user_id == current_user.id)
+    
+    query = db.query(Availabilities).filter(Availabilities.user_id == current_user.id).outerjoin(Availabilities.appointments).options(joinedload(Availabilities.appointments))
     
     
     if availability_id:

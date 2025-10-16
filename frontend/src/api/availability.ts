@@ -1,4 +1,5 @@
 import api from "./api";
+import type { Appointment } from "./appointmentApi";
 import { ROUTES } from "./routes";
 
 interface Succesfully {
@@ -6,12 +7,14 @@ interface Succesfully {
 }
 
 export interface Availability {
+  id: number;
   user_id: number;
   date: string;
   start_time: string;
   end_time: string;
   slot_duration_minutes: number;
-  status?: string;
+  status: string;
+  appointments?: Appointment;
 }
 
 interface AvailabilityListData {
@@ -69,7 +72,7 @@ export const availabilityDeleteApi = async (
   access_token: string | null,
   availability_id: number
 ): Promise<Succesfully> => {
-  return await api.get(ROUTES.availability.delete(availability_id), {
+  return await api.delete(ROUTES.availability.delete(availability_id), {
     headers: {
       Authorization: `Bearer ${access_token}`,
     },
