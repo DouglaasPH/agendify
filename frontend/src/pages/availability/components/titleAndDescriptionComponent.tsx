@@ -1,3 +1,6 @@
+// react
+import { useNavigate } from "react-router-dom";
+
 // lucide
 import { Calendar, Plus, Sparkles } from "lucide-react";
 
@@ -5,6 +8,8 @@ import { Calendar, Plus, Sparkles } from "lucide-react";
 import { motion } from "motion/react";
 
 function TitleAndDescriptionComponent() {
+  const navigate = useNavigate();
+
   return (
     <motion.section
       initial={{ opacity: 0, y: -20 }}
@@ -50,7 +55,12 @@ function TitleAndDescriptionComponent() {
       >
         <motion.button className="flex justify-between items-center gap-2 rounded-xl bg-white text-blue-500 px-4 py-3 hover:bg-white cursor-pointer transition-all hover:shadow-xl hover:scale-105">
           <Plus className="size-4" />
-          <span className="text-sm font-semibold">Create New Availability</span>
+          <span
+            className="text-sm font-semibold"
+            onClick={() => navigate("create")}
+          >
+            Create New Availability
+          </span>
         </motion.button>
       </motion.div>
     </motion.section>

@@ -16,11 +16,9 @@ router = APIRouter(prefix="/availability")
 
 @router.post("/")
 def createAvailability(data: CreateAvailability, current_user: Users = Depends(get_current_user), db: Session = Depends(get_db)):
-    if data.user_id != current_user.id:
-        raise HTTPException(status_code=403, detail="invalid user_id. The user has a different id.")
-
+    print(data)
     new_availability = Availabilities(
-        user_id=data.user_id,
+        user_id=current_user.id,
         date=data.date,
         start_time=data.start_time,
         end_time=data.end_time,

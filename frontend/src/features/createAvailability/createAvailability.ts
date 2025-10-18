@@ -81,9 +81,11 @@ const createAvailability = createSlice({
         totalSlots: state.dates.length * state.timeIntervals.length,
       };
     },
+
+    reset: () => initialState,
   },
 });
 
-export const { setTimeIntervals, setDataCards, setDates } =
+export const { setTimeIntervals, setDataCards, setDates, reset } =
   createAvailability.actions;
 export default createAvailability.reducer;

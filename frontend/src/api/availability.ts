@@ -17,6 +17,13 @@ export interface Availability {
   appointments?: Appointment;
 }
 
+export interface AvailabilityCreate {
+  date: Date;
+  start_time: Date;
+  end_time: Date;
+  slot_duration_minutes: number;
+}
+
 interface AvailabilityListData {
   availability_id: number;
   date?: string;
@@ -57,8 +64,9 @@ export const availabilityGetApi = async (
 
 export const availabilityCreateApi = async (
   access_token: string | null,
-  availability_data: Availability
+  availability_data: AvailabilityCreate
 ): Promise<Succesfully> => {
+  console.log(access_token, availability_data);
   return await api.post(ROUTES.availability.create, availability_data, {
     headers: {
       "Content-Type": "application/json",
