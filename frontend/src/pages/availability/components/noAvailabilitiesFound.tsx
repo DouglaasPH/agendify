@@ -1,9 +1,11 @@
 // shadcn/ui
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { CardContent } from "@/components/ui/card";
 
 // lucide
 import { Calendar, Plus } from "lucide-react";
+
+// motion
 import { motion } from "motion/react";
 
 type NoAvailabilitiesFoundProps = {

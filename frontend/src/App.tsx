@@ -76,7 +76,7 @@ import { getUserDataApi, refreshTokenApi } from "./api/authApi";
 
 // /user/dashboard OK
 // /user/availability OK
-// /user/availability/create PENDING
+// /user/availability/create APP
 // /user/appointment PENDING
 
 // chat PENDING

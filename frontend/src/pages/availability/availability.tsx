@@ -1,8 +1,8 @@
 // React
-import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
 // Redux
+import { useSelector } from "react-redux";
 import type { RootState } from "../../store";
 
 // utils
@@ -14,17 +14,16 @@ import { motion } from "motion/react";
 // API
 import { availabilityListApi } from "@/api/availability";
 
+// shadcn
+import { Card } from "@/components/ui/card";
+
 // Components
-import UserSectionComponent from "@/components/user_section/UserSectionComponent";
 import Cards from "./components/cards";
 import Search from "./components/search";
 import AvailabilitySchedule from "./components/availabilitySchedule";
 import NoAvailabilitiesFound from "./components/noAvailabilitiesFound";
 import PaginationComponent from "./components/pagination";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
 import TitleAndDescriptionComponent from "./components/titleAndDescriptionComponent";
-import { Card } from "@/components/ui/card";
 
 export interface AvailabilitiesData {
   id: number;

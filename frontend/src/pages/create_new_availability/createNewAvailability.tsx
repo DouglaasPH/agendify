@@ -1,13 +1,24 @@
+// react
+import { useNavigate } from "react-router-dom";
+
+// redux
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "@/store";
+import { reset } from "@/features/createAvailability/createAvailability";
+
+// shadcn
 import { Button } from "@/components/ui/button";
+
+// lucide
+import { Save } from "lucide-react";
+
+// components
 import Cards from "./components/Cards";
 import TimeSlotsAndSelectDateCard from "./components/TimeSlotsAndSelectDateCard";
 import TitleAndDescriptionComponent from "./components/TitleAndDescriptionComponent";
-import { Save } from "lucide-react";
 import Overview from "./components/Overview";
-import { useDispatch, useSelector } from "react-redux";
-import { reset } from "@/features/createAvailability/createAvailability";
-import type { RootState } from "@/store";
-import { useNavigate } from "react-router-dom";
+
+// API
 import {
   availabilityCreateApi,
   type AvailabilityCreate,

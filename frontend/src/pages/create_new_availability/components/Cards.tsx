@@ -1,13 +1,15 @@
 // shadcn/ui
 import { Card } from "@/components/ui/card";
-import type { RootState } from "@/store";
 
 // lucide
 import { Calendar, Clock, Timer, TrendingUp } from "lucide-react";
 
 // motion
 import { motion } from "motion/react";
+
+// redux
 import { useSelector } from "react-redux";
+import type { RootState } from "@/store";
 
 function Cards() {
   const quantityDataCards = useSelector(

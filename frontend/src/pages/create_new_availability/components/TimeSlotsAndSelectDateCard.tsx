@@ -1,7 +1,14 @@
-import { Card } from "@/components/ui/card";
+// react
 import { useState } from "react";
-import DefineYourTimeIntervals from "./DefineYourTimeIntervals";
+
+// shadcn
+import { Card } from "@/components/ui/card";
+
+// motion
 import { motion } from "motion/react";
+
+// components
+import DefineYourTimeIntervals from "./DefineYourTimeIntervals";
 import SelectDates from "./SelectDates";
 
 function TimeSlotsAndSelectDateCard() {

@@ -1,10 +1,17 @@
+// react
+import { useEffect, useState } from "react";
+
+// redux
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "@/store";
+
+// shadcn
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Card } from "@/components/ui/card";
+
+// components
 import { setDates } from "@/features/createAvailability/createAvailability";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "@/store";
 
 function SelectDates() {
   const dispatch = useDispatch();

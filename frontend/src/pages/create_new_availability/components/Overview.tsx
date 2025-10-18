@@ -1,10 +1,19 @@
+// redux
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store";
+
+// shadcn
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { formatDateShort } from "@/lib/utils";
-import type { RootState } from "@/store";
+
+// lucide
 import { Calendar, CircleCheckBig, Eye } from "lucide-react";
+
+// utils
+import { formatDateShort } from "@/lib/utils";
+
+// motion
 import { motion } from "motion/react";
-import { useSelector } from "react-redux";
 
 function Overview() {
   const dailySchedules = useSelector(

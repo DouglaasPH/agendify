@@ -6,6 +6,8 @@ import { CalendarCheck, CalendarX, Timer, Users } from "lucide-react";
 
 // motion
 import { motion } from "motion/react";
+
+// type
 import type { AvailabilitiesData } from "../availability";
 
 type CardsProps = {
