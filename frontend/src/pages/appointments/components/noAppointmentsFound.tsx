@@ -1,12 +1,9 @@
-// react
-import { useNavigate } from "react-router-dom";
-
 // shadcn/ui
 import { Button } from "@/components/ui/button";
 import { CardContent } from "@/components/ui/card";
 
 // lucide
-import { Calendar, Plus } from "lucide-react";
+import { Calendar } from "lucide-react";
 
 // motion
 import { motion } from "motion/react";
@@ -15,10 +12,9 @@ type NoAvailabilitiesFoundProps = {
   handleClearFilters: () => void;
 };
 
-function NoAvailabilitiesFound({
+function NoAppointmentFound({
   handleClearFilters,
 }: NoAvailabilitiesFoundProps) {
-  const navigate = useNavigate();
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -31,22 +27,16 @@ function NoAvailabilitiesFound({
         <div className="bg-gray-100 p-6 rounded-full">
           <Calendar className="size-12 text-gray-400" />
         </div>
-        <div className="text-center">
+        <div className="text-center flex flex-col gap-2 w-md">
           <h4 className="font-semibold text-xl text-gray-700">
-            No availabilities found
+            No appointments found
           </h4>
           <p className="text-gray-400">
-            No availabilities match your current filters. Try adjusting your
-            search criteria.
+            No appointments match your current filters, or you don't have any
+            appointments. Try adjusting your search criteria.
           </p>
         </div>
-        <div className="flex gap-4">
-          <Button
-            className="flex items-center justify-between bg-blue-600 hover:bg-blue-500 cursor-pointer "
-            onClick={() => navigate("create")}
-          >
-            <Plus /> <span>Add New Availability</span>
-          </Button>
+        <div>
           <Button
             variant="outline"
             className="cursor-pointer"
@@ -60,4 +50,4 @@ function NoAvailabilitiesFound({
   );
 }
 
-export default NoAvailabilitiesFound;
+export default NoAppointmentFound;

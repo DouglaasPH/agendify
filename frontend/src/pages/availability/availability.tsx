@@ -1,8 +1,8 @@
 // React
+import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
 // Redux
-import { useSelector } from "react-redux";
 import type { RootState } from "../../store";
 
 // utils
@@ -46,29 +46,48 @@ function AvailabilityPage() {
     "All Dates",
     ["Date", "down"],
   ]);
+  {
+    /* number of pages for the table based on the amount of data */
+  }
   const [amountOfSections, setAmountOfSections] = useState(1);
+  {
+    /* current table page */
+  }
   const [currentPage, setCurrentPage] = useState(1);
 
+  {
+    /* all user availability */
+  }
   const [availabilitiesData, setAvailabilitiesData] = useState<
     AvailabilitiesData[]
   >([]);
+  {
+    /* availability for viewing based on filters */
+  }
   const [tableDataToView, setTableDataToView] = useState<AvailabilitiesData[]>(
     []
   );
 
   const maxVisible = 3;
+
   const start_pagination_item = Math.max(
     0,
     Math.min(currentPage - 2, amountOfSections - maxVisible)
   );
   const end_pagination_item = start_pagination_item + maxVisible;
 
+  {
+    /* When user changes filters, change state */
+  }
   const handleSetFilters = (
     index: number,
     typeOrder: string,
     direction: string
   ) => {
     let newFilters: Filter = ["", "", ["", ""]];
+    {
+      /* second filter, third filter, [fourth filter type, direction] */
+    }
     if (index === 0) {
       newFilters = [typeOrder, filters[1], filters[2]];
     } else if (index === 1) {
@@ -81,18 +100,27 @@ function AvailabilityPage() {
     setFilters(newFilters);
   };
 
+  {
+    /* clear filters */
+  }
   const handleClearFilters = () => {
     setFilters(["All Status", "All Dates", ["Date", "down"]]);
     setTableDataToView(availabilitiesData);
   };
 
+  {
+    /* if one of the filters has been modified, call the function to change the table and filter */
+  }
   const handleSortRows = (
-    selectionIndex: number,
-    typeOrder: string,
-    direction: string
+    selectionIndex: number, // get the filter modified by index from the TableDataToView state
+    typeOrder: string, // selected filter value
+    direction: string // if direction is changed, return new direction (up or down), if not, return empty string
   ) => {
     handleSetFilters(selectionIndex, typeOrder, direction);
 
+    {
+      /* precendence for organizing table */
+    }
     const precedence: Record<string, number> = {
       Available: 1,
       Occupied: 2,
@@ -273,6 +301,9 @@ function AvailabilityPage() {
     fetchAvailabilities();
   }, [access_token]);
 
+  {
+    /* when the data to be displayed is modified, change the number of pages for displaying the data */
+  }
   useEffect(() => {
     setAmountOfSections(Math.ceil(tableDataToView.length / 6));
   }, [tableDataToView]);
@@ -315,8 +346,6 @@ function AvailabilityPage() {
                 amountOfSections={amountOfSections}
                 filters={filters}
                 handleSortRows={handleSortRows}
-                start_pagination_item={start_pagination_item}
-                end_pagination_item={end_pagination_item}
                 access_token={access_token}
               />
             ) : (

@@ -127,3 +127,17 @@ a {
 body {
   background-color: #f9fafb;
 }
+
+.input-no-icon::-webkit-calendar-picker-indicator {
+  @apply hidden;
+  -webkit-appearance: none;
+}
+
+.input-no-icon::-webkit-clear-button {
+  @apply hidden;
+  -webkit-appearance: none;
+}
+
+.input-no-icon::-webkit-inner-spin-button {
+  @apply hidden;
+}

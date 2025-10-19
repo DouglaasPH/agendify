@@ -21,55 +21,36 @@ import {
 } from "@/components/ui/table";
 
 // lucide
-import {
-  ArrowDownWideNarrow,
-  ArrowUpNarrowWide,
-  Calendar,
-  CalendarCheck,
-  CalendarX,
-  CircleAlert,
-  Clock,
-  Trash2,
-  User,
-  Users,
-} from "lucide-react";
+import { Calendar, CircleAlert, Clock, Trash2, User } from "lucide-react";
 
 // motion
 import { motion } from "motion/react";
 
-// types
-import type { AvailabilitiesData, Filter } from "../availability";
+// type
+import type { AppointmentData } from "../appointments";
 
 // API
-import { availabilityDeleteApi } from "@/api/availability";
+import { appointmentCancelApi } from "@/api/appointmentApi";
 
-type AvailabilityScheduleProps = {
-  availabilitiesData: AvailabilitiesData[];
-  tableDataToView: AvailabilitiesData[];
-  setTableDataToView: (value: AvailabilitiesData[]) => void;
-  setAvailabilitiesData: (value: AvailabilitiesData[]) => void;
+type AppointmentScheduleProps = {
+  appointmentsData: AppointmentData[];
+  tableDataToView: AppointmentData[];
+  setTableDataToView: (value: AppointmentData[]) => void;
+  setAppointmentsData: (value: AppointmentData[]) => void;
   currentPage: number;
   amountOfSections: number;
-  filters: Filter;
-  handleSortRows: (
-    selectionIndex: number,
-    typeOrder: string,
-    direction: string
-  ) => void;
   access_token: string | null;
 };
 
-function AvailabilitySchedule({
-  availabilitiesData,
+function AppointmentSchedule({
+  appointmentsData,
   tableDataToView,
   setTableDataToView,
-  setAvailabilitiesData,
-  handleSortRows,
+  setAppointmentsData,
   currentPage,
   amountOfSections,
-  filters,
   access_token,
-}: AvailabilityScheduleProps) {
+}: AppointmentScheduleProps) {
   const ROW_PER_PAGE = 6;
 
   const handleGetPage = (page: number) => {
@@ -78,17 +59,25 @@ function AvailabilitySchedule({
     return tableDataToView.slice(startIndex, endIndex);
   };
 
-  const handleDeleteAvailability = async (availability_id: number) => {
-    await availabilityDeleteApi(access_token, availability_id);
+  const handleCancelAppointment = async (appointment_id: number) => {
+    await appointmentCancelApi(access_token, appointment_id);
     const newValueTableDataToView = tableDataToView.filter(
-      (data) => data.id !== availability_id
+      (data) => data.id !== appointment_id
     );
-    const newValueAvailabilitiesData = availabilitiesData.filter(
-      (data) => data.id !== availability_id
+    const newValueAppointmentData = appointmentsData.filter(
+      (data) => data.id !== appointment_id
     );
     setTableDataToView(newValueTableDataToView);
-    setAvailabilitiesData(newValueAvailabilitiesData);
+    setAppointmentsData(newValueAppointmentData);
   };
+  /*
+  id: number;
+  firstColumn: { customer_name: string; customer_email: string };
+  secondColumn: { weekday: string; dateFormatted: string };
+  thirdColumn: { start_time: string; end_time: string };
+  fourthColumn: { slot_duration: number };
+  fifthColumn: { status: string };
+*/
 
   return (
     <motion.div
@@ -99,29 +88,10 @@ function AvailabilitySchedule({
       className="w-full p-10"
     >
       <div className="flex flex-col items-start gap-2">
-        <div className="w-full flex justify-between">
-          <h4 className="flex gap-2 items-center">
-            <Calendar className="size-5 lg:size-7 text-blue-500" />
-            <span className="text-md lg:text-xl">Availability Schedule</span>
-          </h4>
-          <p
-            className="flex items-center gap-1 select-none cursor-pointer hover:bg-gray-200 px-3 py-1 rounded-md"
-            onClick={() =>
-              filters[2][1] == "up"
-                ? handleSortRows(2, filters[2][0], "down")
-                : handleSortRows(2, filters[2][0], "up")
-            }
-          >
-            {filters[2][1] === "up" ? (
-              <ArrowUpNarrowWide className="size-4" />
-            ) : (
-              <ArrowDownWideNarrow className="size-4" />
-            )}
-            <span className="font-semibold text-gray-600 text-md">
-              {filters[2][0]}
-            </span>
-          </p>
-        </div>
+        <h4 className="flex gap-2 items-center">
+          <Calendar className="size-5 lg:size-7 text-blue-500" />
+          <span className="text-md lg:text-xl">Appointment Schedule</span>
+        </h4>
         <p className="text-sm lg:text-lg text-gray-400">
           Showing section {currentPage} of {amountOfSections} availabilities
         </p>
@@ -131,11 +101,11 @@ function AvailabilitySchedule({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Day & Date</TableHead>
-            <TableHead>Time Slot</TableHead>
-            <TableHead>Duration</TableHead>
+            <TableHead>Customer</TableHead>
+            <TableHead>Date</TableHead>
+            <TableHead>Time</TableHead>
+            <TableHead>Slot duration</TableHead>
             <TableHead>Status</TableHead>
-            <TableHead>Booked By</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -144,103 +114,109 @@ function AvailabilitySchedule({
             return (
               <TableRow>
                 <TableCell className="flex items-center gap-2 ">
-                  {data.fourthColumn.status === "Available" ? (
-                    <CalendarCheck className="size-5 text-green-600" />
-                  ) : data.fourthColumn.status === "Occupied" ? (
-                    <Users className="size-5 text-blue-600" />
-                  ) : (
-                    <CalendarX className="size-5 text-gray-400" />
-                  )}
+                  <div className="p-2 bg-gradient-to-t from-blue-600 to-indigo-500 rounded-full">
+                    <User className="size-5 text-white" />
+                  </div>
                   <div className="flex flex-col items-start">
                     <span
                       className={`font-semibold text-md ${
-                        data.fourthColumn.status === "Past"
+                        data.fifthColumn.status === "Cancel" ||
+                        data.fifthColumn.status === "Past"
                           ? "text-gray-600"
                           : null
                       }`}
                     >
-                      {data.firstColumn.weekday}
+                      {data.firstColumn.customer_name}
                     </span>
                     <span
                       className={`text-gray-500 ${
-                        data.fourthColumn.status === "Past"
+                        data.fifthColumn.status === "Cancel" ||
+                        data.fifthColumn.status === "Past"
                           ? "text-gray-400"
                           : null
                       }`}
                     >
-                      {data.firstColumn.dateFormatted}
+                      {data.firstColumn.customer_email}
                     </span>
                   </div>
                 </TableCell>
                 <TableCell>
+                  <div className="flex flex-col items-start">
+                    <span
+                      className={`font-semibold text-md ${
+                        data.fifthColumn.status === "Cancel" ||
+                        data.fifthColumn.status === "Past"
+                          ? "text-gray-600"
+                          : null
+                      }`}
+                    >
+                      {data.secondColumn.weekday}
+                    </span>
+                    <span
+                      className={`text-gray-500 ${
+                        data.fifthColumn.status === "Cancel" ||
+                        data.fifthColumn.status === "Past"
+                          ? "text-gray-400"
+                          : null
+                      }`}
+                    >
+                      {data.secondColumn.dateFormatted}
+                    </span>
+                  </div>
+                </TableCell>
+
+                <TableCell>
                   <div
                     className={`flex items-center gap-2 ${
-                      data.fourthColumn.status === "Past"
+                      data.fifthColumn.status === "Cancel" ||
+                      data.fifthColumn.status === "Past"
                         ? "text-gray-400"
                         : "text-gray-500"
                     }`}
                   >
                     <Clock className="size-4" />
                     <span>
-                      {data.secondColumn.start_time} -
-                      {data.secondColumn.end_time}
+                      {data.thirdColumn.start_time} -{data.thirdColumn.end_time}
                     </span>
                   </div>
                 </TableCell>
-
                 <TableCell>
                   <p
                     className={`${
-                      data.fourthColumn.status === "Past"
+                      data.fifthColumn.status === "Cancel" ||
+                      data.fifthColumn.status === "Past"
                         ? "text-gray-400"
                         : null
                     }`}
                   >
-                    {data.thirdColumn.slot_duration}min
+                    {data.fourthColumn.slot_duration}min
                   </p>
                 </TableCell>
                 <TableCell>
                   <Badge
                     className={
-                      data.fourthColumn.status === "Available"
+                      data.fifthColumn.status === "Confirmed"
                         ? "bg-green-100 text-green-600"
-                        : data.fourthColumn.status === "Occupied"
+                        : data.fifthColumn.status === "Cancel" ||
+                          data.fifthColumn.status === "Past"
                         ? "bg-blue-100 text-blue-600"
                         : "bg-gray-100 text-gray-400"
                     }
                   >
-                    {data.fourthColumn.status}
+                    {data.fifthColumn.status}
                   </Badge>
-                </TableCell>
-                <TableCell
-                  className={`${
-                    data.fourthColumn.status === "Past"
-                      ? "text-gray-400"
-                      : "text-gray-500"
-                  }`}
-                >
-                  {data.fifthColumn.customer != undefined ? (
-                    <div className="flex items-center gap-1">
-                      <User className="size-4" />
-                      <span className="text-md">
-                        {data.fifthColumn.customer}
-                      </span>
-                    </div>
-                  ) : (
-                    "-"
-                  )}
                 </TableCell>
                 <TableCell className="text-right">
                   <AlertDialog>
                     <AlertDialogTrigger>
                       <div
                         className={`p-2 rounded-md w-auto inline-flex select-none ${
-                          data.fourthColumn.status === "Past"
+                          data.fifthColumn.status === "Past"
                             ? "text-red-300"
                             : "text-red-600 hover:bg-red-100 cursor-pointer"
                         }`}
                         onClick={(e) =>
-                          data.fourthColumn.status === "Past"
+                          data.fifthColumn.status === "Past"
                             ? e.preventDefault()
                             : null
                         }
@@ -252,21 +228,24 @@ function AvailabilitySchedule({
                       <AlertDialogHeader>
                         <AlertDialogTitle className="flex gap-2 items-center">
                           <CircleAlert className="text-red-600 size-5" />
-                          <span>Delete Availability</span>
+                          <span>Cancel Appointment</span>
                         </AlertDialogTitle>
                         <AlertDialogDescription>
                           <p>
-                            Are you sure you want to delete this availability
-                            slot for{" "}
+                            Are you sure you want to cancel this appointment
+                            with the{" "}
                             <span className="font-bold text-gray-500">
-                              {data.firstColumn.weekday},{" "}
-                              {data.firstColumn.dateFormatted}
+                              {data.firstColumn.customer_name}
+                            </span>{" "}
+                            <span className="font-bold text-gray-500">
+                              {data.secondColumn.weekday},{" "}
+                              {data.secondColumn.dateFormatted}
                             </span>{" "}
                             from{" "}
                             <span className="font-bold text-gray-500">
                               {" "}
-                              {data.secondColumn.start_time} to{" "}
-                              {data.secondColumn.end_time}
+                              {data.thirdColumn.start_time} to{" "}
+                              {data.thirdColumn.end_time}
                             </span>
                             ?
                           </p>
@@ -279,9 +258,9 @@ function AvailabilitySchedule({
                         </AlertDialogCancel>
                         <AlertDialogAction
                           className="bg-red-600 hover:bg-red-700 cursor-pointer"
-                          onClick={() => handleDeleteAvailability(data.id)}
+                          onClick={() => handleCancelAppointment(data.id)}
                         >
-                          Delete Availability
+                          Cancel Appointment
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
@@ -296,4 +275,4 @@ function AvailabilitySchedule({
   );
 }
 
-export default AvailabilitySchedule;
+export default AppointmentSchedule;

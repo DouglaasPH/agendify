@@ -76,8 +76,8 @@ import { getUserDataApi, refreshTokenApi } from "./api/authApi";
 
 // /user/dashboard OK
 // /user/availability OK
-// /user/availability/create APP
-// /user/appointment PENDING
+// /user/availability/create OK
+// /user/appointment OK
 
 // chat PENDING
 
@@ -188,7 +188,7 @@ const browserRoutes = createBrowserRouter(
           />
         </Route>
       </Route>
-      <Route path="user">
+      <Route path="user" element={<VerifyAuthentication />}>
         <Route path="profile">
           <Route
             index

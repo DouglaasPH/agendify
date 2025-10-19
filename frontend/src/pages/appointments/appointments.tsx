@@ -1,183 +1,242 @@
+// react
 import { useEffect, useState } from "react";
+
+// redux
 import { useSelector } from "react-redux";
 import type { RootState } from "../../store";
-import { appointmentListApi, type Appointment } from "../../api/appointmentApi";
 
-type ComponentType = "all" | "confirmed" | "pending" | "canceled";
+// shadcn
+import { Card } from "@/components/ui/card";
+
+// motion
+import { motion } from "motion/react";
+
+// utils
+import { formatDate, formatHours } from "@/lib/utils";
+
+// components
+import TitleAndStatus from "./components/titleAndStatus";
+import Filters from "./components/filters";
+import AppointmentSchedule from "./components/appointmentsSchedule";
+import PaginationComponent from "../availability/components/pagination";
+import NoAppointmentFound from "./components/noAppointmentsFound";
+
+// API
+import { appointmentListApi } from "../../api/appointmentApi";
+
+export interface AppointmentData {
+  id: number;
+  firstColumn: { customer_name: string; customer_email: string };
+  secondColumn: { weekday: string; dateFormatted: string };
+  thirdColumn: { start_time: string; end_time: string };
+  fourthColumn: { slot_duration: number };
+  fifthColumn: { status: string };
+}
+
+export type Filter = [string, string, string];
 
 function AppointmentsPage() {
-  const [currentComponent, SetCurrentComponent] = useState({
-    all: true,
-    confirmed: false,
-    pending: false,
-    canceled: false,
-  });
-
-  const handleComponent = (componentClicked: ComponentType) => {
-    const newState: {
-      all: boolean;
-      confirmed: boolean;
-      pending: boolean;
-      canceled: boolean;
-    } = {
-      all: false,
-      confirmed: false,
-      pending: false,
-      canceled: false,
-    };
-    newState[componentClicked] = true;
-    SetCurrentComponent(newState);
-  };
-
   const access_token = useSelector(
     (state: RootState) => state.auth.accessToken
   );
+  const [filters, setFilters] = useState<Filter>([
+    "All Status", // all status, confirmed, canceled or past
+    "", // date
+    "", // time
+  ]);
 
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  {
+    /* all user appointment */
+  }
+  const [appointmentsData, setAppointmentsData] = useState<AppointmentData[]>(
+    []
+  );
+  {
+    /* appointment for viewing based on filters */
+  }
+  const [tableDataToView, setTableDataToView] = useState<AppointmentData[]>([]);
+  {
+    /* number of pages for the table based on the amount of data */
+  }
+  const [amountOfSections, setAmountOfSections] = useState(1);
+  {
+    /* current table page */
+  }
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const maxVisible = 3;
+  const start_pagination_item = Math.max(
+    0,
+    Math.min(currentPage - 2, amountOfSections - maxVisible)
+  );
+  const end_pagination_item = start_pagination_item + maxVisible;
+
+  {
+    /* When user changes filters, change state */
+  }
+  const handleSetFilters = (index: number, newFilter: string) => {
+    let newFilters = filters;
+    if (index === 0) {
+      {
+        /* first selection */
+      }
+      newFilters = [newFilter, filters[1], filters[2]];
+    } else if (index === 1) {
+      {
+        /* second selection */
+      }
+      const chooseDate = formatDate(newFilter).dateFormatted;
+      if (chooseDate !== "Invalid Date") {
+        newFilters = [filters[0], chooseDate, filters[2]];
+      } else newFilters = [filters[0], "", filters[2]];
+    } else if (index === 2) {
+      if (newFilter.length > 0) {
+        newFilters = [filters[0], filters[1], newFilter];
+      } else {
+        newFilters = [filters[0], filters[1], ""];
+      }
+    }
+    setFilters(newFilters);
+    handleSortRows(newFilters);
+  };
+
+  {
+    /* if one of the filters has been modified, call the function to change the table and filter */
+  }
+  const handleSortRows = (filters: Filter) => {
+    const dataToView = appointmentsData.filter((appointment) => {
+      const statusMatch =
+        filters[0] === "" ||
+        filters[0] === "All Status" ||
+        appointment.fifthColumn.status === filters[0];
+      const dateMatch =
+        filters[1] === "" ||
+        appointment.secondColumn.dateFormatted === filters[1];
+      const timeMatch =
+        filters[2] === "" ||
+        appointment.thirdColumn.start_time === filters[2] ||
+        appointment.thirdColumn.end_time === filters[2];
+
+      return statusMatch && dateMatch && timeMatch;
+    });
+
+    setTableDataToView(dataToView);
+  };
+
+  {
+    /* clear filters */
+  }
+  const handleClearFilters = () => {
+    setFilters(["All Status", "", ""]);
+    setTableDataToView(appointmentsData);
+  };
 
   useEffect(() => {
-    const fetchAppointments = async () => {
+    const fetchAvailabilities = async () => {
       const allAppointments = await appointmentListApi(access_token, {});
-      setAppointments(allAppointments.data);
-    };
 
-    fetchAppointments();
-  }, []);
+      allAppointments.data.sort(
+        (a, b) =>
+          new Date(b.availabilities.start_time).getTime() -
+          new Date(a.availabilities.start_time).getTime()
+      );
+
+      const data: AppointmentData[] = [];
+
+      allAppointments.data.forEach((appointment) => {
+        const transformDate = formatDate(appointment.availabilities.start_time);
+        const transformStartTime = formatHours(
+          appointment.availabilities.start_time
+        );
+        const transformEndTime = formatHours(
+          appointment.availabilities.end_time
+        );
+        const customer_name = appointment.customer;
+        const customer_email = appointment.customer_email;
+
+        data.push({
+          id: appointment.id,
+          firstColumn: { customer_name, customer_email },
+          secondColumn: transformDate,
+          thirdColumn: {
+            start_time: transformStartTime,
+            end_time: transformEndTime,
+          },
+          fourthColumn: {
+            slot_duration: appointment.availabilities.slot_duration_minutes,
+          },
+          fifthColumn: {
+            status:
+              appointment.status.charAt(0).toUpperCase() +
+              appointment.status.slice(1),
+          },
+        });
+      });
+
+      setAppointmentsData(data);
+      setTableDataToView(data);
+    };
+    fetchAvailabilities();
+  }, [access_token]);
+
+  {
+    /* when the data to be displayed is modified, change the number of pages for displaying the data */
+  }
+  useEffect(() => {
+    setAmountOfSections(Math.ceil(tableDataToView.length / 6));
+  }, [tableDataToView]);
 
   return (
-    <div className="flex justify-center items-center p-[0.4rem] xl:p-0 mb-15">
-      <div className="w-120 sm:w-150 xl:w-270 xl:mt-12 mt-8 flex flex-col justify-center items-center gap-10">
-        <section className="w-full flex justify-between items-center">
-          <h1 className="font-inter font-bold text-[1.8rem] sm:text-[2rem] xl:text-[2.5rem] text-[#121417]">
-            Appointment
-          </h1>
-          <button className="p-2 pl-1 xl:pl-2 pr-1 xl:pr-2 w-[7rem] sm:w-[8rem] xl:w-[9rem] bg-[#E8EDF5] hover:opacity-80 rounded-lg text-[#121417] font-inter font-bold text-[0.7rem] sm:text-[0.7rem] xl:text-[0.8rem] cursor-pointer">
-            New appointment
-          </button>
-        </section>
-        <section className="h-12 w-full flex items-center gap-9 border-b-1 border-b-[#E5E8EB]">
-          <p
-            className="h-full text-center font-inter font-bold text-[0.8rem] sm:text-[0.8rem] xl:text-[0.9rem] transition duration-300 ease-in-out cursor-pointer hover:opacity-80"
-            onClick={() => handleComponent("all")}
-            style={{
-              color: currentComponent.all ? "#121417" : "#61738A",
-              borderBottom: currentComponent.all
-                ? "3px solid #121417"
-                : "3px solid #61738A",
-            }}
-          >
-            All
-          </p>
-          <p
-            className="h-full text-center font-inter font-bold text-[0.8rem] sm:text-[0.8rem] xl:text-[0.9rem] transition duration-300 ease-in-out cursor-pointer hover:opacity-80"
-            onClick={() => handleComponent("confirmed")}
-            style={{
-              color: currentComponent.confirmed ? "#121417" : "#61738A",
-              borderBottom: currentComponent.confirmed
-                ? "3px solid #121417"
-                : "3px solid #61738A",
-            }}
-          >
-            Confirmed
-          </p>
-          <p
-            className="h-full text-center font-inter font-bold text-[0.8rem] sm:text-[0.8rem] xl:text-[0.9rem] transition duration-300 ease-in-out cursor-pointer hover:opacity-80"
-            onClick={() => handleComponent("pending")}
-            style={{
-              color: currentComponent.pending ? "#121417" : "#61738A",
-              borderBottom: currentComponent.pending
-                ? "3px solid #121417"
-                : "3px solid #61738A",
-            }}
-          >
-            Pending
-          </p>
-          <p
-            className="h-full text-center font-inter font-bold text-[0.8rem] sm:text-[0.8rem] xl:text-[0.9rem] transition duration-300 ease-in-out cursor-pointer hover:opacity-80"
-            onClick={() => handleComponent("canceled")}
-            style={{
-              color: currentComponent.canceled ? "#121417" : "#61738A",
-              borderBottom: currentComponent.canceled
-                ? "3px solid #121417"
-                : "3px solid #61738A",
-            }}
-          >
-            Canceled
-          </p>
-        </section>
-        <section className="w-full rounded-lg border border-[#E5E8EB] flex flex-col">
-          <div className="w-full flex flex-row items-center justify-between p-3 pl-5 gap-10 border-b border-[#E5E8EB]">
-            <p className="w-1/5 font-inter font-medium text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#121417]">
-              Customer
-            </p>
-            <p className="w-1/5 font-inter font-medium text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#121417]">
-              Date
-            </p>
-            <p className="w-1/5 font-inter font-medium text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#121417]">
-              Time
-            </p>
-            <p className="w-1/5 font-inter font-medium text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#121417]">
-              Status
-            </p>
-            <p className="w-1/5 font-inter font-medium text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#61738A]">
-              Actions
-            </p>
-          </div>
-          <div>
-            {appointments.length !== 0 ? (
-              appointments
-                .filter((item) => {
-                  if (currentComponent.all) return true;
-                  if (currentComponent.confirmed)
-                    return item.status === "confirmed";
-                  if (currentComponent.pending)
-                    return item.status === "pending";
-                  if (currentComponent.canceled)
-                    return item.status === "canceled";
-                  return false;
-                })
-                .map((item, index) => (
-                  <div
-                    key={index}
-                    className="mb-4 p-2 pl-5 pr-10 flex flex-row justify-between"
-                  >
-                    <p className="w-1/5 font-inter font-regular text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#121417]">
-                      {item.customer}
-                    </p>
-                    <p className="w-1/5 font-inter font-regular text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#61738A]">
-                      {item.availabilities.date}
-                    </p>
-                    <p className="w-1/5 font-inter font-regular text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#61738A]">
-                      {item.availabilities.start_time} -{" "}
-                      {item.availabilities.end_time}
-                    </p>
-                    <p className="w-1/5 capitalize text-center font-inter font-medium text-[0.6rem] sm:text-[0.7rem] xl:text-[1rem] text-[#121417] p-2 pl-1 xl:pl-2 pr-1 xl:pr-2 bg-[#E8EDF5] rounded-lg">
-                      {item.status}
-                    </p>
-                    <div className="w-1/5 flex items-center gap-1">
-                      <button className="font-inter font-bold text-[0.6rem] sm:text-[0.7rem] xl:text-[0.95rem] text-[#61738A] cursor-pointer hover:opacity-80">
-                        Mark as completed
-                      </button>
-                      <p className="font-inter font-bold text-[0.6rem] sm:text-[0.7rem] xl:text-[0.95rem] text-[#61738A]">
-                        |
-                      </p>
-                      <button className="font-inter font-bold text-[0.6rem] sm:text-[0.7rem] xl:text-[0.95rem] text-[#61738A] cursor-pointer hover:opacity-80">
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                ))
+    <main className="flex flex-col gap-10 pb-50">
+      {/* header section */}
+      {/* Title, description and status (confirmed and canceled) */}
+      <TitleAndStatus appointmentsData={appointmentsData} />
+
+      {/* main section */}
+      <section className="flex flex-col justify-center items-center gap-10 px-10 lg:px-20 w-full">
+        <Filters
+          handleSetFilters={handleSetFilters}
+          appointmentsData={appointmentsData}
+          tableDataToView={tableDataToView}
+          setTableDataToView={setTableDataToView}
+        />
+
+        {/* Availability Schedule OR No Availabilities Found */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.9, duration: 0.4 }}
+          className="w-full"
+        >
+          <Card className="w-full">
+            {amountOfSections > 0 ? (
+              <AppointmentSchedule
+                appointmentsData={appointmentsData}
+                tableDataToView={tableDataToView}
+                setTableDataToView={setTableDataToView}
+                setAppointmentsData={setAppointmentsData}
+                currentPage={currentPage}
+                amountOfSections={amountOfSections}
+                access_token={access_token}
+              />
             ) : (
-              <div className="h-40 w-full flex justify-center items-center">
-                <p className="font-inter font-bold text-[0.8rem] sm:text-[0.9rem] xl:text-[1.2rem] text-[#61738A] cursor-pointer hover:opacity-80">
-                  No Appointment.
-                </p>
-              </div>
+              <NoAppointmentFound handleClearFilters={handleClearFilters} />
             )}
-          </div>
-        </section>
-      </div>
-    </div>
+          </Card>
+        </motion.div>
+      </section>
+
+      {/* Pagination Section */}
+      {amountOfSections > 0 ? (
+        <PaginationComponent
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          amountOfSections={amountOfSections}
+          start_pagination_item={start_pagination_item}
+          end_pagination_item={end_pagination_item}
+        />
+      ) : null}
+    </main>
   );
 }
 

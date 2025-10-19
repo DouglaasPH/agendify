@@ -17,22 +17,22 @@ interface AppointmentListData {
 }
 
 interface Availability {
-  date?: string;
-  end_time?: string;
-  status?: string;
-  id?: number;
-  start_time?: string;
-  user_id?: number;
-  slot_duration_minutes?: number;
+  date: string;
+  end_time: string;
+  status: string;
+  id: number;
+  start_time: string;
+  user_id: number;
+  slot_duration_minutes: number;
 }
 
 export interface Appointment {
-  user_id?: number;
-  availabilities_id?: number;
-  customer?: string;
-  id?: number;
-  status?: string;
-  customer_email?: string;
+  user_id: number;
+  availabilities_id: number;
+  customer: string;
+  id: number;
+  status: string;
+  customer_email: string;
   availabilities: Availability;
 }
 
@@ -44,6 +44,7 @@ export const appointmentListApi = async (
   access_token: string | null,
   appointment_data?: Partial<AppointmentListData>
 ): Promise<AppointmentListResponse> => {
+  console.log(access_token, appointment_data);
   return await api.get(ROUTES.appointment.list, {
     params: { ...appointment_data },
     headers: {
@@ -85,7 +86,7 @@ export const appointmentCancelApi = async (
   access_token: string | null,
   appointment_id: number
 ): Promise<Succesfully> => {
-  return await api.get(ROUTES.appointment.cancel(appointment_id), {
+  return await api.delete(ROUTES.appointment.cancel(appointment_id), {
     headers: {
       Authorization: `Bearer ${access_token}`,
     },

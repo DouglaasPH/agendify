@@ -17,6 +17,7 @@ import { motion } from "motion/react";
 
 // types
 import type { AvailabilitiesData, Filter } from "../availability";
+import { similarity } from "@/lib/utils";
 
 type SearchProps = {
   filters: Filter;
@@ -59,38 +60,6 @@ function SearchComponent({
       setTableDataToView(newTableDataToView);
     }
   };
-
-  // Função para medir semelhança entre duas strings (0 a 1)
-  function similarity(a: string, b: string): number {
-    a = a.toLowerCase();
-    b = b.toLowerCase();
-    const longer = a.length > b.length ? a : b;
-    const shorter = a.length > b.length ? b : a;
-    const longerLength = longer.length;
-    if (longerLength === 0) return 1.0;
-    return (longerLength - editDistance(longer, shorter)) / longerLength;
-  }
-
-  // Distância de Levenshtein (número de mudanças entre as strings)
-  function editDistance(a: string, b: string): number {
-    const matrix = Array.from({ length: b.length + 1 }, (_, i) => [i]);
-    for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
-
-    for (let i = 1; i <= b.length; i++) {
-      for (let j = 1; j <= a.length; j++) {
-        matrix[i][j] =
-          b[i - 1] === a[j - 1]
-            ? matrix[i - 1][j - 1]
-            : Math.min(
-                matrix[i - 1][j - 1] + 1, // substituição
-                matrix[i][j - 1] + 1, // inserção
-                matrix[i - 1][j] + 1 // deleção
-              );
-      }
-    }
-
-    return matrix[b.length][a.length];
-  }
 
   function searchRows(data: AvailabilitiesData[], query: string) {
     const normalizedQuery = query.toLowerCase().trim();
