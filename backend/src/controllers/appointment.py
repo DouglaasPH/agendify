@@ -19,7 +19,11 @@ router = APIRouter(prefix="/appointment")
 @router.post("/")
 def toSchedule(data: ToSchedule, db: Session = Depends(get_db)):
     current_availability = db.query(Availabilities).filter(Availabilities.id == data.availability_id).first()
-    current_availability.status = "Occupied"
+    
+    if not current_availability:
+        raise HTTPException(status_code=404, detail="Availability not found.")
+
+    current_availability.status = "occupied"
     
     new_appointment = Appointments(
         user_id=data.user_id,
@@ -84,16 +88,21 @@ def getAApointment(id: int, current_user: Users = Depends(get_current_user), db:
     return query.first()
 
 
-@router.put("/{appointment_id}")
+@router.delete("/{appointment_id}")
 def cancelAppointment(appointment_id: int, current_user: Users = Depends(get_current_user), db: Session = Depends(get_db)):
     current_appointment = db.query(Appointments).filter_by(id=appointment_id, user_id= current_user.id).first()
-
     
     if current_appointment.user_id != current_user.id:
         raise HTTPException(status_code=404, detail="Appointment not found.")
     
+
+    current_availability = db.query(Availabilities).filter_by(id=current_appointment.availability_id).first()
+    
+    if current_availability.status == "occupied":
+        current_availability.status = "available"
     db.delete(current_appointment)
     db.commit()
+    db.refresh(current_availability)
     
     return { "msg": "Appointment successfully canceled." }
 

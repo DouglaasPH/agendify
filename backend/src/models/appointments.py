@@ -9,6 +9,7 @@ from database import Base
 class AppointmentStatus(enum.Enum):
     confirmed = "confirmed"
     canceled = "canceled"
+    past = "past"
 
 
 # TODO: Choice of services for customers
