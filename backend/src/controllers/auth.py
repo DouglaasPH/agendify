@@ -1,4 +1,5 @@
 from datetime import datetime
+import uuid
 
 from fastapi import APIRouter, Request, Response
 from fastapi.security import OAuth2PasswordRequestForm
@@ -22,6 +23,7 @@ router = APIRouter(prefix="/auth")
 @router.post("/register")
 def register(user_data: LoginIn, db: Session = Depends(get_db)):
     hashed = pwd_context.hash(user_data.password)
+    chat_code = str(uuid.uuid4())
 
     
     new_user = Users(
@@ -31,6 +33,7 @@ def register(user_data: LoginIn, db: Session = Depends(get_db)):
         hashed_password=hashed,
         profileAvatarId=user_data.profileAvatarId,
         phone_number=user_data.phoneNumber,
+        chat_code=chat_code,
     )
     
     db.add(new_user)
@@ -70,7 +73,7 @@ def login(response: Response, form_data: OAuth2PasswordRequestForm = Depends(), 
 
 
 @router.get("/")
-def getUserData(current_user: Users = Depends(get_current_user), db: Session = Depends(get_db)):
+def getUserDataForUser(current_user: Users = Depends(get_current_user), db: Session = Depends(get_db)):
     query = db.query(Users).filter(Users.id == current_user.id).first()
     if not query:
         raise HTTPException(status_code=404, detail="User not found.")
@@ -79,6 +82,20 @@ def getUserData(current_user: Users = Depends(get_current_user), db: Session = D
         "name": query.name,
         "email": query.email,
         "phoneNumber": query.phone_number,
+        "profession": query.profession,
+        "profileAvatarId": query.profileAvatarId,
+    }
+    
+    
+@router.get("/{chat_code}")
+def getUserDataForCustomer(chat_code: str, db: Session = Depends(get_db)):
+    query = db.query(Users).filter(Users.chat_code == chat_code).first()
+    if not query:
+        raise HTTPException(status_code=404, detail="User not found.")
+
+    return {
+        "id": query.id,
+        "name": query.name,
         "profession": query.profession,
         "profileAvatarId": query.profileAvatarId,
     }
@@ -139,7 +156,7 @@ def refresh_token(request: Request, db: Session = Depends(get_db)):
     return {"access_token": new_access_token, "token_type": "bearer"}
 
 
-@router.get("/check-email")
+@router.get("/check-email/{email}")
 def check_email(email: str, db: Session = Depends(get_db)):
     query = db.query(Users).filter(Users.email == email)
     

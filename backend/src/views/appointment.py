@@ -5,8 +5,7 @@ from typing import Literal
 class ToSchedule(BaseModel):
     user_id: int
     availability_id: int
-    customer: str
-    customer_email: str
+    customer_id: str
 
 
 class ListAppointments(BaseModel):

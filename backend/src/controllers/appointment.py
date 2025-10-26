@@ -28,8 +28,7 @@ def toSchedule(data: ToSchedule, db: Session = Depends(get_db)):
     new_appointment = Appointments(
         user_id=data.user_id,
         availability_id=data.availability_id,
-        customer=data.customer,
-        customer_email=data.customer_email,
+        customer_id=data.customer_id,
     )
     
     db.add(new_appointment)
@@ -60,9 +59,9 @@ def listAppointments(
     if status:
         query = query.filter(Appointments.status == status)
     if customer:
-        query = query.filter(Appointments.customer == customer)
+        query = query.filter(Appointments.customers.name == customer)
     if customer_email:
-        query = query.filter(Appointments.customer_email == customer_email)
+        query = query.filter(Appointments.customers.email == customer_email)
     if date:
         query = query.filter(Availabilities.date == date)
     if start_time:

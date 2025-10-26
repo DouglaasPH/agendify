@@ -12,5 +12,6 @@ class Users(Base):
     email = Column(String, unique=True, nullable=False)
     profession = Column(String, nullable=False)
     phone_number = Column(String, nullable=False)
+    chat_code = Column(String, nullable=False)
     
     refresh_tokens = relationship("RefreshToken", back_populates="user")
