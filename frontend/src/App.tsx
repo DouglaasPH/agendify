@@ -278,10 +278,10 @@ const browserRoutes = createBrowserRouter(
         />
       </Route>
       <Route
-        path="chat"
+        path="chat/:chat_code"
         element={
           <>
-            <NavBar /> <ChatPage />
+            <ChatPage />
           </>
         }
       />

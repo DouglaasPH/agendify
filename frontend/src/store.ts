@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./features/auth/authSlice";
+import customerSlice from "./features/auth/customerSlice";
 import registerSlice from "./features/auth/registerSlice";
 import userDataSlice from "./features/auth/userDataSlice";
 import loadingSlice from "./features/loadingSlice";
@@ -12,6 +13,7 @@ export const store = configureStore({
     userData: userDataSlice,
     loading: loadingSlice,
     createAvailability: createAvailability,
+    customer: customerSlice,
   },
 });
 

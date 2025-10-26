@@ -77,3 +77,14 @@ export function editDistance(a: string, b: string): number {
 
   return matrix[b.length][a.length];
 }
+
+export function handleValidateEmail(email: string) {
+  const regex = /^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$/;
+  let state = false;
+
+  if (regex.test(email)) {
+    state = true;
+  }
+
+  return state;
+}

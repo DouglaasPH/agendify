@@ -107,8 +107,7 @@ interface checkEmailResponse {
 export const checkEmailApi = async (
   email: string
 ): Promise<checkEmailResponse> => {
-  return await api.get(ROUTES.auth.checkEmail, {
-    params: { email },
+  return await api.get(ROUTES.auth.checkEmail(email), {
     withCredentials: true,
   });
 };

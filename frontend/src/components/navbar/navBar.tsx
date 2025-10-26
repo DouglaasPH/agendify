@@ -1,12 +1,10 @@
 // react
-import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
 // Components
 import NotLoggedInNavBar from "./components/notLoggedInNavBar";
 import LoggedInNavBar from "./components/loggedInNavBar";
-import InTheChatPage from "./components/inTheChatNavBar";
 
 // redux
 import type { RootState } from "../../store";
@@ -16,27 +14,16 @@ import { motion } from "motion/react";
 
 function NavBar() {
   const [notLoggedIn, setNotLoggedIn] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [inTheChat, setInTheChat] = useState(false);
-
-  const navigate = useNavigate();
 
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );
 
-  const logoClicked = () => navigate("/");
-
-  // TODO: Add logic to direct the types of navbar
   useEffect(() => {
     if (isAuthenticated) {
       setNotLoggedIn(false);
-      setLoggedIn(true);
-      setInTheChat(false);
     } else {
       setNotLoggedIn(true);
-      setLoggedIn(false);
-      setInTheChat(false);
     }
   }, [isAuthenticated]);
 
@@ -62,7 +49,7 @@ function NavBar() {
           : "bg-white/80 backdrop-blur-sm"
       }`}
     >
-      <LoggedInNavBar />
+      {notLoggedIn ? <NotLoggedInNavBar /> : <LoggedInNavBar />}
     </motion.div>
   );
 }

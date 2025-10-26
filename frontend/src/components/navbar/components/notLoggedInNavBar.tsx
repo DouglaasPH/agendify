@@ -40,11 +40,13 @@ function NotLoggedInNavBar() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.0, duration: 0.2 }}
-            className="relative text-gray-300 hover:text-white transition-all duration-300 group py-2"
+            className="relative text-gray-900 hover:text-white transition-all duration-300 group py-2"
           >
-            <span className="relative z-10 text-white">{link.label}</span>
+            <span className="relative z-10 text-gray-800 font-medium">
+              {link.label}
+            </span>
             <motion.div
-              className="absolute bottom-0 left-0 w-0 h-0.5 bg-white group-hover:w-full transition-all duration-300"
+              className="absolute bottom-0 left-0 w-0 h-0.5 bg-gray-800 group-hover:w-full transition-all duration-300"
               whileHover={{ width: "100%" }}
             />
           </motion.a>
@@ -60,7 +62,7 @@ function NotLoggedInNavBar() {
       >
         <Button
           variant="outline"
-          className="w-30"
+          className="w-30 cursor-pointer"
           onClick={() => navigate("/login")}
         >
           Start Now <ArrowRight className="w-4 h-4" />

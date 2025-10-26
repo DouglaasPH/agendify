@@ -1,67 +1,92 @@
-import { useEffect, useRef, useState } from "react";
+// react
+import { useEffect, useState } from "react";
+
+// components
+import LoginChat from "./components/loginChat";
+import AppointmentChat from "./components/appointmentChat";
+
+// api
+import { LoginWithCustomerIdApi, verifyChatCodeApi } from "@/api/customer";
+import { useParams } from "react-router-dom";
+import NotFoundChat from "./components/notFoundChat";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setAccessTokenCustomer,
+  updateCustomerData,
+  updateProfessionalData,
+} from "@/features/auth/customerSlice";
+import type { RootState } from "@/store";
+
+export interface UserDataType {
+  id: number;
+  name: string;
+  profession: string;
+  profileAvatarId: number;
+}
+
+export interface CustomerDataType {
+  name: string;
+  email: string;
+}
 
 function ChatPage() {
-  const [messages, SetMessages] = useState([
-    {
-      sender: "assistant",
-      text: "Hi! I'm Agendify's virtual assistant. How can I help you today?",
-    },
-  ]);
-  const [inputValue, setInputValue] = useState("");
-
-  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.customer.auth.isAuthenticated
+  );
+  const dispatch = useDispatch();
+  const { chat_code } = useParams<string>();
+  //const [isLoggedCustomer, setIsLoggedCustomer] = useState(false);
+  //const [userData, setUserData] = useState<UserDataType>();
+  //const [customerData, setCustomerData] = useState<CustomerDataType>();
+  //const [access_token, setAccess_token] = useState("");
+  const [isValidChatCode, setIsValidChatCode] = useState(false);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    const verifyChatCode = async () => {
+      if (!chat_code) return setIsValidChatCode(false);
+      const fetchAPI = await verifyChatCodeApi(chat_code);
 
-  const handleSend = () => {
-    if (inputValue.trim() == "") return;
+      if (fetchAPI.data) {
+        setIsValidChatCode(true);
+        dispatch(updateProfessionalData(fetchAPI.data));
+        //setUserData(fetchAPI.data);
+      }
+    };
+    verifyChatCode();
 
-    SetMessages([...messages, { sender: "user", text: inputValue }]);
-    setInputValue("");
-  };
+    const customer_id = localStorage.getItem("customer_id");
+
+    if (customer_id !== null) {
+      const fetch = async () => {
+        const fetchAPI = await LoginWithCustomerIdApi(Number(customer_id));
+        //setCustomerData(fetchAPI.data.customer_data);
+        //setAccess_token(fetchAPI.data.access_token);
+        localStorage.setItem(
+          "customer_id",
+          String(fetchAPI.data.customer_data.id)
+        );
+        dispatch(setAccessTokenCustomer(fetchAPI.data.access_token));
+        dispatch(updateCustomerData(fetchAPI.data.customer_data));
+      };
+      fetch();
+      //setIsLoggedCustomer(true);
+    }
+  });
 
   return (
-    <div className="flex justify-center items-center p-[0.4rem] pt-20 xl:pb-15">
-      <div className="h-full w-135 sm:w-200 xl:w-270 xl:mt-12 mt-8 flex flex-col justify-between items-center gap-20">
-        <h1 className="text-center font-inter font-bold text-[1.5rem] sm:text-[2rem] xl:text-[2.5rem] text-[#121417]">
-          Scheduling Assistant
-        </h1>
-        <section className="w-full flex flex-col gap-10 pb-20">
-          {messages.map((msg, index) => (
-            <p
-              key={index}
-              className={`font-inter font-normal text-[0.8rem] sm:text-[0.8rem] xl:text-[0.9rem] p-2 rounded-lg max-w-[25rem] break-words ${
-                msg.sender === "user"
-                  ? "bg-blue-500 text-[#FFFFFF] self-end"
-                  : "bg-gray-300 text-[#121417] self-start"
-              }`}
-            >
-              {msg.text}
-            </p>
-          ))}
-          <div ref={messagesEndRef} className="w-0 h-0" />
-        </section>
-        <section className="bottom-0 fixed w-135 sm:w-160 xl:w-270 h-20 sm:h-20 xl:h-18 bg-[#FFFFFF]">
-          <div className="w-full h-15 sm:h-14 xl:h-13 bg-[#F0F2F5] rounded-lg flex flex-row justify-between items-center pl-5 pr-5">
-            <input
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSend()}
-              placeholder="Type your message..."
-              className="h-10 xl:w-247 font-inter font-semibold text-[0.8rem] sm:text-[0.8rem] xl:text-[0.9rem] text-[#61738A] outline-none focus:ring-0"
-            />
-            <button
-              onClick={handleSend}
-              className="bg-[#0D78F2] h-9 w-12 sm:h-9 sm:w-12 xl:h-9 xl:w-13 flex justify-center items-center rounded-xl cursor-pointer hover:opacity-95"
-            ></button>
-          </div>
-        </section>
-      </div>
-    </div>
+    <main className="h-screen w-full px-5 lg:px-0">
+      {isValidChatCode && isAuthenticated ? (
+        <AppointmentChat />
+      ) : isValidChatCode && !isAuthenticated ? (
+        <LoginChat />
+      ) : (
+        <NotFoundChat />
+      )}
+    </main>
   );
 }
 
 export default ChatPage;
+
+/*
+ */

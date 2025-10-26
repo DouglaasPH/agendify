@@ -28,6 +28,7 @@ import {
 
 // motion
 import { motion } from "motion/react";
+import { handleValidateEmail } from "@/lib/utils";
 
 function RegisterPage() {
   const dispatch = useDispatch();
@@ -58,18 +59,6 @@ function RegisterPage() {
     }
 
     setValidateName(state);
-    return state;
-  };
-
-  const handleValidateEmail = () => {
-    const regex = /^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$/;
-    let state = false;
-
-    if (regex.test(email)) {
-      state = true;
-    }
-
-    setValidateEmail(state);
     return state;
   };
 
@@ -144,13 +133,15 @@ function RegisterPage() {
   const handleRegister = async () => {
     if (
       handleValidateName() &&
-      handleValidateEmail() &&
+      handleValidateEmail(email) &&
       handleValidatePhoneNumber() &&
       handleValidateProfession() &&
       handleValidateConfirmationPassword()
     ) {
+      setValidateEmail(true);
       try {
         const response = await checkEmailApi(email);
+        console.log(response);
         if (!response.data.exists) {
           dispatch(
             updateRegister({
@@ -168,7 +159,9 @@ function RegisterPage() {
       } catch (error) {
         return error;
       }
-    } else return;
+    } else {
+      setValidateEmail(false);
+    }
   };
 
   return (
