@@ -1,9 +1,3 @@
-Perfeito 👏 lembrando: o **Agendify** é o teu projeto de **agendamento para profissionais autônomos** (como manicures, barbeiros e professores particulares), feito com **React no frontend**, **FastAPI no backend** e **SQLite/PostgreSQL** como banco.
-
-Abaixo está um **README técnico** voltado **especificamente para o frontend**, com foco em estrutura, tecnologias, comandos e decisões de arquitetura.
-
----
-
 # 🗓️ Agendify — Frontend
 
 **Agendify** é um sistema de agendamento inteligente para profissionais autônomos, permitindo interação entre clientes e prestadores de serviço de forma simples e automatizada.
