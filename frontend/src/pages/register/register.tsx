@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 // redux slice
 import { updateRegister } from "../../features/auth/registerSlice";
-import { checkEmailApi } from "../../api/authApi";
+import { checkEmailApi } from "../../services/authApi";
 
 // shadcn/ui
 import { Button } from "@/components/ui/button";
@@ -28,6 +28,8 @@ import {
 
 // motion
 import { motion } from "motion/react";
+
+// utils
 import { handleValidateEmail } from "@/lib/utils";
 
 function RegisterPage() {

@@ -1,6 +1,11 @@
-import { Card } from "@/components/ui/card";
-import { MessageCircle, TriangleAlert, X } from "lucide-react";
+// motion
 import { motion } from "motion/react";
+
+// lucide
+import { MessageCircle, TriangleAlert, X } from "lucide-react";
+
+// shadcn
+import { Card } from "@/components/ui/card";
 
 function NotFoundChat() {
   return (

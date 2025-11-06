@@ -1,13 +1,24 @@
-import type { Appointment } from "@/api/appointmentApi";
-import { allAppointmentsApi, cancelAppointmentsApi } from "@/api/customer";
+// react
+import { useEffect, useState } from "react";
+
+// shadcn
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { formatDate, formatHours } from "@/lib/utils";
-import type { RootState } from "@/store";
+
+// lucide
 import { Calendar, Clock, X } from "lucide-react";
-import { useEffect, useState } from "react";
+
+// redux
 import { useSelector } from "react-redux";
-import type { Step } from "../appointmentChat";
+import type { RootState } from "@/store";
+
+// api
+import { allAppointmentsApi, cancelAppointmentsApi } from "@/services/customer";
+import { formatDate, formatHours } from "@/lib/utils";
+
+// types
+import type { Appointment } from "@/types/appointment";
+import type { Step } from "@/types/chat";
 
 type ViewAppointmentsProps = {
   handleWithCustomerInteraction: (

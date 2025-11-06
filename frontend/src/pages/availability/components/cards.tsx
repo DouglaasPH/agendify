@@ -8,10 +8,10 @@ import { CalendarCheck, CalendarX, Timer, Users } from "lucide-react";
 import { motion } from "motion/react";
 
 // type
-import type { AvailabilitiesData } from "../availability";
+import type { Availabilities_data_for_page } from "@/types/availability";
 
 type CardsProps = {
-  availabilitiesData: AvailabilitiesData[];
+  availabilitiesData: Availabilities_data_for_page[];
 };
 
 function Cards({ availabilitiesData }: CardsProps) {

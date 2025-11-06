@@ -12,7 +12,7 @@ import { formatDate, formatHours } from "@/lib/utils";
 import { motion } from "motion/react";
 
 // API
-import { availabilityListApi } from "@/api/availability";
+import { availabilityListApi } from "@/services/availability";
 
 // shadcn
 import { Card } from "@/components/ui/card";
@@ -25,16 +25,11 @@ import NoAvailabilitiesFound from "./components/noAvailabilitiesFound";
 import PaginationComponent from "./components/pagination";
 import TitleAndDescriptionComponent from "./components/titleAndDescriptionComponent";
 
-export interface AvailabilitiesData {
-  id: number;
-  firstColumn: { weekday: string; dateFormatted: string };
-  secondColumn: { start_time: string; end_time: string };
-  thirdColumn: { slot_duration: number };
-  fourthColumn: { status: string };
-  fifthColumn: { customer: string | undefined };
-}
-
-export type Filter = [string, string, [string, string]];
+// types
+import type {
+  Availabilities_data_for_page,
+  Filter,
+} from "@/types/availability";
 
 function AvailabilityPage() {
   const access_token = useSelector(
@@ -59,14 +54,14 @@ function AvailabilityPage() {
     /* all user availability */
   }
   const [availabilitiesData, setAvailabilitiesData] = useState<
-    AvailabilitiesData[]
+    Availabilities_data_for_page[]
   >([]);
   {
     /* availability for viewing based on filters */
   }
-  const [tableDataToView, setTableDataToView] = useState<AvailabilitiesData[]>(
-    []
-  );
+  const [tableDataToView, setTableDataToView] = useState<
+    Availabilities_data_for_page[]
+  >([]);
 
   const maxVisible = 3;
 
@@ -127,7 +122,7 @@ function AvailabilityPage() {
       Past: 3,
     };
 
-    let dataToView: AvailabilitiesData[] = [];
+    let dataToView: Availabilities_data_for_page[] = [];
 
     if (selectionIndex === 0) {
       switch (typeOrder) {
@@ -266,7 +261,7 @@ function AvailabilityPage() {
           new Date(b.start_time).getTime() - new Date(a.start_time).getTime()
       );
 
-      const data: AvailabilitiesData[] = [];
+      const data: Availabilities_data_for_page[] = [];
 
       allAvailabilities.data.forEach((availability) => {
         const transformDate = formatDate(availability.start_time);

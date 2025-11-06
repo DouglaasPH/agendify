@@ -1,6 +1,9 @@
-import type { Availability } from "@/api/availability";
+// redux
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+
+// types
+import type { Availability } from "@/types/availability";
 
 interface CustomerData {
   id: null | number;

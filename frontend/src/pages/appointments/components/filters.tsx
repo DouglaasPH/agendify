@@ -32,15 +32,15 @@ import {
 import { motion } from "motion/react";
 
 // utils
+import type { Appointment_data_for_page } from "@/types/appointment";
+
+// types
 import { similarity } from "@/lib/utils";
 
-// type
-import type { AppointmentData } from "../appointments";
-
 type FiltersProps = {
-  appointmentsData: AppointmentData[];
-  tableDataToView: AppointmentData[];
-  setTableDataToView: (data: AppointmentData[]) => void;
+  appointmentsData: Appointment_data_for_page[];
+  tableDataToView: Appointment_data_for_page[];
+  setTableDataToView: (data: Appointment_data_for_page[]) => void;
   handleSetFilters: (index: number, newFilter: string) => void;
 };
 
@@ -55,7 +55,7 @@ function Filters({
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [time, setTime] = useState("");
 
-  function searchRows(data: AppointmentData[], query: string) {
+  function searchRows(data: Appointment_data_for_page[], query: string) {
     const normalizedQuery = query.toLowerCase().trim();
 
     return data.filter((item) => {

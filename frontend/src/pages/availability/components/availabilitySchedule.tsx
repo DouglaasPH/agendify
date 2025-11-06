@@ -38,16 +38,19 @@ import {
 import { motion } from "motion/react";
 
 // types
-import type { AvailabilitiesData, Filter } from "../availability";
+import type {
+  Availabilities_data_for_page,
+  Filter,
+} from "@/types/availability";
 
 // API
-import { availabilityDeleteApi } from "@/api/availability";
+import { availabilityDeleteApi } from "@/services/availability";
 
 type AvailabilityScheduleProps = {
-  availabilitiesData: AvailabilitiesData[];
-  tableDataToView: AvailabilitiesData[];
-  setTableDataToView: (value: AvailabilitiesData[]) => void;
-  setAvailabilitiesData: (value: AvailabilitiesData[]) => void;
+  availabilitiesData: Availabilities_data_for_page[];
+  tableDataToView: Availabilities_data_for_page[];
+  setTableDataToView: (value: Availabilities_data_for_page[]) => void;
+  setAvailabilitiesData: (value: Availabilities_data_for_page[]) => void;
   currentPage: number;
   amountOfSections: number;
   filters: Filter;

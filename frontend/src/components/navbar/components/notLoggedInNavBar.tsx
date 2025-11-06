@@ -33,7 +33,7 @@ function NotLoggedInNavBar() {
 
       {/* desktop layout */}
       <section className="md:flex sm:hidden hidden gap-15">
-        {navLinks.map((link, index) => (
+        {navLinks.map((link) => (
           <motion.a
             key={link.label}
             href={link.href}

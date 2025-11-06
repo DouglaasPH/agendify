@@ -1,3 +1,4 @@
+// react
 import {
   createBrowserRouter,
   createRoutesFromElements,
@@ -5,7 +6,15 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { useEffect } from "react";
+
+// Redux
 import { useDispatch } from "react-redux";
+import { logout, setAccessToken } from "./features/auth/authSlice";
+import { resetUserData, updateUserData } from "./features/auth/userDataSlice";
+import { updateLoading } from "./features/loadingSlice";
+
+// API
+import { getUserDataApi, refreshTokenApi } from "./services/authApi";
 
 // Private Routes
 import {
@@ -43,43 +52,35 @@ import ChatPage from "./pages/chat/chat";
 import CreateNewAvailabilityPage from "./pages/create_new_availability/createNewAvailability";
 import PrivacyPolicyPage from "./pages/privacy_policy/privacyPolicy";
 
-// Redux
-import { logout, setAccessToken } from "./features/auth/authSlice";
-import { resetUserData, updateUserData } from "./features/auth/userDataSlice";
-import { updateLoading } from "./features/loadingSlice";
-
-// API
-import { getUserDataApi, refreshTokenApi } from "./api/authApi";
-
 // URLs
-// /terms-of-use OK
-// privacy-policy OK
-// /about-us OK
-// /contact OK
-// /help-center OK
+// /terms-of-use
+// privacy-policy
+// /about-us
+// /contact
+// /help-center
 
-// /login OK
+// /login
 
-// /register OK
-// /register/accept-terms-of-use OK
-// /register/choose-your-avatar OK
+// /register
+// /register/accept-terms-of-use
+// /register/choose-your-avatar
 
-// /forgot-your-password OK
-// /forgot-your-password/reset-password OK
+// /forgot-your-password
+// /forgot-your-password/reset-password
 
-// /user/profile OK
-// /user/edit/user-data OK
-// /user/edit/email OK
-// /user/edit/email/succesfully OK
-// /user/edit/password OK
-// /user/password-changed-succesfully-notice OK
+// /user/profile
+// /user/edit/user-data
+// /user/edit/email
+// /user/edit/email/succesfully
+// /user/edit/password
+// /user/password-changed-succesfully-notice
 
-// /user/dashboard OK
-// /user/availability OK
-// /user/availability/create OK
-// /user/appointment OK
+// /user/dashboard
+// /user/availability
+// /user/availability/create
+// /user/appointment
 
-// chat PENDING
+// chat
 
 const browserRoutes = createBrowserRouter(
   createRoutesFromElements(
@@ -322,6 +323,3 @@ function App() {
 }
 
 export default App;
-
-// user/
-// element={<VerifyAuthentication />}

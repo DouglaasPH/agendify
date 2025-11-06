@@ -1,35 +1,33 @@
+// react
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import cartoonAvatars from "@/pages/choose_your_avatar/cartoonAvatars";
+
+// lucide
+import { User } from "lucide-react";
+
+// motion
 import { motion } from "motion/react";
-import LoadingType from "./loadingType";
+
+// pages
+import cartoonAvatars from "@/assets/cartoonAvatars";
+
+// components
 import Initial from "./chat/initial";
+import LoadingType from "./loadingType";
 import SelectDate from "./chat/selectDate";
 import ButtonBack from "./chat/buttonBack";
 import SelectTime from "./chat/selectTime";
 import ViewAppointments from "./chat/viewAppointments";
 import ConfirmingAppointment from "./chat/confirmingAppointment";
-import { User } from "lucide-react";
+
+// redux
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store";
+
+// utils
 import { formatDate } from "@/lib/utils";
 
-export type NewAppointment = {
-  id: number | null;
-  date: string;
-  start_time: string;
-  end_time: string;
-};
-
-export type Step =
-  | "initial"
-  | "selectDate"
-  | "selectTime"
-  | "confirmingAppointment"
-  | "confirmedAppointment"
-  | "schedulingFinalized"
-  | "viewAppointments"
-  | "cancelAppointment"
-  | "botDidntUndestand";
+// types
+import type { NewAppointment, Step } from "@/types/chat";
 
 function AppointmentChat() {
   const customerData = useSelector(

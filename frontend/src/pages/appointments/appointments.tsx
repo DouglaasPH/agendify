@@ -22,16 +22,10 @@ import PaginationComponent from "../availability/components/pagination";
 import NoAppointmentFound from "./components/noAppointmentsFound";
 
 // API
-import { appointmentListApi } from "../../api/appointmentApi";
+import { appointmentListApi } from "../../services/appointmentApi";
 
-export interface AppointmentData {
-  id: number;
-  firstColumn: { customer_name: string; customer_email: string };
-  secondColumn: { weekday: string; dateFormatted: string };
-  thirdColumn: { start_time: string; end_time: string };
-  fourthColumn: { slot_duration: number };
-  fifthColumn: { status: string };
-}
+// types
+import type { Appointment_data_for_page } from "@/types/appointment";
 
 export type Filter = [string, string, string];
 
@@ -48,13 +42,15 @@ function AppointmentsPage() {
   {
     /* all user appointment */
   }
-  const [appointmentsData, setAppointmentsData] = useState<AppointmentData[]>(
-    []
-  );
+  const [appointmentsData, setAppointmentsData] = useState<
+    Appointment_data_for_page[]
+  >([]);
   {
     /* appointment for viewing based on filters */
   }
-  const [tableDataToView, setTableDataToView] = useState<AppointmentData[]>([]);
+  const [tableDataToView, setTableDataToView] = useState<
+    Appointment_data_for_page[]
+  >([]);
   {
     /* number of pages for the table based on the amount of data */
   }
@@ -141,7 +137,7 @@ function AppointmentsPage() {
           new Date(a.availabilities.start_time).getTime()
       );
 
-      const data: AppointmentData[] = [];
+      const data: Appointment_data_for_page[] = [];
 
       allAppointments.data.forEach((appointment) => {
         const transformDate = formatDate(appointment.availabilities.start_time);

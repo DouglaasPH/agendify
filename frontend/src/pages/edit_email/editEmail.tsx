@@ -1,14 +1,27 @@
+// react
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import type { RootState } from "../../store";
-import { modifyUserEmail } from "../../api/authApi";
-import { updateUserData } from "../../features/auth/userDataSlice";
+
+// motion
 import { motion } from "motion/react";
+
+// lucide
 import { ArrowLeft, LockOpen, Mail, Save } from "lucide-react";
+
+// shadcn
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+
+// redux
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "../../store";
+import { updateUserData } from "../../features/auth/userDataSlice";
+
+// API
+import { modifyUserEmail } from "../../services/authApi";
+
+// components
 import VerificationEmailModal from "./verificationEmailModal/verificationEmailModal";
 
 function EditEmailPage() {

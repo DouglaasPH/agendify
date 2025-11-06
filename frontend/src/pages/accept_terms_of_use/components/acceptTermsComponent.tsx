@@ -1,19 +1,20 @@
 // react
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // redux
-// redux
-import { updateAcceptedTermsOfUse } from "../../../features/auth/registerSlice";
 import { useDispatch } from "react-redux";
+import { updateAcceptedTermsOfUse } from "../../../features/auth/registerSlice";
 
 // shadcn/ui
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { CardContent } from "@/components/ui/card";
 
 // lucide-react
 import { CircleCheckBig } from "lucide-react";
-import { useState } from "react";
-import { CardContent } from "@/components/ui/card";
+
+// motion
 import { motion } from "motion/react";
 
 function AcceptTermsSectionComponent() {
@@ -53,7 +54,7 @@ function AcceptTermsSectionComponent() {
               <div className="flex flex-row gap-3 items-center">
                 <Checkbox
                   checked={firstCheckbox}
-                  onCheckedChange={setFirstCheckbox}
+                  onCheckedChange={() => setFirstCheckbox(!firstCheckbox)}
                 />
                 <small
                   className="text-sm leading-none font-medium cursor-pointer select-none"
@@ -65,7 +66,7 @@ function AcceptTermsSectionComponent() {
               <div className="flex flex-row gap-3 items-center">
                 <Checkbox
                   checked={secondCheckbox}
-                  onCheckedChange={setSecondCheckbox}
+                  onCheckedChange={() => setSecondCheckbox(!secondCheckbox)}
                 />
                 <p
                   className="text-muted-foreground text-sm font-medium cursor-pointer select-none"

@@ -1,6 +1,11 @@
+// shadcn
 import { Button } from "@/components/ui/button";
+
+// lucide
 import { ArrowLeft } from "lucide-react";
-import type { Step } from "../appointmentChat";
+
+// types
+import type { Step } from "@/types/chat";
 
 type ButtonBackProps = {
   handleWithCustomerInteraction: (

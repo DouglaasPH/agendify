@@ -1,5 +1,4 @@
-// Configuração de axios para chamadas HTTP
-
+// axios
 import axios from "axios";
 
 const api = axios.create({

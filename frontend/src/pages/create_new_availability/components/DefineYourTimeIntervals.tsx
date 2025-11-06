@@ -11,10 +11,10 @@ import { AnimatePresence, motion } from "motion/react";
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "@/store";
-import {
-  setTimeIntervals,
-  type TimeIntervals,
-} from "@/features/createAvailability/createAvailability";
+import { setTimeIntervals } from "@/features/createAvailability/createAvailability";
+
+// types
+import type { TimeIntervals } from "@/types/availability";
 
 type TimeIntervalsProps = {
   setCurrentSection: (data: string) => void;

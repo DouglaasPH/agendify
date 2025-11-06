@@ -22,7 +22,7 @@ import { Badge } from "@/components/ui/badge";
 import { AnimatePresence, motion } from "motion/react";
 
 // cartoonAvatars
-import cartoonAvatars from "../cartoonAvatars";
+import cartoonAvatars from "../../../assets/cartoonAvatars";
 
 // hooks
 import { useChooseAvatar } from "../hooks/useChooseAvatar";

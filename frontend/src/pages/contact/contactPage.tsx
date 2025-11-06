@@ -1,3 +1,10 @@
+// lucide
+import { Instagram, Linkedin, Mail } from "lucide-react";
+
+// motion
+import { motion } from "motion/react";
+
+// shadcn/ui
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -6,8 +13,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Instagram, Linkedin, Mail } from "lucide-react";
-import { motion } from "motion/react";
 
 function ContactPage() {
   return (

@@ -8,18 +8,14 @@ import { Button } from "@/components/ui/button";
 // lucide
 import {
   ArrowRight,
-  Award,
   BarChart3,
   Bell,
-  Building,
   Calendar,
   Check,
   CirclePlay,
   Clock,
   Globe,
   Heart,
-  Lightbulb,
-  Rocket,
   Shield,
   Smartphone,
   Sparkles,
@@ -52,27 +48,6 @@ function HomePage() {
   const { scrollYProgress } = useScroll();
   const heroY = useTransform(scrollYProgress, [0, 1], [0, -50]);
   const featuresY = useTransform(scrollYProgress, [0, 1], [0, -30]);
-
-  const ourHistory = [
-    {
-      icon: Lightbulb,
-      label: "Problem Identified",
-      description:
-        "Professionals were wasting hours managing appointments manually, facing high no-show rates and inefficient processes.",
-    },
-    {
-      icon: Rocket,
-      label: "Solution Created",
-      description:
-        "We developed an intuitive platform that automates the entire process, from scheduling to reminders.",
-    },
-    {
-      icon: Award,
-      label: "Results Achieved",
-      description:
-        "Today, more than 10,000 professionals save time, increase revenue, and offer a better customer experience.",
-    },
-  ];
 
   const features = [
     {

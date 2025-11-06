@@ -15,15 +15,20 @@ import { Calendar, Funnel, Search } from "lucide-react";
 // motion
 import { motion } from "motion/react";
 
-// types
-import type { AvailabilitiesData, Filter } from "../availability";
+// utils
 import { similarity } from "@/lib/utils";
+
+// types
+import type {
+  Availabilities_data_for_page,
+  Filter,
+} from "@/types/availability";
 
 type SearchProps = {
   filters: Filter;
-  availabilitiesData: AvailabilitiesData[];
-  tableDataToView: AvailabilitiesData[];
-  setTableDataToView: (data: AvailabilitiesData[]) => void;
+  availabilitiesData: Availabilities_data_for_page[];
+  tableDataToView: Availabilities_data_for_page[];
+  setTableDataToView: (data: Availabilities_data_for_page[]) => void;
   handleSortRows: (
     selectionIndex: number,
     typeOrder: string,
@@ -61,7 +66,7 @@ function SearchComponent({
     }
   };
 
-  function searchRows(data: AvailabilitiesData[], query: string) {
+  function searchRows(data: Availabilities_data_for_page[], query: string) {
     const normalizedQuery = query.toLowerCase().trim();
 
     return data.filter((item) => {

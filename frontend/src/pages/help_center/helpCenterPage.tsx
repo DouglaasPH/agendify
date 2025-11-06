@@ -1,3 +1,13 @@
+// react
+import { useState } from "react";
+
+// lucide
+import { ChevronDown } from "lucide-react";
+
+// motion
+import { motion } from "motion/react";
+
+// shadcn
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -6,15 +16,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+
+// radix
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@radix-ui/react-accordion";
-import { ChevronDown } from "lucide-react";
-import { motion } from "motion/react";
-import { useState } from "react";
 
 function HelpCenterPage() {
   const [questionClicked, setQuestionClicked] = useState(0);

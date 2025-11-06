@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 import type { RootState } from "@/store";
 
 // cartoon avatars
-import cartoonAvatars from "@/pages/choose_your_avatar/cartoonAvatars";
+import cartoonAvatars from "@/assets/cartoonAvatars";
 
 // utils
 import { formatDate } from "@/lib/utils";

@@ -1,7 +1,8 @@
-// Slice do Redux (user, token, login, logout, etc.)
-
+// redux
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+
+// Slice do Redux (user, token, login, logout, etc.)
 
 interface AuthState {
   accessToken: string | null;

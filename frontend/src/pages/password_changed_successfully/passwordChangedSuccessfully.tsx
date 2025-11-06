@@ -1,8 +1,15 @@
+// react
+import { useNavigate } from "react-router-dom";
+
+// motion
+import { motion } from "motion/react";
+
+//lucide
+import { ArrowRight, CheckCircle } from "lucide-react";
+
+// shadcn
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowRight, CheckCircle } from "lucide-react";
-import { motion } from "motion/react";
-import { useNavigate } from "react-router-dom";
 
 function PasswordChangedSuccessfullyPage() {
   const navigate = useNavigate();

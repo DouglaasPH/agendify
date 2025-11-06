@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 // API
-import { getUserDataApi, loginApi } from "../../api/authApi";
+import { getUserDataApi, loginApi } from "../../services/authApi";
 
 // Redux
 import { useDispatch } from "react-redux";
@@ -19,6 +19,8 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+
+// motion
 import { motion } from "motion/react";
 
 function LoginPage() {

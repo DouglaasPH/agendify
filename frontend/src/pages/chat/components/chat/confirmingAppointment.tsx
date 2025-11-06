@@ -1,10 +1,21 @@
-import { createAppointmentsApi } from "@/api/customer";
+// shadcn
 import { Button } from "@/components/ui/button";
-import type { RootState } from "@/store";
+
+// lucide
 import { CircleCheckBig } from "lucide-react";
+
+// redux
 import { useSelector } from "react-redux";
-import type { NewAppointment, Step } from "../appointmentChat";
+import type { RootState } from "@/store";
+
+// api
+import { createAppointmentsApi } from "@/services/customer";
+
+// utils
 import { formatDate, formatHours } from "@/lib/utils";
+
+// types
+import type { NewAppointment, Step } from "@/types/chat";
 
 type ConfirmingAppointmentProps = {
   newAppointment: NewAppointment | undefined;

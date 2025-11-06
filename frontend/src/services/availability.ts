@@ -1,28 +1,12 @@
+// Api data of connection
 import api from "./api";
-import type { Appointment } from "./appointmentApi";
+
+// All routes
 import { ROUTES } from "./routes";
 
-interface Succesfully {
-  msg: string;
-}
-
-export interface Availability {
-  id: number;
-  user_id: number;
-  date: string;
-  start_time: string;
-  end_time: string;
-  slot_duration_minutes: number;
-  status: string;
-  appointments?: Appointment;
-}
-
-export interface AvailabilityCreate {
-  date: Date;
-  start_time: Date;
-  end_time: Date;
-  slot_duration_minutes: number;
-}
+// Types used in more than one file
+import type { Availability, AvailabilityCreate } from "@/types/availability";
+import type { Succesfully } from "@/types/common";
 
 interface AvailabilityListData {
   availability_id: number;
@@ -66,7 +50,6 @@ export const availabilityCreateApi = async (
   access_token: string | null,
   availability_data: AvailabilityCreate
 ): Promise<Succesfully> => {
-  console.log(access_token, availability_data);
   return await api.post(ROUTES.availability.create, availability_data, {
     headers: {
       "Content-Type": "application/json",

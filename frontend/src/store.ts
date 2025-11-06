@@ -1,4 +1,7 @@
+// redux
 import { configureStore } from "@reduxjs/toolkit";
+
+// slices
 import authReducer from "./features/auth/authSlice";
 import customerSlice from "./features/auth/customerSlice";
 import registerSlice from "./features/auth/registerSlice";

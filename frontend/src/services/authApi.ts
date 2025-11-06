@@ -1,4 +1,7 @@
+// Api data of connection
 import api from "./api";
+
+// All routes
 import { ROUTES } from "./routes";
 
 interface LoginData {
@@ -58,6 +61,15 @@ interface PutUserPassword {
   newPassword: string;
 }
 
+interface RegisterData {
+  name: string;
+  email: string;
+  phoneNumber: string;
+  profession: string;
+  password: string;
+  profileAvatarId: number;
+}
+
 export const loginApi = async (
   user_data: LoginData
 ): Promise<LoginResponse> => {
@@ -81,15 +93,6 @@ export const getUserDataApi = async (
     withCredentials: true,
   });
 };
-
-interface RegisterData {
-  name: string;
-  email: string;
-  phoneNumber: string;
-  profession: string;
-  password: string;
-  profileAvatarId: number;
-}
 
 export const registerApi = async (
   user_data: RegisterData

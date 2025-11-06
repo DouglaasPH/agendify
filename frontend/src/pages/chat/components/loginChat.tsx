@@ -1,17 +1,30 @@
-import { registerOrLoginWithtoutCustomerIdApi } from "@/api/customer";
+// react
+import { useState } from "react";
+
+// motion
+import { motion } from "motion/react";
+
+// shadcn
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { handleValidateEmail } from "@/lib/utils";
+
+// lucide
 import { MessageCircle, User } from "lucide-react";
-import { motion } from "motion/react";
-import { useState } from "react";
+
+// redux
 import { useDispatch, useSelector } from "react-redux";
 import {
   setAccessTokenCustomer,
   updateCustomerData,
 } from "@/features/auth/customerSlice";
 import type { RootState } from "@/store";
+
+// api
+import { registerOrLoginWithtoutCustomerIdApi } from "@/services/customer";
+
+// utils
+import { handleValidateEmail } from "@/lib/utils";
 
 function LoginChat() {
   const userData = useSelector(

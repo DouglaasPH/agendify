@@ -1,9 +1,12 @@
+// Api data of connection
 import api from "./api";
+
+// All routes
 import { ROUTES } from "./routes";
 
-interface Succesfully {
-  msg: string;
-}
+// Types used in more than one file
+import type { Appointment, AppointmentListResponse } from "@/types/appointment";
+import type { Succesfully } from "@/types/common";
 
 interface AppointmentListData {
   availabilities_id?: number;
@@ -14,30 +17,6 @@ interface AppointmentListData {
   start_time?: string;
   end_time?: string;
   slot_duration_minutes?: number;
-}
-
-interface Availability {
-  date: string;
-  end_time: string;
-  status: string;
-  id: number;
-  start_time: string;
-  user_id: number;
-  slot_duration_minutes: number;
-}
-
-export interface Appointment {
-  user_id: number;
-  availabilities_id: number;
-  customer: string;
-  id: number;
-  status: string;
-  customer_email: string;
-  availabilities: Availability;
-}
-
-export interface AppointmentListResponse {
-  data: Appointment[];
 }
 
 export const appointmentListApi = async (

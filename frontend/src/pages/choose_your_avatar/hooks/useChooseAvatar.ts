@@ -4,12 +4,16 @@ import { useState } from "react";
 // redux
 import { useDispatch } from "react-redux";
 import { updateProfileAvatarId } from "../../../features/auth/registerSlice";
-import { getUserDataApi, loginApi, registerApi } from "../../../api/authApi";
+import {
+  getUserDataApi,
+  loginApi,
+  registerApi,
+} from "../../../services/authApi";
 import { setAccessToken } from "../../../features/auth/authSlice";
 import { updateUserData } from "../../../features/auth/userDataSlice";
 
 // cartoonAvatars
-import cartoonAvatars from "../cartoonAvatars";
+import cartoonAvatars from "../../../assets/cartoonAvatars";
 
 interface UserRegistrationData {
   name: string;

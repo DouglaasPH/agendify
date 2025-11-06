@@ -1,5 +1,11 @@
+// Api data of connection
 import api from "./api";
+
+// All routes
 import { ROUTES } from "./routes";
+
+// Types used in more than one file
+import type { Succesfully } from "@/types/common";
 
 interface RegisterOrLoginWithoutCustomerIdData {
   name: string;
@@ -29,12 +35,6 @@ interface VerifyChatCodeResponse {
 interface CreateAppointmentData {
   professional_id: number;
   availability_id: number;
-}
-
-interface succesfullyResponse {
-  data: {
-    msg: string;
-  };
 }
 
 export const registerOrLoginWithtoutCustomerIdApi = async (
@@ -69,7 +69,7 @@ export const allAppointmentsApi = async (access_token: string) => {
 export const createAppointmentsApi = async (
   access_token: string,
   data: CreateAppointmentData
-): Promise<succesfullyResponse> => {
+): Promise<Succesfully> => {
   return await api.post(ROUTES.customer.createAppointment, data, {
     headers: {
       Authorization: `Bearer ${access_token}`,
@@ -80,7 +80,7 @@ export const createAppointmentsApi = async (
 export const cancelAppointmentsApi = async (
   access_token: string,
   appointmend_id: number
-): Promise<succesfullyResponse> => {
+): Promise<Succesfully> => {
   console.log(access_token, appointmend_id);
   return await api.put(
     ROUTES.customer.cancelAppointment(appointmend_id),

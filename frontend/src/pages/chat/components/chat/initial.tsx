@@ -1,6 +1,11 @@
-import { Button } from "@/components/ui/button";
+// lucide
 import { Calendar, Clock } from "lucide-react";
-import type { Step } from "../appointmentChat";
+
+// shadcn
+import { Button } from "@/components/ui/button";
+
+// types
+import type { Step } from "@/types/chat";
 
 type InitialProps = {
   handleWithCustomerInteraction: (

@@ -33,9 +33,13 @@ import PieChartGraphicComponent from "./components/pieChartGraphicComponent";
 import SimpleLineChartGraphicCompoent from "./components/simpleLineChartGraphicComponent";
 import UserSectionComponent from "@/components/user_section/UserSectionComponent";
 
+// types
+import type { Appointment } from "@/types/appointment";
+import type { Availability } from "@/types/availability";
+
 // API
-import { appointmentListApi, type Appointment } from "../../api/appointmentApi";
-import { availabilityListApi, type Availability } from "../../api/availability";
+import { appointmentListApi } from "@/services/appointmentApi";
+import { availabilityListApi } from "@/services/availability";
 
 interface UserData {
   appointments_today: Appointment[] | null;

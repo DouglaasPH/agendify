@@ -12,7 +12,7 @@ import { motion } from "motion/react";
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../store";
-import { modifyUserData } from "../../api/authApi";
+import { modifyUserData } from "../../services/authApi";
 import { updateUserData } from "../../features/auth/userDataSlice";
 import { ArrowLeft, Briefcase, Phone, Save, User } from "lucide-react";
 

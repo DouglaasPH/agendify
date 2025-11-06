@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 // cartoonAvatar
-import cartoonAvatars from "@/pages/choose_your_avatar/cartoonAvatars";
+import cartoonAvatars from "@/assets/cartoonAvatars";
 
 // logo component
 import LogoComponent from "@/components/logo/Logo";
@@ -15,7 +15,7 @@ import { resetUserData } from "@/features/auth/userDataSlice";
 import { logout } from "@/features/auth/authSlice";
 
 // API
-import { logoutApi } from "@/api/authApi";
+import { logoutApi } from "@/services/authApi";
 
 // motion
 import { motion } from "motion/react";
@@ -43,7 +43,7 @@ import {
 type NavLink = {
   label: string;
   address: string;
-  icon: React.ElementType; // <-- importante
+  icon: React.ElementType;
 };
 
 function LoggedInNavBar() {

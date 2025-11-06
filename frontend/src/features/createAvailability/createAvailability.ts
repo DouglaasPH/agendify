@@ -1,12 +1,10 @@
 // Slice do Redux (user, token, login, logout, etc.)
-
+// redux
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-export interface TimeIntervals {
-  start_time: string;
-  end_time: string;
-}
+// types
+import type { TimeIntervals } from "@/types/availability";
 
 export interface DataCards {
   intervals: number;

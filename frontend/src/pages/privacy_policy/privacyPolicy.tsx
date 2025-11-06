@@ -1,6 +1,5 @@
 // lucide
 import {
-  FileText,
   Shield,
   Users,
   Lock,

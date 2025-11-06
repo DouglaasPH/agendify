@@ -19,10 +19,10 @@ import TitleAndDescriptionComponent from "./components/TitleAndDescriptionCompon
 import Overview from "./components/Overview";
 
 // API
-import {
-  availabilityCreateApi,
-  type AvailabilityCreate,
-} from "@/api/availability";
+import { availabilityCreateApi } from "@/services/availability";
+
+// types
+import type { AvailabilityCreate } from "@/types/availability";
 
 function CreateNewAvailabilityPage() {
   const { dates, timeIntervals } = useSelector(

@@ -8,10 +8,10 @@ import { resetUserData } from "../../features/auth/userDataSlice";
 import { logout } from "../../features/auth/authSlice";
 
 // API
-import { deleteApi, logoutApi } from "../../api/authApi";
+import { deleteApi, logoutApi } from "../../services/authApi";
 
 // cartoonAvatars
-import cartoonAvatars from "../choose_your_avatar/cartoonAvatars";
+import cartoonAvatars from "../../assets/cartoonAvatars";
 
 // motion
 import { motion } from "motion/react";

@@ -1,3 +1,7 @@
+// motion
+import { motion } from "motion/react";
+
+// shadcn
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -7,7 +11,6 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { motion } from "motion/react";
 
 function ResetPasswordWithoutLoginPage() {
   return (

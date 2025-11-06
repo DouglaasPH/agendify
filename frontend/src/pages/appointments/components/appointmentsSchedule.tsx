@@ -26,17 +26,17 @@ import { Calendar, CircleAlert, Clock, Trash2, User } from "lucide-react";
 // motion
 import { motion } from "motion/react";
 
-// type
-import type { AppointmentData } from "../appointments";
+// types
+import type { Appointment_data_for_page } from "@/types/appointment";
 
 // API
-import { appointmentCancelApi } from "@/api/appointmentApi";
+import { appointmentCancelApi } from "@/services/appointmentApi";
 
 type AppointmentScheduleProps = {
-  appointmentsData: AppointmentData[];
-  tableDataToView: AppointmentData[];
-  setTableDataToView: (value: AppointmentData[]) => void;
-  setAppointmentsData: (value: AppointmentData[]) => void;
+  appointmentsData: Appointment_data_for_page[];
+  tableDataToView: Appointment_data_for_page[];
+  setTableDataToView: (value: Appointment_data_for_page[]) => void;
+  setAppointmentsData: (value: Appointment_data_for_page[]) => void;
   currentPage: number;
   amountOfSections: number;
   access_token: string | null;

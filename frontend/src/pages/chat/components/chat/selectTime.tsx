@@ -1,10 +1,21 @@
+// react
+import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
+
+// shadcn
 import { Card } from "@/components/ui/card";
+
+// lucide
 import { Clock } from "lucide-react";
-import type { NewAppointment, Step } from "../appointmentChat";
+
+// types
+import type { Availability } from "@/types/availability";
+import type { NewAppointment, Step } from "@/types/chat";
+
+// redux
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store";
-import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
-import type { Availability } from "@/api/availability";
+
+// utils
 import { formatHours } from "@/lib/utils";
 
 type SelectTimeProps = {

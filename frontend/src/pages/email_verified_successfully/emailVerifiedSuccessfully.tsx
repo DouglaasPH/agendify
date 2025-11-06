@@ -1,8 +1,15 @@
-import { Card } from "@/components/ui/card";
-import { ArrowRight, CheckCircle } from "lucide-react";
-import { motion } from "motion/react";
-import { Button } from "@/components/ui/button";
+// react
 import { useNavigate } from "react-router-dom";
+
+// lucide
+import { ArrowRight, CheckCircle } from "lucide-react";
+
+// motion
+import { motion } from "motion/react";
+
+// shadcn
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 function EmailVerifiedSuccesfullyPage() {
   const navigate = useNavigate();

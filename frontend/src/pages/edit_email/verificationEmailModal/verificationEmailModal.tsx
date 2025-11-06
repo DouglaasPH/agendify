@@ -1,8 +1,15 @@
+// react
+import { useNavigate } from "react-router-dom";
+
+// shadcn
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft, CheckCircle } from "lucide-react";
+
+// motion
 import { motion } from "motion/react";
-import { useNavigate } from "react-router-dom";
+
+// lucide
+import { ArrowLeft, CheckCircle } from "lucide-react";
 
 type Props = {
   newEmail: string;

@@ -11,10 +11,10 @@ import { CalendarDays } from "lucide-react";
 import { motion } from "motion/react";
 
 // type
-import type { AppointmentData } from "../appointments";
+import type { Appointment_data_for_page } from "@/types/appointment";
 
 type TitleAndStatusProps = {
-  appointmentsData: AppointmentData[];
+  appointmentsData: Appointment_data_for_page[];
 };
 
 function TitleAndStatus({ appointmentsData }: TitleAndStatusProps) {
