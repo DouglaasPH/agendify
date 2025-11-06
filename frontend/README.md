@@ -1,50 +1,50 @@
 # 🗓️ Agendify — Frontend
 
-**Agendify** é um sistema de agendamento inteligente para profissionais autônomos, permitindo interação entre clientes e prestadores de serviço de forma simples e automatizada.
-Esta parte do projeto corresponde ao **frontend**, desenvolvido em **React**, com foco em performance, componentização e integração com o backend FastAPI.
+**Agendify** is an intelligent scheduling system for self-employed professionals, enabling interaction between clients and service providers in a simple and automated way.
+This part of the project corresponds to the **frontend**, developed in **React**, focusing on performance, componentization, and integration with the FastAPI backend.
 
 ---
 
-## 🚀 Tecnologias Principais
+## 🚀 Main Technologies
 
-| Tecnologia                             | Uso                                                    |
-| -------------------------------------- | ------------------------------------------------------ |
-| **React.js (Vite)**                    | Framework base para construção da interface            |
-| **TypeScript**                         | Tipagem estática e segurança no código                 |
-| **React Router DOM**                   | Gerenciamento de rotas públicas e privadas             |
-| **Axios**                              | Comunicação com a API do backend                       |
-| **Shadcn/UI + Tailwind CSS**           | Estilização e componentes reutilizáveis                |
-| **React Hook Form + Zod**              | Validação e controle de formulários                    |
-| **Context API / Hooks personalizados** | Gerenciamento de autenticação e estado global          |
-| **Framer Motion**                      | Animações suaves em componentes e transições de página |
+| Technology                     | Usage                                                |
+| ------------------------------ | ---------------------------------------------------- |
+| **React.js (Vite)**            | Base framework for building the interface            |
+| **TypeScript**                 | Static typing and code safety                        |
+| **React Router DOM**           | Management of public and private routes              |
+| **Axios**                      | Communication with the backend API                   |
+| **Shadcn/UI + Tailwind CSS**   | Styling and reusable components                      |
+| **React Hook Form + Zod**      | Form validation and control                          |
+| **Context API / Custom Hooks** | Authentication and global state management           |
+| **Framer Motion**              | Smooth animations in components and page transitions |
 
 ---
 
-## 📁 Estrutura de Pastas
+## 📁 Folder Structure
 
 ```bash
 src/
-├── assets/                # Ícones, imagens e fontes
-├── components/            # Componentes reutilizáveis (botões, inputs, etc.)
-├── layouts/               # Layouts padrão (DashboardLayout, AuthLayout)
-├── css/               # Estilos complementares e personalizações de Tailwind
-├── feature/           # Lógicas de acesso e verificação de rotas (ex: usuário logado)
-├── lib/               # Funções utilitárias (ex: formatadores, helpers, validações)
-├── pages/             # Páginas da aplicação (Login, Dashboard, Agendamentos, etc.)
-├── store.ts           # Configuração global do Redux Toolkit
-├── index.css          # Arquivo principal de estilos com Tailwind CSS
-└── main.tsx           # Ponto de entrada do aplicativo
+├── assets/                # Icons, images, and fonts
+├── components/            # Reusable components (buttons, inputs, etc.)
+├── layouts/               # Standard layouts (DashboardLayout, AuthLayout)
+├── css/                   # Complementary styles and Tailwind customizations
+├── feature/               # Access logic and route verification (e.g., logged-in user)
+├── lib/                   # Utility functions (formatters, helpers, validations)
+├── pages/                 # Application pages (Login, Dashboard, Appointments, etc.)
+├── store.ts               # Global Redux Toolkit configuration
+├── index.css              # Main Tailwind CSS stylesheet
+└── main.tsx               # Application entry point
 ```
 
 ---
 
-## 🔑 Autenticação e Proteção de Rotas
+## 🔑 Authentication and Route Protection
 
-- A autenticação é gerenciada pelo **AuthContext** (`src/contexts/AuthContext.tsx`).
-- Tokens JWT são armazenados de forma segura (sessionStorage/localStorage).
-- Rotas protegidas utilizam o componente **`<PrivateRoute />`** (em `src/auth/PrivateRoute.tsx`), que redireciona usuários não autenticados para a tela de login.
+- Authentication is managed by **AuthContext** (`src/contexts/AuthContext.tsx`).
+- JWT tokens are securely stored (sessionStorage/localStorage).
+- Protected routes use the **`<PrivateRoute />`** component (`src/auth/PrivateRoute.tsx`), which redirects unauthenticated users to the login screen.
 
-Exemplo:
+Example:
 
 ```tsx
 <Route
@@ -59,63 +59,63 @@ Exemplo:
 
 ---
 
-## 🔄 Comunicação com o Backend
+## 🔄 Backend Communication
 
-- Todas as requisições HTTP utilizam **Axios** configurado em `src/services/api.ts`.
-- Há interceptadores para anexar o token JWT automaticamente.
-- As principais rotas incluem:
+- All HTTP requests use **Axios**, configured in `src/services/api.ts`.
+- Interceptors automatically attach the JWT token.
+- Main routes include:
 
-  - `POST /login` — autenticação
-  - `POST /agendar/` — chat de agendamento
-  - `POST /agendamentos/confirmar` — confirmação de agendamento
-  - `GET /agendamentos/` — listagem com filtros
-
----
-
-## 🧩 Tipagem
-
-- Todos os tipos reutilizados (ex: `User`, `Appointment`, `ApiResponse`) ficam em `src/types/`.
-- Tipos locais e específicos são definidos dentro do próprio componente.
+  - `POST /login` — authentication
+  - `POST /agendar/` — scheduling chat
+  - `POST /agendamentos/confirmar` — appointment confirmation
+  - `GET /agendamentos/` — listing with filters
 
 ---
 
-## 🎨 UI e Estilo
+## 🧩 Typing
 
-- **Tailwind CSS** fornece a base de estilização rápida e responsiva.
-- **Shadcn/UI** é usado para componentes acessíveis e personalizáveis (modais, botões, cards).
-- **Framer Motion** adiciona microanimações em transições de tela e elementos interativos.
-
----
-
-## 🧠 Boas Práticas de Código
-
-- Componentes são **funcionais e reutilizáveis**.
-- Imports seguem o padrão `@/` configurado no `tsconfig.json` (`baseUrl: "./src"`).
-- Tipos compartilhados e funções auxiliares não se misturam com lógica de UI.
+- All reusable types (e.g., `User`, `Appointment`, `ApiResponse`) are located in `src/types/`.
+- Local and specific types are defined within the respective component.
 
 ---
 
-## ⚙️ Configuração e Execução
+## 🎨 UI and Styling
 
-### 🧩 Instalar dependências
+- **Tailwind CSS** provides the foundation for fast and responsive styling.
+- **Shadcn/UI** is used for accessible and customizable components (modals, buttons, cards).
+- **Framer Motion** adds micro-animations to screen transitions and interactive elements.
+
+---
+
+## 🧠 Coding Best Practices
+
+- Components are **functional and reusable**.
+- Imports follow the `@/` pattern set in `tsconfig.json` (`baseUrl: "./src"`).
+- Shared types and helper functions are kept separate from UI logic.
+
+---
+
+## ⚙️ Setup and Execution
+
+### 🧩 Install dependencies
 
 ```bash
 npm install
 ```
 
-### ▶️ Rodar em ambiente de desenvolvimento
+### ▶️ Run in development mode
 
 ```bash
 npm run dev
 ```
 
-### 🏗️ Build para produção
+### 🏗️ Build for production
 
 ```bash
 npm run build
 ```
 
-### 🔍 Lint e formatação
+### 🔍 Lint and formatting
 
 ```bash
 npm run lint
@@ -124,24 +124,24 @@ npm run format
 
 ---
 
-## 🧪 Testes (opcional / futura implementação)
+## 🧪 Tests (optional / future implementation)
 
-- O projeto está preparado para testes com **Vitest** e **React Testing Library**.
-- Os testes futuros cobrirão:
+- The project is prepared for testing with **Vitest** and **React Testing Library**.
+- Future tests will cover:
 
-  - Hooks de autenticação
-  - Requisições à API
-  - Componentes críticos (forms, modal de agendamento)
-
----
-
-## 📦 Dependências Principais
-
-Perfeito 🔥 Aqui está sua seção **📦 Dependências Principais** formatada exatamente no mesmo estilo, mas com base **nas dependências reais** do seu projeto Agendify Frontend (mantendo apenas as essenciais e agrupando por finalidade).
+  - Authentication hooks
+  - API requests
+  - Critical components (forms, scheduling modal)
 
 ---
 
-## 📦 Dependências Principais
+## 📦 Main Dependencies
+
+Perfect 🔥 Here’s your **📦 Main Dependencies** section formatted exactly in the same style, based on the **real dependencies** from your Agendify Frontend project (keeping only essentials and grouped by purpose).
+
+---
+
+## 📦 Main Dependencies
 
 ```json
 "dependencies": {
@@ -173,7 +173,7 @@ Perfeito 🔥 Aqui está sua seção **📦 Dependências Principais** formatada
 
 ---
 
-## 🧰 Dependências de Desenvolvimento
+## 🧰 Development Dependencies
 
 ```json
 "devDependencies": {
@@ -194,9 +194,9 @@ Perfeito 🔥 Aqui está sua seção **📦 Dependências Principais** formatada
 
 ---
 
-## 👨‍💻 Autor
+## 👨‍💻 Author
 
 **Douglas Phelipe**
-Desenvolvedor em formação | Focado em Web Fullstack e Cloud
-📍 Pernambuco, Brasil
-🔗 [LinkedIn](https://linkedin.com/in/douglasphelipe)
+Aspiring Fullstack & Cloud Developer
+📍 Pernambuco, Brazil
+🔗 [LinkedIn](https://linkedin.com/in/douglas-phelipe)
