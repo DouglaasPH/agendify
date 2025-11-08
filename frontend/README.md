@@ -137,12 +137,6 @@ npm run format
 
 ## 📦 Main Dependencies
 
-Perfect 🔥 Here’s your **📦 Main Dependencies** section formatted exactly in the same style, based on the **real dependencies** from your Agendify Frontend project (keeping only essentials and grouped by purpose).
-
----
-
-## 📦 Main Dependencies
-
 ```json
 "dependencies": {
   "react": "^19.x",
