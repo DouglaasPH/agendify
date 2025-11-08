@@ -6,7 +6,7 @@ import { Shield } from "lucide-react";
 
 function SecondSectionComponent() {
   return (
-    <div className="flex flex-col h-110 gap-5">
+    <div className="flex flex-col h-auto gap-5 pb-5">
       <section className="flex flex-col items-center gap-3">
         <div className="flex flex-row items-center gap-2 w-full">
           <div className="w-9 h-9 bg-blue-100 rounded-lg flex items-center justify-center">

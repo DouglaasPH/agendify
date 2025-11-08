@@ -23,7 +23,7 @@ function PrivacyPolicyPage() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 1.2 }}
-        className="flex flex-col items-center gap-5 w-full px-10 md:px-0"
+        className="flex flex-col items-center gap-5 w-full px-10 px-10 md:px-40"
       >
         <div className="bg-gradient-to-br from-green-100 via-green-200 to-green p-4 md:p-3 rounded-2xl">
           <Shield className="size-8 md:size-12 text-green-600" />

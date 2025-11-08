@@ -1,3 +1,6 @@
+// react
+import { useNavigate } from "react-router-dom";
+
 // motion
 import { motion, useScroll, useTransform } from "motion/react";
 
@@ -48,6 +51,7 @@ function HomePage() {
   const { scrollYProgress } = useScroll();
   const heroY = useTransform(scrollYProgress, [0, 1], [0, -50]);
   const featuresY = useTransform(scrollYProgress, [0, 1], [0, -30]);
+  const navigate = useNavigate();
 
   const features = [
     {
@@ -258,14 +262,9 @@ function HomePage() {
           className="flex flex-col md:flex-row gap-5 w-full md:w-auto px-10"
         >
           <Button
-            variant="default"
-            className="w-full md:w-40 h-12 rounded-xl flex justify-center gap-5 text-sm font-semibold"
-          >
-            <CirclePlay className="size-4" /> View demo
-          </Button>
-          <Button
             variant="outline"
-            className="w-full md:w-40 h-12 rounded-xl flex justify-center gap-5 text-sm font-semibold"
+            className="w-auto md:w-md h-12 rounded-xl flex justify-center gap-5 text-sm font-semibold cursor-pointer"
+            onClick={() => navigate("login")}
           >
             Start for free <ArrowRight className="size-4" />
           </Button>
@@ -364,7 +363,7 @@ function HomePage() {
               Transform your management and maximize your results
             </p>
           </motion.div>
-          <div className="w-full grid grid-cols-1 md:grid-cols-[1fr_1fr_1fr] gap-7 px-2 md:px-0">
+          <div className="w-full grid grid-cols-1 md:grid-cols-[1fr_1fr_1fr] gap-7 px-4">
             {forProfessionalsData.map((forProfessional, index) => (
               <motion.div
                 key={index}
@@ -402,7 +401,7 @@ function HomePage() {
               Simple, fast, and personalized experience
             </p>
           </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr_1fr] gap-7 px-3 md:px-0 w-full">
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr_1fr] gap-7 px-4 w-full">
             {forCustomers.map((forCustomers, index) => (
               <motion.div
                 key={index}
@@ -747,7 +746,7 @@ function HomePage() {
             Real stories from professionals who transformed their businesses
           </p>
         </motion.div>
-        <div className="w-full grid grid-cols-1 md:grid-cols-[1fr_1fr_1fr] gap-7 px-3 md:px-0">
+        <div className="w-full grid grid-cols-1 xl:grid-cols-[1fr_1fr_1fr] gap-7 px-3 md:px-0">
           {testimonials.map((testimonial, index) => (
             <motion.div
               key={index}
@@ -796,21 +795,16 @@ function HomePage() {
             </p>
           </div>
 
-          <div className="w-2/3 md:w-1/5 grid grid-cols-1 md:grid-cols-[49%_49%] gap-3 md:gap-0 justify-between">
+          <div className="flex items-center  justify-center">
             <Button
               variant="secondary"
-              className="h-12 rounded-xl flex justify-center gap-5 text-sm font-semibold"
+              className="h-12 rounded-xl flex justify-center gap-5 text-sm font-semibold w-auto md:w-sm cursor-pointer"
+              onClick={() => navigate("login")}
             >
               <CirclePlay className="size-4" /> Start for free
             </Button>
-            <Button
-              variant="default"
-              className="h-12 rounded-xl flex justify-center gap-5 text-sm font-semibold"
-            >
-              Schedule a demo <ArrowRight className="size-4" />
-            </Button>
           </div>
-          <div className="h-25 md:h-auto md:w-1/5 flex flex-col md:flex-row items-center justify-between">
+          <div className="h-25 md:h-auto flex flex-col md:flex-row gap-5 items-center">
             <small className="flex items-center gap-1 text-[0.8rem] md:text-sm text-gray-400">
               <Shield className="text-gray-400 size-3 md:size-4" /> Secure data
             </small>

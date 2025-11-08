@@ -188,7 +188,7 @@ function RegisterPage() {
           </div>
         </div>
       ) : null}
-      <main className="p-5 h-screen w-full">
+      <main className="min-h-screen w-full px-5 md:px-0 flex justify-center items-center">
         <motion.div
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}

@@ -21,10 +21,9 @@ function NotLoggedInNavBar() {
   const navigate = useNavigate();
 
   const navLinks = [
-    { label: "Start", href: "#start" },
-    { label: "About", href: "#about" },
-    { label: "Features", href: "#features" },
-    { label: "Contact", href: "#contact" },
+    { label: "Home", href: "/" },
+    { label: "About us", href: "about-us" },
+    { label: "Contact", href: "contact" },
   ];
 
   return (
@@ -78,16 +77,16 @@ function NotLoggedInNavBar() {
       >
         <Sheet>
           <SheetTrigger>
-            <Button className="bg-white/8 border-1 border-white/20 w-10">
+            <Button className="bg-gray-900/90 border-1 border-white/20 w-10">
               <Menu className="size-5" />
             </Button>
           </SheetTrigger>
 
-          <SheetContent className="grid grid-rows-[1fr_4fr_1fr] border-none bg-gradient-to-b from-black to-gray-900 [&>button]:text-white [&>button>svg]:w-8 [&>button>svg]:h-8">
-            <SheetHeader className="flex justify-center border-b-1 border-b-white/10">
+          <SheetContent className="grid grid-rows-[1fr_4fr_1fr] border-none bg-white [&>button]:text-black [&>button>svg]:w-8 [&>button>svg]:h-8">
+            <SheetHeader className="flex justify-center border-b-1 border-b-gray-900/20">
               <LogoComponent />
             </SheetHeader>
-            <section className="px-8 pb-4 flex flex-col gap-10 border-b-1 border-b-white/10">
+            <section className="px-8 pb-4 flex flex-col gap-10 border-b-1 border-b-gray-900/20">
               {navLinks.map((link, index) => (
                 <motion.a
                   key={link.label}
@@ -95,9 +94,9 @@ function NotLoggedInNavBar() {
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.2, duration: 0.4 }}
-                  className="text-gray-300 hover:bg-red transition-all duration-300 hover:bg-white/5 rounded-lg pl-5 w-full h-15 flex justify-start items-center"
+                  className="text-gray-900 hover:bg-red transition-all duration-300 hover:bg-white/5 rounded-lg pl-5 w-full h-15 flex justify-start items-center"
                 >
-                  <span className="relative z-10 text-white text-lg">
+                  <span className="relative z-10 text-gray-900 text-lg">
                     {link.label}
                   </span>
                 </motion.a>
@@ -111,8 +110,7 @@ function NotLoggedInNavBar() {
                 className="w-5/8 flex justify-center items-center"
               >
                 <Button
-                  variant="secondary"
-                  className="cursor-pointer font-semibold text-lg w-full rounded-full"
+                  className="cursor-pointer font-semibold text-lg w-full"
                   onClick={() => navigate("/login")}
                 >
                   Start now
@@ -123,7 +121,7 @@ function NotLoggedInNavBar() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6, duration: 0.2 }}
-                className="text-muted-foreground text-sm text-white/50"
+                className="text-muted-foreground text-sm text-gray-900/30"
               >
                 Free trial for 15 days
               </motion.p>

@@ -20,7 +20,7 @@ function TermsOfUsePage() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 1.2 }}
-        className="flex flex-col items-center gap-5 w-full px-10 md:px-0"
+        className="flex flex-col items-center gap-5 w-full px-10 md:px-40"
       >
         <div className="bg-gradient-to-br from-blue-100 via-blue-200 to-blue p-4 md:p-3 rounded-2xl">
           <FileText className="size-8 md:size-12 text-blue-600" />

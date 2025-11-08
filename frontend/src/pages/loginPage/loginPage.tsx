@@ -65,7 +65,7 @@ function LoginPage() {
         </div>
       ) : null}
 
-      <main className="h-screen w-full px-5 md:px-0">
+      <main className="h-screen w-full px-5 md:px-0 my-10">
         <motion.div
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}

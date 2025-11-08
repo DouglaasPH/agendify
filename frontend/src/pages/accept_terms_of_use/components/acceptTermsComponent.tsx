@@ -22,7 +22,6 @@ function AcceptTermsSectionComponent() {
   const dispatch = useDispatch();
 
   const [firstCheckbox, setFirstCheckbox] = useState(false);
-  const [secondCheckbox, setSecondCheckbox] = useState(false);
 
   const handleAccepted = () => {
     dispatch(updateAcceptedTermsOfUse({ acceptedTermsOfUse: true }));
@@ -62,19 +61,6 @@ function AcceptTermsSectionComponent() {
                 >
                   I have read and agree to the Terms of Use and Privacy Policy *
                 </small>
-              </div>
-              <div className="flex flex-row gap-3 items-center">
-                <Checkbox
-                  checked={secondCheckbox}
-                  onCheckedChange={() => setSecondCheckbox(!secondCheckbox)}
-                />
-                <p
-                  className="text-muted-foreground text-sm font-medium cursor-pointer select-none"
-                  onClick={() => setSecondCheckbox(!secondCheckbox)}
-                >
-                  I'd like to receive updates about new features and
-                  improvements (optional)
-                </p>
               </div>
             </div>
             <div className="grid grid-cols-[49%_49%] gap-4 w-full">
