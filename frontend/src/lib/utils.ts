@@ -88,3 +88,11 @@ export function handleValidateEmail(email: string) {
 
   return state;
 }
+
+export function goToErrorPage(error: any) {
+  if (!error.response) {
+    window.location.href = `/error/${503}`;
+  } else {
+    window.location.href = `/error/${error.response.status}`;
+  }
+}

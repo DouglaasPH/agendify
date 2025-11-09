@@ -15,6 +15,9 @@ import { updateUserData } from "../../../features/auth/userDataSlice";
 // cartoonAvatars
 import cartoonAvatars from "../../../assets/cartoonAvatars";
 
+// utils
+import { goToErrorPage } from "@/lib/utils";
+
 interface UserRegistrationData {
   name: string;
   email: string;
@@ -39,7 +42,7 @@ export const useChooseAvatar = (
     try {
       await registerApi(userData);
     } catch (error) {
-      return error;
+      goToErrorPage(error);
     }
   };
 
@@ -55,7 +58,7 @@ export const useChooseAvatar = (
       dispatch(setAccessToken(loginResponse.data.access_token));
       dispatch(updateUserData(userDataResponse.data));
     } catch (error) {
-      return error;
+      goToErrorPage(error);
     }
   };
 

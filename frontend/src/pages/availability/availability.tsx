@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import type { RootState } from "../../store";
 
 // utils
-import { formatDate, formatHours } from "@/lib/utils";
+import { formatDate, formatHours, goToErrorPage } from "@/lib/utils";
 
 // motion
 import { motion } from "motion/react";
@@ -254,44 +254,47 @@ function AvailabilityPage() {
 
   useEffect(() => {
     const fetchAvailabilities = async () => {
-      const allAvailabilities = await availabilityListApi(access_token, {});
+      try {
+        const allAvailabilities = await availabilityListApi(access_token, {});
+        allAvailabilities.data.sort(
+          (a, b) =>
+            new Date(b.start_time).getTime() - new Date(a.start_time).getTime()
+        );
 
-      allAvailabilities.data.sort(
-        (a, b) =>
-          new Date(b.start_time).getTime() - new Date(a.start_time).getTime()
-      );
+        const data: Availabilities_data_for_page[] = [];
 
-      const data: Availabilities_data_for_page[] = [];
+        allAvailabilities.data.forEach((availability) => {
+          const transformDate = formatDate(availability.start_time);
+          const transformStartTime = formatHours(availability.start_time);
+          const transformEndTime = formatHours(availability.end_time);
+          const customer = availability.appointments?.customer;
 
-      allAvailabilities.data.forEach((availability) => {
-        const transformDate = formatDate(availability.start_time);
-        const transformStartTime = formatHours(availability.start_time);
-        const transformEndTime = formatHours(availability.end_time);
-        const customer = availability.appointments?.customer;
-
-        data.push({
-          id: availability.id,
-          firstColumn: transformDate,
-          secondColumn: {
-            start_time: transformStartTime,
-            end_time: transformEndTime,
-          },
-          thirdColumn: {
-            slot_duration: availability.slot_duration_minutes,
-          },
-          fourthColumn: {
-            status:
-              availability.status.charAt(0).toUpperCase() +
-              availability.status.slice(1),
-          },
-          fifthColumn: {
-            customer: customer,
-          },
+          data.push({
+            id: availability.id,
+            firstColumn: transformDate,
+            secondColumn: {
+              start_time: transformStartTime,
+              end_time: transformEndTime,
+            },
+            thirdColumn: {
+              slot_duration: availability.slot_duration_minutes,
+            },
+            fourthColumn: {
+              status:
+                availability.status.charAt(0).toUpperCase() +
+                availability.status.slice(1),
+            },
+            fifthColumn: {
+              customer: customer,
+            },
+          });
         });
-      });
 
-      setAvailabilitiesData(data);
-      setTableDataToView(data);
+        setAvailabilitiesData(data);
+        setTableDataToView(data);
+      } catch (error) {
+        goToErrorPage(error);
+      }
     };
     fetchAvailabilities();
   }, [access_token]);

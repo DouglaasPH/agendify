@@ -12,7 +12,7 @@ import { Card } from "@/components/ui/card";
 import { motion } from "motion/react";
 
 // utils
-import { formatDate, formatHours } from "@/lib/utils";
+import { formatDate, formatHours, goToErrorPage } from "@/lib/utils";
 
 // components
 import TitleAndStatus from "./components/titleAndStatus";
@@ -129,48 +129,54 @@ function AppointmentsPage() {
 
   useEffect(() => {
     const fetchAvailabilities = async () => {
-      const allAppointments = await appointmentListApi(access_token, {});
+      try {
+        const allAppointments = await appointmentListApi(access_token, {});
 
-      allAppointments.data.sort(
-        (a, b) =>
-          new Date(b.availabilities.start_time).getTime() -
-          new Date(a.availabilities.start_time).getTime()
-      );
-
-      const data: Appointment_data_for_page[] = [];
-
-      allAppointments.data.forEach((appointment) => {
-        const transformDate = formatDate(appointment.availabilities.start_time);
-        const transformStartTime = formatHours(
-          appointment.availabilities.start_time
+        allAppointments.data.sort(
+          (a, b) =>
+            new Date(b.availabilities.start_time).getTime() -
+            new Date(a.availabilities.start_time).getTime()
         );
-        const transformEndTime = formatHours(
-          appointment.availabilities.end_time
-        );
-        const customer_name = appointment.customer;
-        const customer_email = appointment.customer_email;
 
-        data.push({
-          id: appointment.id,
-          firstColumn: { customer_name, customer_email },
-          secondColumn: transformDate,
-          thirdColumn: {
-            start_time: transformStartTime,
-            end_time: transformEndTime,
-          },
-          fourthColumn: {
-            slot_duration: appointment.availabilities.slot_duration_minutes,
-          },
-          fifthColumn: {
-            status:
-              appointment.status.charAt(0).toUpperCase() +
-              appointment.status.slice(1),
-          },
+        const data: Appointment_data_for_page[] = [];
+
+        allAppointments.data.forEach((appointment) => {
+          const transformDate = formatDate(
+            appointment.availabilities.start_time
+          );
+          const transformStartTime = formatHours(
+            appointment.availabilities.start_time
+          );
+          const transformEndTime = formatHours(
+            appointment.availabilities.end_time
+          );
+          const customer_name = appointment.customer;
+          const customer_email = appointment.customer_email;
+
+          data.push({
+            id: appointment.id,
+            firstColumn: { customer_name, customer_email },
+            secondColumn: transformDate,
+            thirdColumn: {
+              start_time: transformStartTime,
+              end_time: transformEndTime,
+            },
+            fourthColumn: {
+              slot_duration: appointment.availabilities.slot_duration_minutes,
+            },
+            fifthColumn: {
+              status:
+                appointment.status.charAt(0).toUpperCase() +
+                appointment.status.slice(1),
+            },
+          });
         });
-      });
 
-      setAppointmentsData(data);
-      setTableDataToView(data);
+        setAppointmentsData(data);
+        setTableDataToView(data);
+      } catch (error) {
+        goToErrorPage(error);
+      }
     };
     fetchAvailabilities();
   }, [access_token]);

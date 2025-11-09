@@ -1,3 +1,4 @@
+// react
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -5,6 +6,9 @@ import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+
+// lucide
+import { ArrowLeft, Briefcase, Phone, Save, User } from "lucide-react";
 
 // motion
 import { motion } from "motion/react";
@@ -14,7 +18,9 @@ import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../../store";
 import { modifyUserData } from "../../services/authApi";
 import { updateUserData } from "../../features/auth/userDataSlice";
-import { ArrowLeft, Briefcase, Phone, Save, User } from "lucide-react";
+
+// utils
+import { goToErrorPage } from "@/lib/utils";
 
 function EditDataPage() {
   const dispatch = useDispatch();
@@ -79,7 +85,7 @@ function EditDataPage() {
         dispatch(updateUserData(response.data));
         navigate("/user/profile/");
       } catch (error) {
-        return error;
+        goToErrorPage(error);
       }
     } else return;
   };

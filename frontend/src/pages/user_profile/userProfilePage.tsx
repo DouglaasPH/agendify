@@ -32,6 +32,9 @@ import {
   User,
 } from "lucide-react";
 
+// utils
+import { goToErrorPage } from "@/lib/utils";
+
 function UserProfilePage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -46,7 +49,7 @@ function UserProfilePage() {
       dispatch(resetUserData());
       dispatch(logout());
     } catch (error) {
-      return error;
+      goToErrorPage(error);
     }
   };
 
@@ -56,7 +59,7 @@ function UserProfilePage() {
       dispatch(resetUserData());
       dispatch(logout());
     } catch (error) {
-      return error;
+      goToErrorPage(error);
     }
   };
 

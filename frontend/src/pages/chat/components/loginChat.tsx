@@ -24,7 +24,7 @@ import type { RootState } from "@/store";
 import { registerOrLoginWithtoutCustomerIdApi } from "@/services/customer";
 
 // utils
-import { handleValidateEmail } from "@/lib/utils";
+import { goToErrorPage, handleValidateEmail } from "@/lib/utils";
 
 function LoginChat() {
   const userData = useSelector(
@@ -48,16 +48,20 @@ function LoginChat() {
 
   const handleCickButton = async () => {
     if (name.length > 0 && isValidEmail) {
-      const fetchAPI = await registerOrLoginWithtoutCustomerIdApi({
-        name,
-        email,
-      });
-      localStorage.setItem(
-        "customer_id",
-        String(fetchAPI.data.customer_data.id)
-      );
-      dispatch(updateCustomerData(fetchAPI.data.customer_data));
-      dispatch(setAccessTokenCustomer(fetchAPI.data.access_token));
+      try {
+        const fetchAPI = await registerOrLoginWithtoutCustomerIdApi({
+          name,
+          email,
+        });
+        localStorage.setItem(
+          "customer_id",
+          String(fetchAPI.data.customer_data.id)
+        );
+        dispatch(updateCustomerData(fetchAPI.data.customer_data));
+        dispatch(setAccessTokenCustomer(fetchAPI.data.access_token));
+      } catch (error) {
+        goToErrorPage(error);
+      }
     } else return;
   };
 

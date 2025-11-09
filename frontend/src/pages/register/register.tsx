@@ -1,3 +1,4 @@
+// react
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -30,7 +31,7 @@ import {
 import { motion } from "motion/react";
 
 // utils
-import { handleValidateEmail } from "@/lib/utils";
+import { goToErrorPage, handleValidateEmail } from "@/lib/utils";
 
 function RegisterPage() {
   const dispatch = useDispatch();
@@ -143,7 +144,6 @@ function RegisterPage() {
       setValidateEmail(true);
       try {
         const response = await checkEmailApi(email);
-        console.log(response);
         if (!response.data.exists) {
           dispatch(
             updateRegister({
@@ -159,7 +159,7 @@ function RegisterPage() {
           SetEmailExists(true);
         }
       } catch (error) {
-        return error;
+        goToErrorPage(error);
       }
     } else {
       setValidateEmail(false);

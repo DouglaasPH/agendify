@@ -41,6 +41,9 @@ import type { Availability } from "@/types/availability";
 import { appointmentListApi } from "@/services/appointmentApi";
 import { availabilityListApi } from "@/services/availability";
 
+// utils
+import { goToErrorPage } from "@/lib/utils";
+
 interface UserData {
   appointments_today: Appointment[] | null;
   available_slots: Availability[] | null;
@@ -153,86 +156,90 @@ function DashboardPage() {
       const today = new Date().toISOString().split("T")[0];
       const todayDate = new Date(today);
 
-      const allAppointmentsResponse = await appointmentListApi(
-        access_token,
-        {}
-      );
-
-      if (allAppointmentsResponse.data.length !== 0) {
-        todayAppointments = allAppointmentsResponse.data.filter(
-          (appointment: Appointment) =>
-            appointment.availabilities?.date === today
-        );
-        nextAppointment = allAppointmentsResponse.data.filter(
-          (appointment: Appointment) => {
-            if (!appointment.availabilities?.date) return false;
-            return new Date(appointment.availabilities.date) > todayDate;
-          }
-        );
-
-        {
-          /*  data for simple line graphic */
-        }
-        const todayy = new Date();
-        const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-        const firstDayOfWeek = new Date(todayy);
-        firstDayOfWeek.setDate(todayy.getDate() - todayy.getDay()); // domingo da semana atual
-        firstDayOfWeek.setHours(0, 0, 0, 0);
-
-        const lastDayOfWeek = new Date(firstDayOfWeek);
-        lastDayOfWeek.setDate(firstDayOfWeek.getDate() + 6); // sábado da semana atual
-        lastDayOfWeek.setHours(23, 59, 59, 999);
-
-        const updatedData = simpleLineData.map((dayObj) => {
-          const dayIndex = weekDays.indexOf(dayObj.day);
-
-          const appointmentsCount = allAppointmentsResponse.data.filter(
-            (appointment: Appointment) => {
-              if (!appointment.availabilities?.start_time) return false;
-              const appointmentDate = new Date(
-                appointment.availabilities.start_time
-              );
-
-              // só contar se estiver dentro da semana atual
-              if (
-                appointmentDate < firstDayOfWeek ||
-                appointmentDate > lastDayOfWeek
-              )
-                return false;
-
-              return appointmentDate.getDay() === dayIndex;
-            }
-          ).length;
-
-          return {
-            ...dayObj,
-            appointments: appointmentsCount,
-          };
-        });
-
-        setSimpleLineData(updatedData);
-        const allAvailabilitiesResponse = await availabilityListApi(
+      try {
+        const allAppointmentsResponse = await appointmentListApi(
           access_token,
           {}
         );
 
-        if (allAvailabilitiesResponse.data.length !== 0) {
-          freeSlotsAvailabilities = allAvailabilitiesResponse.data.filter(
-            (availability: Availability) => {
-              if (
-                availability.status === "uncoupled" &&
-                new Date(availability.date) >= todayDate
-              )
-                return availability;
+        if (allAppointmentsResponse.data.length !== 0) {
+          todayAppointments = allAppointmentsResponse.data.filter(
+            (appointment: Appointment) =>
+              appointment.availabilities?.date === today
+          );
+          nextAppointment = allAppointmentsResponse.data.filter(
+            (appointment: Appointment) => {
+              if (!appointment.availabilities?.date) return false;
+              return new Date(appointment.availabilities.date) > todayDate;
             }
           );
-        }
 
-        setUserData2({
-          appointments_today: todayAppointments,
-          next_appointments: nextAppointment,
-          available_slots: freeSlotsAvailabilities,
-        });
+          {
+            /*  data for simple line graphic */
+          }
+          const todayy = new Date();
+          const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+          const firstDayOfWeek = new Date(todayy);
+          firstDayOfWeek.setDate(todayy.getDate() - todayy.getDay()); // sunday of the current week
+          firstDayOfWeek.setHours(0, 0, 0, 0);
+
+          const lastDayOfWeek = new Date(firstDayOfWeek);
+          lastDayOfWeek.setDate(firstDayOfWeek.getDate() + 6); // saturday of the current week
+          lastDayOfWeek.setHours(23, 59, 59, 999);
+
+          const updatedData = simpleLineData.map((dayObj) => {
+            const dayIndex = weekDays.indexOf(dayObj.day);
+
+            const appointmentsCount = allAppointmentsResponse.data.filter(
+              (appointment: Appointment) => {
+                if (!appointment.availabilities?.start_time) return false;
+                const appointmentDate = new Date(
+                  appointment.availabilities.start_time
+                );
+
+                // it only counts if it's within the current week.
+                if (
+                  appointmentDate < firstDayOfWeek ||
+                  appointmentDate > lastDayOfWeek
+                )
+                  return false;
+
+                return appointmentDate.getDay() === dayIndex;
+              }
+            ).length;
+
+            return {
+              ...dayObj,
+              appointments: appointmentsCount,
+            };
+          });
+
+          setSimpleLineData(updatedData);
+          const allAvailabilitiesResponse = await availabilityListApi(
+            access_token,
+            {}
+          );
+
+          if (allAvailabilitiesResponse.data.length !== 0) {
+            freeSlotsAvailabilities = allAvailabilitiesResponse.data.filter(
+              (availability: Availability) => {
+                if (
+                  availability.status === "uncoupled" &&
+                  new Date(availability.date) >= todayDate
+                )
+                  return availability;
+              }
+            );
+          }
+
+          setUserData2({
+            appointments_today: todayAppointments,
+            next_appointments: nextAppointment,
+            available_slots: freeSlotsAvailabilities,
+          });
+        }
+      } catch (error) {
+        goToErrorPage(error);
       }
     };
     fetchAppointments();

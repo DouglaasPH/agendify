@@ -19,6 +19,9 @@ import {
 } from "@/features/auth/customerSlice";
 import type { RootState } from "@/store";
 
+// utils
+import { goToErrorPage } from "@/lib/utils";
+
 function ChatPage() {
   const isAuthenticated = useSelector(
     (state: RootState) => state.customer.auth.isAuthenticated
@@ -30,11 +33,16 @@ function ChatPage() {
   useEffect(() => {
     const verifyChatCode = async () => {
       if (!chat_code) return setIsValidChatCode(false);
-      const fetchAPI = await verifyChatCodeApi(chat_code);
 
-      if (fetchAPI.data) {
-        setIsValidChatCode(true);
-        dispatch(updateProfessionalData(fetchAPI.data));
+      try {
+        const fetchAPI = await verifyChatCodeApi(chat_code);
+
+        if (fetchAPI.data) {
+          setIsValidChatCode(true);
+          dispatch(updateProfessionalData(fetchAPI.data));
+        }
+      } catch (error) {
+        goToErrorPage(error);
       }
     };
     verifyChatCode();
@@ -43,13 +51,17 @@ function ChatPage() {
 
     if (customer_id !== null) {
       const fetch = async () => {
-        const fetchAPI = await LoginWithCustomerIdApi(Number(customer_id));
-        localStorage.setItem(
-          "customer_id",
-          String(fetchAPI.data.customer_data.id)
-        );
-        dispatch(setAccessTokenCustomer(fetchAPI.data.access_token));
-        dispatch(updateCustomerData(fetchAPI.data.customer_data));
+        try {
+          const fetchAPI = await LoginWithCustomerIdApi(Number(customer_id));
+          localStorage.setItem(
+            "customer_id",
+            String(fetchAPI.data.customer_data.id)
+          );
+          dispatch(setAccessTokenCustomer(fetchAPI.data.access_token));
+          dispatch(updateCustomerData(fetchAPI.data.customer_data));
+        } catch (error) {
+          goToErrorPage(error);
+        }
       };
       fetch();
     }

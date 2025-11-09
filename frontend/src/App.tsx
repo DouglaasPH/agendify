@@ -51,6 +51,7 @@ import AppointmentsPage from "./pages/appointments/appointments";
 import ChatPage from "./pages/chat/chat";
 import CreateNewAvailabilityPage from "./pages/create_new_availability/createNewAvailability";
 import PrivacyPolicyPage from "./pages/privacy_policy/privacyPolicy";
+import ErrorPage from "./pages/error/errorPage";
 
 // URLs
 // /terms-of-use
@@ -58,6 +59,7 @@ import PrivacyPolicyPage from "./pages/privacy_policy/privacyPolicy";
 // /about-us
 // /contact
 // /help-center
+// /error/:error_http
 
 // /login
 
@@ -130,6 +132,14 @@ const browserRoutes = createBrowserRouter(
         element={
           <>
             <NavBar /> <PrivacyPolicyPage /> <FooterBar />
+          </>
+        }
+      />
+      <Route
+        path="error/:error_http"
+        element={
+          <>
+            <ErrorPage />
           </>
         }
       />
@@ -307,6 +317,8 @@ function App() {
         if (error.response.status == 401) {
           dispatch(logout());
           dispatch(resetUserData());
+        } else {
+          window.location.href = `error/${error.repsonse.status}`;
         }
       }
     };

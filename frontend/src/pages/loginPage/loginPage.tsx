@@ -1,3 +1,4 @@
+// react
 import { useState } from "react";
 
 // API
@@ -23,6 +24,9 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 // motion
 import { motion } from "motion/react";
 
+// utils
+import { goToErrorPage } from "@/lib/utils";
+
 function LoginPage() {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
@@ -39,7 +43,6 @@ function LoginPage() {
       dispatch(setAccessToken(loginResponse.data.access_token));
       dispatch(updateUserData(userDataResponse.data));
     } catch (error: any) {
-      console.log(error.response.data.detail, error.response.status);
       if (
         error.response.status == 400 &&
         error.response.data.detail === "Invalid username or password."
@@ -48,7 +51,7 @@ function LoginPage() {
         setTimeout(() => {
           setErrorApi(false);
         }, 3000);
-      }
+      } else goToErrorPage(error);
     }
   };
 

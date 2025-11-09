@@ -20,6 +20,9 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
+// utils
+import { goToErrorPage } from "@/lib/utils";
+
 function ResetPasswordWithLoginPage() {
   const navigate = useNavigate();
   const access_token = useSelector(
@@ -74,7 +77,7 @@ function ResetPasswordWithLoginPage() {
         });
         navigate("/user/profile");
       } catch (error) {
-        return error;
+        goToErrorPage(error);
       }
     } else return;
   };
