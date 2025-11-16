@@ -2,6 +2,8 @@ export const ROUTES = {
   auth: {
     login: "/auth/",
     register: "/auth/register",
+    registerGenerateVerificationToken:
+      "/auth/register/generate-verification-token",
     refresh: "/auth/refresh",
     logout: "/auth/logout",
     delete: "/auth/delete",

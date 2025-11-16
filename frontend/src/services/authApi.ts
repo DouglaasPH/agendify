@@ -1,4 +1,5 @@
 // Api data of connection
+import type { Succesfully } from "@/types/common";
 import api from "./api";
 
 // All routes
@@ -94,13 +95,24 @@ export const getUserDataApi = async (
   });
 };
 
-export const registerApi = async (
+export const registerGenerationTokenApi = async (
   user_data: RegisterData
-): Promise<LoginResponse> => {
-  return await api.post(ROUTES.auth.register, user_data, {
-    headers: { "Content-Type": "application/json" },
-    withCredentials: true,
-  });
+): Promise<Succesfully> => {
+  return await api.post(
+    ROUTES.auth.registerGenerateVerificationToken,
+    user_data
+  );
+};
+
+export const registerApi = async (token: string): Promise<LoginResponse> => {
+  return await api.post(
+    ROUTES.auth.register,
+    { token },
+    {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    }
+  );
 };
 
 interface checkEmailResponse {

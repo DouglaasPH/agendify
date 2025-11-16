@@ -21,7 +21,10 @@ import {
   VerifyAuthentication,
   VerifyNotAuthentication,
 } from "./components/routes/VerifyAuthentication";
-import { AcceptTermsOfUsePagePrivateRoute } from "./components/routes/PrivateRoutes";
+import {
+  AcceptTermsOfUsePagePrivateRoute,
+  VerifyEmailInTheRegistrationPrivateRoute,
+} from "./components/routes/PrivateRoutes";
 
 // Components
 import NavBar from "./components/navbar/navBar";
@@ -52,6 +55,8 @@ import ChatPage from "./pages/chat/chat";
 import CreateNewAvailabilityPage from "./pages/create_new_availability/createNewAvailability";
 import PrivacyPolicyPage from "./pages/privacy_policy/privacyPolicy";
 import ErrorPage from "./pages/error/errorPage";
+import CheckEmailDuringRegistrationPage from "./pages/register/email_verify/verifyEmailInRegister";
+import VerifyEmailInTheRegistrationPage from "./pages/choose_your_avatar/verify_email_in_the_registration/verifyEmailInTheRegistration";
 
 // URLs
 // /terms-of-use
@@ -66,6 +71,7 @@ import ErrorPage from "./pages/error/errorPage";
 // /register
 // /register/accept-terms-of-use
 // /register/choose-your-avatar
+// /register/verify-email
 
 // /forgot-your-password
 // /forgot-your-password/reset-password
@@ -178,6 +184,12 @@ const browserRoutes = createBrowserRouter(
                 </>
               }
             />
+            <Route element={<VerifyEmailInTheRegistrationPrivateRoute />}>
+              <Route
+                path="verify-email"
+                element={<VerifyEmailInTheRegistrationPage />}
+              />
+            </Route>
           </Route>
         </Route>
         <Route path="forgot-your-password">
@@ -295,6 +307,10 @@ const browserRoutes = createBrowserRouter(
             <ChatPage />
           </>
         }
+      />
+      <Route
+        path="/validate-email-in-register/:token"
+        element={<CheckEmailDuringRegistrationPage />}
       />
     </Route>
   )

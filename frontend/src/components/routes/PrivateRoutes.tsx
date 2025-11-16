@@ -43,4 +43,20 @@ function ChooseYourAvatarPagePrivateRoute() {
   );
 }
 
-export { AcceptTermsOfUsePagePrivateRoute, ChooseYourAvatarPagePrivateRoute };
+function VerifyEmailInTheRegistrationPrivateRoute() {
+  const profile_avatar_id = useSelector(
+    (state: RootState) => state.register.profileAvatarId
+  );
+
+  return profile_avatar_id !== null ? (
+    <Outlet />
+  ) : (
+    <Navigate to={"/register"} replace />
+  );
+}
+
+export {
+  AcceptTermsOfUsePagePrivateRoute,
+  ChooseYourAvatarPagePrivateRoute,
+  VerifyEmailInTheRegistrationPrivateRoute,
+};

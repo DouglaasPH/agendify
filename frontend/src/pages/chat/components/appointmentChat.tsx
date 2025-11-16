@@ -12,7 +12,7 @@ import cartoonAvatars from "@/assets/cartoonAvatars";
 
 // components
 import Initial from "./chat/initial";
-import LoadingType from "./loadingType";
+import LoadingType from "../../../components/loading/loadingType";
 import SelectDate from "./chat/selectDate";
 import ButtonBack from "./chat/buttonBack";
 import SelectTime from "./chat/selectTime";

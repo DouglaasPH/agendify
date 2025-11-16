@@ -1,6 +1,3 @@
-// react
-import { useNavigate } from "react-router-dom";
-
 // redux
 import { useSelector } from "react-redux";
 import type { RootState } from "../../../store";
@@ -42,7 +39,6 @@ function ChooseYourAvatarDesktop() {
           : 0,
     };
   });
-  const navigate = useNavigate();
 
   const {
     selectedAvatar,
@@ -53,7 +49,7 @@ function ChooseYourAvatarDesktop() {
     avatarLimiterDisplayedEnd,
     handleSave,
     handleSurpriseMe,
-  } = useChooseAvatar(user_data_for_registration, navigate);
+  } = useChooseAvatar(user_data_for_registration);
 
   return (
     <div className="w-full grid grid-cols-[2fr_3fr] h-[100vh] max-h-screen overflow-y-auto">

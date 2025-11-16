@@ -4,13 +4,7 @@ import { useState } from "react";
 // redux
 import { useDispatch } from "react-redux";
 import { updateProfileAvatarId } from "../../../features/auth/registerSlice";
-import {
-  getUserDataApi,
-  loginApi,
-  registerApi,
-} from "../../../services/authApi";
-import { setAccessToken } from "../../../features/auth/authSlice";
-import { updateUserData } from "../../../features/auth/userDataSlice";
+import { registerGenerationTokenApi } from "../../../services/authApi";
 
 // cartoonAvatars
 import cartoonAvatars from "../../../assets/cartoonAvatars";
@@ -27,10 +21,7 @@ interface UserRegistrationData {
   profileAvatarId: number;
 }
 
-export const useChooseAvatar = (
-  userData: UserRegistrationData,
-  navigate: any
-) => {
+export const useChooseAvatar = (userData: UserRegistrationData) => {
   const dispatch = useDispatch();
   const [selectedAvatar, setSelectedAvatar] = useState(cartoonAvatars[0]);
   const [currentSection, setCurrentSection] = useState(1);
@@ -40,23 +31,7 @@ export const useChooseAvatar = (
 
   const handleRegisterApi = async () => {
     try {
-      await registerApi(userData);
-    } catch (error) {
-      goToErrorPage(error);
-    }
-  };
-
-  const handleLoginApi = async () => {
-    try {
-      const loginResponse = await loginApi({
-        email: userData.email,
-        password: userData.password,
-      });
-      const userDataResponse = await getUserDataApi(
-        loginResponse.data.access_token
-      );
-      dispatch(setAccessToken(loginResponse.data.access_token));
-      dispatch(updateUserData(userDataResponse.data));
+      await registerGenerationTokenApi(userData);
     } catch (error) {
       goToErrorPage(error);
     }
@@ -65,8 +40,6 @@ export const useChooseAvatar = (
   const handleSave = async () => {
     dispatch(updateProfileAvatarId({ profileAvatarId: selectedAvatar.id }));
     await handleRegisterApi();
-    await handleLoginApi();
-    navigate("/user/dashboard");
   };
 
   const handleSurpriseMe = () => {

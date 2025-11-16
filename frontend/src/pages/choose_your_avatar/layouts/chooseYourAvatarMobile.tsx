@@ -1,6 +1,3 @@
-// react
-import { useNavigate } from "react-router-dom";
-
 // redux
 import { useSelector } from "react-redux";
 import type { RootState } from "../../../store";
@@ -41,7 +38,6 @@ function ChooseYourAvatarMobile() {
           : 0,
     };
   });
-  const navigate = useNavigate();
 
   const {
     selectedAvatar,
@@ -52,7 +48,7 @@ function ChooseYourAvatarMobile() {
     avatarLimiterDisplayedEnd,
     handleSave,
     handleSurpriseMe,
-  } = useChooseAvatar(user_data_for_registration, navigate);
+  } = useChooseAvatar(user_data_for_registration);
   return (
     <div className="w-full grid grid-row-[1fr_3fr_1fr] h-[100vh] max-h-screen overflow-y-auto">
       <div className="bg-gray-50 flex flex-col justify-between items-center py-5 px-5 gap-5">
