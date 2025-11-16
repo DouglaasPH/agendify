@@ -34,6 +34,7 @@ import {
   Calendar,
   CalendarCheck,
   CircleQuestionMark,
+  CircleUser,
   House,
   LogOut,
   Menu,
@@ -71,9 +72,9 @@ function LoggedInNavBar() {
       icon: CalendarCheck,
     },
     {
-      label: "Help Center",
-      address: "/help-center",
-      icon: CircleQuestionMark,
+      label: "View Profile",
+      address: "/user/profile",
+      icon: CircleUser,
     },
   ];
 
@@ -103,7 +104,7 @@ function LoggedInNavBar() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.0, duration: 0.2 }}
-            className={`relative p-4 rounded-2xl transition-all duration-300 group py-2 ${
+            className={`cursor-pointer relative p-4 rounded-2xl transition-all duration-300 group py-2 ${
               location.pathname.includes(link.address)
                 ? "bg-blue-100 text-blue-600 font-semibold"
                 : "text-gray-600 hover:text-black hover:bg-gray-100"
