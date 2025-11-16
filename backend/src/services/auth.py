@@ -58,3 +58,15 @@ def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_
     if user is None:
         raise credentials_exception
     return user
+
+
+
+def generation_token(data_token):
+    token = jwt.encode(data_token, SECRET_KEY, algorithm=ALGORITHM)
+    print(token)
+    return token
+
+
+def decode_token(token):
+    payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    return payload

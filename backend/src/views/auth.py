@@ -5,13 +5,17 @@ class LoginOut(BaseModel):
     access_token: str
 
 
-class LoginIn(BaseModel):
+class DataToVerifyAccount(BaseModel):
     name: str
     email: str
     password: str
     profession: str
     profileAvatarId: int
     phoneNumber: str
+    
+
+class TokenInRegister(BaseModel):
+    token: str
 
 
 class UserDataToUpdate(BaseModel):

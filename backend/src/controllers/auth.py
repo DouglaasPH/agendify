@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import uuid
 
 from fastapi import APIRouter, Request, Response
@@ -12,28 +12,58 @@ from models.users import Users
 from models.appointments import Appointments
 from models.availabilities import Availabilities
 from models.refresh_tokens import RefreshToken
-from views.auth import LoginIn, UserDataToUpdate, UserEmailToUpdate, UserPasswordToUpdate
-from services.auth import get_db, authenticate_user, pwd_context, get_current_user, verify_password
+from services.mail_service import send_verification_email
+from views.auth import DataToVerifyAccount, TokenInRegister, UserDataToUpdate, UserEmailToUpdate, UserPasswordToUpdate
+from services.auth import decode_token, generation_token, get_db, authenticate_user, pwd_context, get_current_user, verify_password
 from services.token import create_access_token, create_refresh_token
 
 
 router = APIRouter(prefix="/auth")
 
 
-@router.post("/register")
-def register(user_data: LoginIn, db: Session = Depends(get_db)):
+@router.post("/register/generate-verification-token")
+async def generate_verification_token(user_data: DataToVerifyAccount):
     hashed = pwd_context.hash(user_data.password)
     chat_code = str(uuid.uuid4())
+    
+    payload =  {
+        "name":user_data.name,
+        "email":user_data.email,
+        "profession":user_data.profession,
+        "hashed_password":hashed,
+        "profileAvatarId":user_data.profileAvatarId,
+        "phone_number":user_data.phoneNumber,
+        "chat_code":chat_code,
+        "exp": int((datetime.utcnow() + timedelta(minutes=5)).timestamp())
+    }
+    token = generation_token(payload)
+    
+    link = f"http://localhost:5173/validate-email-in-register/{token}"
+        
+    await send_verification_email(link, user_data.email)
+    
+    return { "msg": "Email sent successfully." }
+
+
+@router.post("/register")
+def register(data: TokenInRegister, db: Session = Depends(get_db)):
+    print(data)
+    decoded_token = decode_token(data.token)
+    
+    existing_user = db.query(Users).filter(Users.email == decoded_token["email"]).first()
+    
+    if existing_user:
+        raise HTTPException(status_code=409, detail="User already registered")
 
     
     new_user = Users(
-        name=user_data.name,
-        email=user_data.email,
-        profession=user_data.profession,
-        hashed_password=hashed,
-        profileAvatarId=user_data.profileAvatarId,
-        phone_number=user_data.phoneNumber,
-        chat_code=chat_code,
+        name=decoded_token["name"],
+        email=decoded_token["email"],
+        profession=decoded_token["profession"],
+        hashed_password=decoded_token["hashed_password"],
+        profileAvatarId=decoded_token["profileAvatarId"],
+        phone_number=decoded_token["phone_number"],
+        chat_code=decoded_token["chat_code"],
     )
     
     db.add(new_user)
