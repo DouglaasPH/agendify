@@ -33,3 +33,12 @@ class UserEmailToUpdate(BaseModel):
 class UserPasswordToUpdate(BaseModel):
     currentPassword: str
     newPassword: str
+    
+
+class EmailData(BaseModel):
+    email: str
+
+
+class ResetPasswordData(BaseModel):
+    newPassword: str
+    token: str

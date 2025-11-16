@@ -202,7 +202,7 @@ const browserRoutes = createBrowserRouter(
             }
           />
           <Route
-            path="reset-password"
+            path="reset-password/:token"
             element={
               <>
                 <ResetPasswordWithoutLoginPage />

@@ -197,3 +197,28 @@ export const modifyUserPassword = async (
     withCredentials: true,
   });
 };
+
+export const forgotYourPasswordApi = async (
+  email: string
+): Promise<MessageResponse> => {
+  return await api.post(
+    ROUTES.auth.forgotYourPassword,
+    { email },
+    {
+      headers: { "Content-Type": "application/json" },
+    }
+  );
+};
+
+export const forgotYourPasswordResetPasswordApi = async (
+  newPassword: string,
+  token: string
+): Promise<MessageResponse> => {
+  return await api.put(
+    ROUTES.auth.forgotYourPasswordResetPassword,
+    { newPassword, token },
+    {
+      headers: { "Content-Type": "application/json" },
+    }
+  );
+};

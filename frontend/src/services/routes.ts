@@ -12,6 +12,9 @@ export const ROUTES = {
     modifyUserData: "/auth/modify-user-data",
     modifyUserEmail: "/auth/modify-user-email",
     modifyUserPassword: "/auth/modify-user-password",
+    forgotYourPassword: "auth/forgot-your-password",
+    forgotYourPasswordResetPassword:
+      "/auth/forgot-your-password/reset-password",
     getUserDataForCustomer: (chat_code: string) => `/auth/${chat_code}`,
   },
   appointment: {

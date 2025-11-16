@@ -63,7 +63,6 @@ def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_
 
 def generation_token(data_token):
     token = jwt.encode(data_token, SECRET_KEY, algorithm=ALGORITHM)
-    print(token)
     return token
 
 

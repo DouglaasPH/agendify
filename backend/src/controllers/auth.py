@@ -12,8 +12,8 @@ from models.users import Users
 from models.appointments import Appointments
 from models.availabilities import Availabilities
 from models.refresh_tokens import RefreshToken
-from services.mail_service import send_verification_email
-from views.auth import DataToVerifyAccount, TokenInRegister, UserDataToUpdate, UserEmailToUpdate, UserPasswordToUpdate
+from services.mail_service import send_password_reset_email, send_verification_email
+from views.auth import DataToVerifyAccount, EmailData, ResetPasswordData, TokenInRegister, UserDataToUpdate, UserEmailToUpdate, UserPasswordToUpdate
 from services.auth import decode_token, generation_token, get_db, authenticate_user, pwd_context, get_current_user, verify_password
 from services.token import create_access_token, create_refresh_token
 
@@ -47,7 +47,6 @@ async def generate_verification_token(user_data: DataToVerifyAccount):
 
 @router.post("/register")
 def register(data: TokenInRegister, db: Session = Depends(get_db)):
-    print(data)
     decoded_token = decode_token(data.token)
     
     existing_user = db.query(Users).filter(Users.email == decoded_token["email"]).first()
@@ -239,6 +238,48 @@ def modifyUserEmail(user_email_to_update: UserEmailToUpdate, current_user: Users
     
     return { "email": user.email }
 
+
+
+
+@router.post("/forgot-your-password")
+async def forgotYourPassword(email_data: EmailData, db: Session = Depends(get_db)):
+    user_data = db.query(Users).filter(Users.email == email_data.email).first()
+    
+    if not user_data:
+        raise HTTPException(status_code=404, detail="User not existing.")
+    
+    
+    payload =  {
+        "user_id":user_data.id,
+        "email":user_data.email,
+        "exp": int((datetime.utcnow() + timedelta(minutes=15)).timestamp())
+    }
+    token = generation_token(payload)
+    
+    link = f"http://localhost:5173/forgot-your-password/reset-password/{token}"
+        
+    await send_password_reset_email(user_data.name, user_data.email, link)
+    
+    return { "msg": "Email sent successfully." }
+
+
+@router.put("/forgot-your-password/reset-password")
+async def forgotYourPassword(data: ResetPasswordData, db: Session = Depends(get_db)):
+    decoded_token = decode_token(data.token)
+    user = db.query(Users).filter(Users.id == decoded_token["user_id"]).first()
+    
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found.")
+    
+    hashed = pwd_context.hash(data.newPassword)
+    
+    user.hashed_password = hashed
+    
+    db.commit()
+    db.refresh(user)
+    
+    return { "msg": "Password changed succesfully." }
+    
 
 @router.put("/modify-user-password")
 def modifyUserPassword(user_password_to_update: UserPasswordToUpdate, current_user: Users = Depends(get_current_user), db: Session = Depends(get_db)):
