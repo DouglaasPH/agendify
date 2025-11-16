@@ -180,7 +180,7 @@ const browserRoutes = createBrowserRouter(
               path="choose-your-avatar"
               element={
                 <>
-                  <ChooseYourAvatarPage />
+                  <ChooseYourAvatarPage mode="register" />
                 </>
               }
             />
@@ -263,6 +263,14 @@ const browserRoutes = createBrowserRouter(
                 }
               />
             </Route>
+            <Route
+              path="avatar"
+              element={
+                <>
+                  <ChooseYourAvatarPage mode="updateAccount" />
+                </>
+              }
+            />
           </Route>
         </Route>
         <Route

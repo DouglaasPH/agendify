@@ -1,14 +1,18 @@
 import ChooseYourAvatarMobile from "./layouts/chooseYourAvatarMobile";
 import ChooseYourAvatarDesktop from "./layouts/chooseYourAvatarDesktop";
 
-function ChooseYourAvatarPage() {
+type Props = {
+  mode: "register" | "updateAccount";
+};
+
+function ChooseYourAvatarPage({ mode }: Props) {
   return (
     <div>
       <div className="hidden md:block">
-        <ChooseYourAvatarDesktop />
+        <ChooseYourAvatarDesktop mode={mode} />
       </div>
       <div className="block md:hidden">
-        <ChooseYourAvatarMobile />
+        <ChooseYourAvatarMobile mode={mode} />
       </div>
     </div>
   );

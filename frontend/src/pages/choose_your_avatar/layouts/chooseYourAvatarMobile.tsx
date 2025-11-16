@@ -24,19 +24,29 @@ import cartoonAvatars from "../../../assets/cartoonAvatars";
 // hooks
 import { useChooseAvatar } from "../hooks/useChooseAvatar";
 
-function ChooseYourAvatarMobile() {
-  const user_data_for_registration = useSelector((state: RootState) => {
-    return {
-      name: state.register.fullName,
-      email: state.register.email,
-      password: state.register.password,
-      profession: state.register.profession,
-      phoneNumber: state.register.phoneNumber,
-      profileAvatarId:
-        state.register.profileAvatarId !== null
-          ? state.register.profileAvatarId
-          : 0,
-    };
+type Props = {
+  mode: "register" | "updateAccount";
+};
+
+function ChooseYourAvatarMobile({ mode }: Props) {
+  const user_data = useSelector((state: RootState) => {
+    if (mode == "register") {
+      return {
+        name: state.register.fullName,
+        email: state.register.email,
+        password: state.register.password,
+        profession: state.register.profession,
+        phoneNumber: state.register.phoneNumber,
+        profileAvatarId:
+          state.register.profileAvatarId !== null
+            ? state.register.profileAvatarId
+            : 0,
+      };
+    } else {
+      return {
+        profileAvatarId: state.userData.profileAvatarId,
+      };
+    }
   });
 
   const {
@@ -46,9 +56,10 @@ function ChooseYourAvatarMobile() {
     setCurrentSection,
     avatarLimiterDisplayedStart,
     avatarLimiterDisplayedEnd,
-    handleSave,
+    handleSaveToRegisterAccount,
+    handleUpdateAccount,
     handleSurpriseMe,
-  } = useChooseAvatar(user_data_for_registration);
+  } = useChooseAvatar(user_data);
   return (
     <div className="w-full grid grid-row-[1fr_3fr_1fr] h-[100vh] max-h-screen overflow-y-auto">
       <div className="bg-gray-50 flex flex-col justify-between items-center py-5 px-5 gap-5">
@@ -207,7 +218,11 @@ function ChooseYourAvatarMobile() {
             <Button
               variant="default"
               className="text-sm flex flex-row items-center w-4/9 gap-2 h-9 cursor-pointer"
-              onClick={() => handleSave()}
+              onClick={() =>
+                mode == "register"
+                  ? handleSaveToRegisterAccount()
+                  : handleUpdateAccount()
+              }
             >
               Continue
               <ArrowRight className="size-4" />

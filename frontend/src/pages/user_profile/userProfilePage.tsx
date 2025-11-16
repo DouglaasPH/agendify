@@ -77,7 +77,9 @@ function UserProfilePage() {
               stiffness: 200,
               delay: 1,
             }}
-            className="flex justify-center items-center rounded-full select-none relative bg-[#9ca3af] border-3 py-10 px-5 text-8xl border-black/20"
+            className={`flex justify-center items-center rounded-full select-none relative bg-gradient-to-br ${
+              cartoonAvatars[data_user.profileAvatarId].bgGradient
+            } border-3 py-10 px-5 text-8xl border-black/20`}
           >
             {cartoonAvatars[data_user.profileAvatarId].emoji}
           </motion.div>
@@ -85,7 +87,7 @@ function UserProfilePage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2, delay: 1.4 }}
-            className="max-w-4xl mx-auto bg-gradient-to-r from-gray-900 via-black to-gray-800 bg-clip-text text-transparent text-4xl md:text-4xl leading-tight"
+            className="max-w-4xl mx-auto bg-gradient-to-r from-gray-900 via-black to-gray-800 bg-clip-text text-transparent text-4xl md:text-4xl leading-tight text-center"
           >
             {data_user.name}
           </motion.h1>
@@ -104,10 +106,17 @@ function UserProfilePage() {
           transition={{ duration: 0.2, delay: 1.6 }}
           className="flex flex-col gap-3 w-ws"
         >
-          <Button variant="outline" className="py-6 md:py-5 w-2xs">
+          <Button
+            variant="outline"
+            className="py-6 md:py-5 w-2xs cursor-pointer"
+            onClick={() => navigate("edit/avatar")}
+          >
             <Camera /> Change Avatar
           </Button>
-          <Button className="py-6 md:py-5 w-2xs" onClick={() => handleLogout()}>
+          <Button
+            className="py-6 md:py-5 w-2xs cursor-pointer"
+            onClick={() => handleLogout()}
+          >
             <LogOut /> Log Out
           </Button>
         </motion.div>
@@ -131,104 +140,117 @@ function UserProfilePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 items-center px-5 md:px-100 gap-10">
           {/* Name */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
+            initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.2, delay: 1.7 }}
-            className="flex justify-between items-center gap-20 bg-gray-300/20 p-5 rounded-2xl hover:shadow-md w-full"
+            transition={{ duration: 0.2, delay: 2 }}
+            className="bg-gray-300/20 p-5 rounded-2xl hover:shadow-md"
           >
-            <div className="flex items-center gap-5">
-              <div className="bg-gradient-to-b from-blue-600 to-blue-700 p-3 rounded-md  ">
+            <div className="grid grid-cols-[12%_85%] justify-between">
+              <div className="flex justify-center items-center bg-gradient-to-b from-blue-600 to-blue-700 p-3 rounded-md">
                 <User className="text-white size-9" />
               </div>
               <div className="flex flex-col justify-between items-start">
-                <p className="text-lg text-muted-foreground mb-1">Name</p>
+                <div className="flex justify-between w-full items-center">
+                  <p className="text-lg text-muted-foreground mb-1">Name</p>
+                  <div>
+                    <SquarePen
+                      className="size-6 md:size-4.5 cursor-pointer"
+                      onClick={() => navigate("edit/user-data")}
+                    />
+                  </div>
+                </div>
                 <p className="text-xl md:text-2xl text-foreground">
                   {data_user.name}
                 </p>
               </div>
             </div>
-            <div>
-              <SquarePen
-                className="size-6 md:size-4.5 cursor-pointer"
-                onClick={() => navigate("edit/user-data")}
-              />
-            </div>
           </motion.div>
+
           {/* Profession */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.2, delay: 1.8 }}
-            className="flex justify-between items-center gap-20 bg-gray-300/20 p-5 rounded-2xl hover:shadow-md"
+            transition={{ duration: 0.2, delay: 2 }}
+            className="bg-gray-300/20 p-5 rounded-2xl hover:shadow-md"
           >
-            <div className="flex items-center gap-5">
-              <div className="bg-gradient-to-b from-blue-600 to-blue-700 p-3 rounded-md  ">
+            <div className="grid grid-cols-[12%_83%] justify-between">
+              <div className="flex justify-center items-center bg-gradient-to-b from-blue-600 to-blue-700 p-3 rounded-md">
                 <Briefcase className="text-white size-9" />
               </div>
               <div className="flex flex-col justify-between items-start">
-                <p className="text-lg text-muted-foreground mb-1">Profession</p>
+                <div className="flex justify-between w-full items-center">
+                  <p className="text-lg text-muted-foreground mb-1">
+                    Profession
+                  </p>
+                  <div>
+                    <SquarePen
+                      className="size-6 md:size-4.5 cursor-pointer"
+                      onClick={() => navigate("edit/user-data")}
+                    />
+                  </div>
+                </div>
                 <p className="text-xl md:text-2xl text-foreground">
                   {data_user.profession}
                 </p>
               </div>
             </div>
-            <div>
-              <SquarePen
-                className="size-6 md:size-4.5 cursor-pointer"
-                onClick={() => navigate("edit/user-data")}
-              />
-            </div>
           </motion.div>
+
           {/* Phone Number */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
+            initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.2, delay: 1.9 }}
-            className="flex justify-between items-center gap-20 bg-gray-300/20 p-5 rounded-2xl hover:shadow-md"
+            transition={{ duration: 0.2, delay: 2 }}
+            className="bg-gray-300/20 p-5 rounded-2xl hover:shadow-md"
           >
-            <div className="flex items-center gap-5">
-              <div className="bg-gradient-to-b from-blue-600 to-blue-700 p-3 rounded-md  ">
+            <div className="grid grid-cols-[12%_83%] justify-between">
+              <div className="flex justify-center items-center bg-gradient-to-b from-blue-600 to-blue-700 p-3 rounded-md">
                 <Phone className="text-white size-9" />
               </div>
               <div className="flex flex-col justify-between items-start">
-                <p className="text-lg text-muted-foreground mb-1">
-                  Phone Number
-                </p>
+                <div className="flex justify-between w-full items-center">
+                  <p className="text-lg text-muted-foreground mb-1">
+                    Phone Number
+                  </p>
+                  <div>
+                    <SquarePen
+                      className="size-6 md:size-4.5 cursor-pointer"
+                      onClick={() => navigate("edit/user-data")}
+                    />
+                  </div>
+                </div>
                 <p className="text-xl md:text-2xl text-foreground">
                   {data_user.phoneNumber}
                 </p>
               </div>
             </div>
-            <div>
-              <SquarePen
-                className="size-6 md:size-4.5 cursor-pointer"
-                onClick={() => navigate("edit/user-data")}
-              />
-            </div>
           </motion.div>
+
           {/* Email */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.2, delay: 2 }}
-            className="flex justify-between items-center gap-20 bg-gray-300/20 p-5 rounded-2xl hover:shadow-md"
+            className="bg-gray-300/20 p-5 rounded-2xl hover:shadow-md"
           >
-            <div className="flex items-center gap-5">
-              <div className="bg-gradient-to-b from-blue-600 to-blue-700 p-3 rounded-md  ">
+            <div className="grid grid-cols-[12%_83%] justify-between">
+              <div className="flex justify-center items-center bg-gradient-to-b from-blue-600 to-blue-700 p-3 rounded-md">
                 <Mail className="text-white size-9" />
               </div>
               <div className="flex flex-col justify-between items-start">
-                <p className="text-lg text-muted-foreground mb-1">E-mail</p>
+                <div className="flex justify-between w-full items-center">
+                  <p className="text-lg text-muted-foreground mb-1">E-mail</p>
+                  <div>
+                    <SquarePen
+                      className="size-6 md:size-4.5 cursor-pointer"
+                      onClick={() => navigate("edit/email")}
+                    />
+                  </div>
+                </div>
                 <p className="text-xl md:text-2xl text-foreground">
                   {data_user.email}
                 </p>
               </div>
-            </div>
-            <div>
-              <SquarePen
-                className="size-6 md:size-4.5 cursor-pointer"
-                onClick={() => navigate("edit/email")}
-              />
             </div>
           </motion.div>
         </div>

@@ -2,22 +2,28 @@
 import { useState } from "react";
 
 // redux
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateProfileAvatarId } from "../../../features/auth/registerSlice";
-import { registerGenerationTokenApi } from "../../../services/authApi";
+import {
+  modifyUserData,
+  registerGenerationTokenApi,
+} from "../../../services/authApi";
 
 // cartoonAvatars
 import cartoonAvatars from "../../../assets/cartoonAvatars";
 
 // utils
 import { goToErrorPage } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
+import type { RootState } from "@/store";
+import { updateUserData } from "@/features/auth/userDataSlice";
 
 interface UserRegistrationData {
-  name: string;
-  email: string;
-  password: string;
-  profession: string;
-  phoneNumber: string;
+  name?: string;
+  email?: string;
+  password?: string;
+  profession?: string;
+  phoneNumber?: string;
   profileAvatarId: number;
 }
 
@@ -25,6 +31,10 @@ export const useChooseAvatar = (userData: UserRegistrationData) => {
   const dispatch = useDispatch();
   const [selectedAvatar, setSelectedAvatar] = useState(cartoonAvatars[0]);
   const [currentSection, setCurrentSection] = useState(1);
+  const navigate = useNavigate();
+  const access_token = useSelector(
+    (state: RootState) => state.auth.accessToken
+  );
 
   const avatarLimiterDisplayedStart = currentSection === 1 ? 0 : 6;
   const avatarLimiterDisplayedEnd = currentSection === 1 ? 6 : 12;
@@ -37,7 +47,7 @@ export const useChooseAvatar = (userData: UserRegistrationData) => {
     }
   };
 
-  const handleSave = async () => {
+  const handleSaveToRegisterAccount = async () => {
     dispatch(updateProfileAvatarId({ profileAvatarId: selectedAvatar.id }));
     await handleRegisterApi();
   };
@@ -49,6 +59,19 @@ export const useChooseAvatar = (userData: UserRegistrationData) => {
     setCurrentSection(randomNum > 5 ? 2 : 1);
   };
 
+  const handleUpdateAccount = async () => {
+    console.log(selectedAvatar.id);
+    try {
+      await modifyUserData(access_token, {
+        profileAvatarId: selectedAvatar.id,
+      });
+      dispatch(updateUserData({ profileAvatarId: selectedAvatar.id }));
+      navigate("/user/profile");
+    } catch (error) {
+      navigate(`/error/${error.response?.status}`);
+    }
+  };
+
   return {
     selectedAvatar,
     setSelectedAvatar,
@@ -56,7 +79,8 @@ export const useChooseAvatar = (userData: UserRegistrationData) => {
     setCurrentSection,
     avatarLimiterDisplayedStart,
     avatarLimiterDisplayedEnd,
-    handleSave,
+    handleSaveToRegisterAccount,
+    handleUpdateAccount,
     handleSurpriseMe,
   };
 };

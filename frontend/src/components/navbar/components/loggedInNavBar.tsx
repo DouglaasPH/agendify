@@ -33,7 +33,6 @@ import {
 import {
   Calendar,
   CalendarCheck,
-  CircleQuestionMark,
   CircleUser,
   House,
   LogOut,
@@ -128,7 +127,9 @@ function LoggedInNavBar() {
           stiffness: 200,
           delay: 1.2,
         }}
-        className="hidden lg:flex justify-center items-center rounded-full select-none relative bg-[#9ca3af] border-1 py-2 px-2 text-xl border-black/20"
+        className={`hidden lg:flex justify-center items-center rounded-full select-none relative bg-gradient-to-br ${
+          cartoonAvatars[user_data.profileAvatarId].bgGradient
+        } py-2 px-2 text-xl border-black/20 border-1`}
       >
         {cartoonAvatars[user_data.profileAvatarId].emoji}
       </motion.div>
@@ -159,7 +160,9 @@ function LoggedInNavBar() {
                   stiffness: 200,
                   delay: 1.2,
                 }}
-                className="justify-center items-center rounded-full select-none relative bg-[#9ca3af] border-1 py-2 px-2 text-xl border-black/20 flex"
+                className={`justify-center items-center rounded-full select-none relative bg-gradient-to-br ${
+                  cartoonAvatars[user_data.profileAvatarId].bgGradient
+                } py-2 px-2 text-xl flex border-black/20 border-1`}
               >
                 {cartoonAvatars[user_data.profileAvatarId].emoji}
               </motion.div>
