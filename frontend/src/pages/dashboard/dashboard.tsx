@@ -1,6 +1,5 @@
 // react
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 // motion
 import { motion } from "motion/react";
@@ -13,7 +12,6 @@ import type { RootState } from "../../store";
 import {
   Calendar,
   CalendarCheck,
-  CalendarPlus,
   ChartColumn,
   ChevronRight,
   Clock,
@@ -65,7 +63,7 @@ function DashboardPage() {
   const access_token = useSelector(
     (state: RootState) => state.auth.accessToken
   );
-  const navigate = useNavigate();
+  const chat_code = useSelector((state: RootState) => state.userData.chat_code);
 
   const [userData2, setUserData2] = useState<UserData>({
     appointments_today: [],
@@ -415,31 +413,16 @@ function DashboardPage() {
               <Card className="px-5">
                 <Button
                   variant="outline"
-                  className="rounded-2xl flex items-center justify-between"
-                  onClick={() => navigate("/user/availability")}
+                  className="rounded-2xl flex items-center justify-between cursor-pointer hover:scale-105"
+                  onClick={() =>
+                    navigator.clipboard.writeText(
+                      `http://localhost:5173/chat/${chat_code}`
+                    )
+                  }
                 >
                   <span className="flex gap-2 items-center text-gray-600 font-medium">
-                    <Calendar className="text-blue-600" /> Manage Availabilities
-                  </span>
-                  <ChevronRight />
-                </Button>
-                <Button
-                  variant="outline"
-                  className="rounded-2xl flex items-center justify-between"
-                  onClick={() => navigate("/user/appointment")}
-                >
-                  <span className="flex gap-2 items-center text-gray-600 font-medium">
-                    <CalendarPlus className="text-green-600" />
-                    Manage Appointments
-                  </span>
-                  <ChevronRight />
-                </Button>
-                <Button
-                  variant="outline"
-                  className="rounded-2xl flex items-center justify-between"
-                >
-                  <span className="flex gap-2 items-center text-gray-600 font-medium">
-                    <MessageCircle className="text-purple-600" /> User Chat
+                    <MessageCircle className="text-purple-600" /> Copy the link
+                    to my user chat
                   </span>
                   <ChevronRight />
                 </Button>

@@ -113,6 +113,7 @@ def getUserDataForUser(current_user: Users = Depends(get_current_user), db: Sess
         "phoneNumber": query.phone_number,
         "profession": query.profession,
         "profileAvatarId": query.profileAvatarId,
+        "chat_code": query.chat_code,
     }
     
     

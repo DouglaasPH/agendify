@@ -8,6 +8,7 @@ interface UserDataSlice {
   phoneNumber: string;
   profession: string;
   profileAvatarId: number;
+  chat_code: string;
 }
 
 const initialState: UserDataSlice = {
@@ -16,6 +17,7 @@ const initialState: UserDataSlice = {
   phoneNumber: "",
   profession: "",
   profileAvatarId: 0,
+  chat_code: "",
 };
 
 const userDataSlice = createSlice({
