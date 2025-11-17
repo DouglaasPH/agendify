@@ -79,9 +79,9 @@ import VerifyEmailInTheRegistrationPage from "./pages/choose_your_avatar/verify_
 // /user/profile
 // /user/edit/user-data
 // /user/edit/email
-// /user/edit/email/succesfully
 // /user/edit/password
 // /user/password-changed-succesfully-notice
+// /change-email/:token
 
 // /user/dashboard
 // /user/availability
@@ -240,10 +240,6 @@ const browserRoutes = createBrowserRouter(
                   </>
                 }
               />
-              <Route
-                path="succesfully"
-                element={<EmailVerifiedSuccesfullyPage />}
-              />
             </Route>
             <Route path="password">
               <Route
@@ -319,6 +315,10 @@ const browserRoutes = createBrowserRouter(
       <Route
         path="/validate-email-in-register/:token"
         element={<CheckEmailDuringRegistrationPage />}
+      />
+      <Route
+        path="change-email/:token"
+        element={<EmailVerifiedSuccesfullyPage />}
       />
     </Route>
   )

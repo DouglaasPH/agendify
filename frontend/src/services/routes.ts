@@ -10,6 +10,7 @@ export const ROUTES = {
     checkEmail: (email: string) => `/auth/check-email/${email}`,
     getUserData: "/auth/",
     modifyUserData: "/auth/modify-user-data",
+    sendEmailToChangeEmail: "/auth/send-email-to-change-email",
     modifyUserEmail: "/auth/modify-user-email",
     modifyUserPassword: "/auth/modify-user-password",
     forgotYourPassword: "auth/forgot-your-password",

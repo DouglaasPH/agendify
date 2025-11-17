@@ -172,17 +172,35 @@ export const modifyUserData = async (
   });
 };
 
-export const modifyUserEmail = async (
+export const sendEmailToChangeEmail = async (
   access_token: string | null,
-  user_data: PutUserEmail
+  new_email: string
 ): Promise<PutUserEmailResponse> => {
-  return await api.put(ROUTES.auth.modifyUserEmail, user_data, {
-    headers: {
-      Authorization: `Bearer ${access_token}`,
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-  });
+  return await api.post(
+    ROUTES.auth.sendEmailToChangeEmail,
+    { new_email },
+    {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    }
+  );
+};
+
+export const modifyUserEmail = async (
+  token: string
+): Promise<PutUserEmailResponse> => {
+  return await api.put(
+    ROUTES.auth.modifyUserEmail,
+    { token },
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
 };
 
 export const modifyUserPassword = async (

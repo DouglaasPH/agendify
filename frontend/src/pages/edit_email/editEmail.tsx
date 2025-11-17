@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
 
 // lucide
-import { ArrowLeft, LockOpen, Mail, Save } from "lucide-react";
+import { ArrowLeft, LockOpen, Mail } from "lucide-react";
 
 // shadcn
 import { Label } from "@/components/ui/label";
@@ -14,12 +14,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 // redux
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import type { RootState } from "../../store";
-import { updateUserData } from "../../features/auth/userDataSlice";
 
 // API
-import { modifyUserEmail } from "../../services/authApi";
+import { sendEmailToChangeEmail } from "../../services/authApi";
 
 // components
 import VerificationEmailModal from "./verificationEmailModal/verificationEmailModal";
@@ -29,9 +28,8 @@ function EditEmailPage() {
     (state: RootState) => state.auth.accessToken
   );
   const user_email = useSelector((state: RootState) => state.userData.email);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [newEmail, setNewEmail] = useState("douglas@gmail.com");
+  const [newEmail, setNewEmail] = useState("");
   const [validateNewEmail, setValidateNewEmail] = useState<null | boolean>(
     null
   );
@@ -49,12 +47,10 @@ function EditEmailPage() {
     else setValidateNewEmail(true);
   };
 
-  const handleSaveChanges = async () => {
-    const response = await modifyUserEmail(access_token, {
-      email: newEmail,
-    });
+  const handleSendInstructions = async () => {
+    await sendEmailToChangeEmail(access_token, newEmail);
     setSeeModal(true);
-    dispatch(updateUserData({ email: response.data.email }));
+    console.log(seeModal);
   };
 
   return (
@@ -109,6 +105,7 @@ function EditEmailPage() {
                   <Mail className="text-blue-600 size-5" /> New Email Address
                 </Label>
                 <Input
+                  placeholder="example@email.com"
                   id="email"
                   type="text"
                   value={newEmail}
@@ -125,13 +122,13 @@ function EditEmailPage() {
           </form>
           <div className="px-5 md:px-15 pb-5 flex flex-col gap-5">
             <Button
-              className="w-full py-6 md:py-5 rounded-xl text-lg bg-gradient-to-r from-blue-600 via-purple-600 to-purple-700"
-              onClick={() => handleSaveChanges()}
+              className="w-full py-6 md:py-5 rounded-xl text-lg bg-gradient-to-r from-blue-600 via-purple-600 to-purple-700 cursor-pointer"
+              onClick={() => handleSendInstructions()}
             >
-              <Save /> Save Changes
+              Send Instructions
             </Button>
             <Button
-              className="w-full py-6 md:py-5 rounded-xl text-xl"
+              className="w-full py-6 md:py-5 rounded-xl text-xl  cursor-pointer"
               variant="outline"
               onClick={() => navigate("/user/profile")}
             >
@@ -157,94 +154,3 @@ function EditEmailPage() {
 }
 
 export default EditEmailPage;
-
-/*
-return (
-  <div className="flex justify-center items-center p-[0.4rem] xl:p-0 mb-20">
-    <div className="w-92 sm:w-140 xl:w-270 xl:mt-12 mt-8 flex flex-col justify-center items-center gap-10">
-      <h1 className=" w-full font-inter font-bold text-[1.5rem] sm:text-[1.65rem] xl:text-[1.8rem] text-[#121417]">
-        Edit e-mail
-      </h1>
-      <section className="w-full flex flex-col justify-between gap-3">
-        <div className="flex flex-col justify-between gap-1 w-full">
-          <p className="font-inter font-medium text-[0.6rem] sm:text-[0.7rem] xl:text-[0.8rem] text-[#121417]">
-            Current e-mail
-          </p>
-          <input
-            type="email"
-            value={currentEmail}
-            onChange={(e) => handleInsertCurrentEmail(e.target.value)}
-            className={`font-inter font-normal text-[0.6rem] sm:text-[0.7rem] xl:text-[0.8rem] placeholder-[#61738A] text-[#121417] focus:outline-none ${
-              validateCurrentEmail == null || validateCurrentEmail
-                ? "border-none"
-                : "border-2 border-red-800 focus:border-red-800"
-            } bg-[#F0F2F5] rounded-md p-3 w-full`}
-          />
-        </div>
-        <div className="flex flex-col justify-between gap-1 w-full">
-          <p className="font-inter font-medium text-[0.6rem] sm:text-[0.7rem] xl:text-[0.8rem] text-[#121417]">
-            New e-mail
-          </p>
-          <input
-            type="text"
-            value={newEmail}
-            onChange={(e) => handleInsertNewEmail(e.target.value)}
-            className={`font-inter font-normal text-[0.6rem] sm:text-[0.7rem] xl:text-[0.8rem] placeholder-[#61738A] text-[#121417] focus:outline-none ${
-              validateNewEmail == null || validateNewEmail
-                ? "border-none"
-                : "border-2 border-red-800 focus:border-red-800"
-            } bg-[#F0F2F5] rounded-md p-3 w-full`}
-          />
-        </div>
-        <div className="flex flex-col justify-between gap-1 w-full">
-          <p className="font-inter font-medium text-[0.6rem] sm:text-[0.7rem] xl:text-[0.8rem] text-[#121417]">
-            Your password for identity confirmation
-          </p>
-          <input
-            type="text"
-            placeholder="Your password"
-            value={password}
-            onChange={(input) => setPassword(input.target.value)}
-            className="font-inter font-normal text-[0.6rem] sm:text-[0.7rem] xl:text-[0.8rem] placeholder-[#61738A] text-[#121417] border border-[#DBE0E5] rounded-md p-2 w-full"
-          />
-        </div>
-        <div className="flex flex-row justify-between">
-          <button
-            className="p-3 pl-2 xl:pl-3 pr-2 xl:pr-3 w-[8rem] sm:w-[8rem] xl:w-[10rem] bg-[#E8EDF5] hover:opacity-80 rounded-lg text-[#121417] font-inter font-bold text-[0.6rem] sm:text-[0.7rem] xl:text-[0.8rem] cursor-pointer"
-            onClick={() => navigate("/user/profile")}
-          >
-            Cancel
-          </button>
-          <button
-            className="p-3 pl-2 xl:pl-3 pr-2 xl:pr-3 w-[8rem] sm:w-[8rem] xl:w-[10rem] bg-[#0D78F2] hover:opacity-90 rounded-lg text-[#FFFFFF] font-inter font-bold text-[0.6rem] sm:text-[0.7rem] xl:text-[0.8rem] cursor-pointer"
-            onClick={() => handleSaveChanges()}
-          >
-            Save Changes
-          </button>
-        </div>
-      </section>
-      <section>
-        <p className="text-end font-inter font-regular text-[0.5rem] sm:text-[0.6rem] xl:text-[0.7rem] text-[#61738A] cursor-pointer">
-          After the change, you will need to confirm the new email.
-        </p>
-      </section>
-    </div>
-
-    {errorApi ? (
-      <div className="fixed inset-0 bg-black/50 flex flex-row justify-center items-center">
-        <div className=" bg-[#f1f1f1] w-120 sm:w-150 xl:w-150 sm:h-60 h-50 xl:h-60 p-10 rounded-lg   flex flex-col items-center justify-between">
-          <h1 className="text-center font-inter font-bold text-[1.6rem] sm:text-[2rem] xl:text-[1.8rem] text-[#121417]">
-            {typeErrorApi}
-          </h1>
-          <button
-            onClick={() => setErrorApi(false)}
-            className="p-2 sm:p-2 pl-2 xl:pl-3 pr-2 xl:pr-3 w-45 bg-[#0D78F2] hover:opacity-95 rounded-lg text-[#FFFFFF] font-inter font-bold text-[0.7rem] sm:text-[0.8rem] xl:text-[0.7rem] cursor-pointer"
-          >
-            Try again
-          </button>
-        </div>
-      </div>
-    ) : null}
-  </div>
-);
-*/

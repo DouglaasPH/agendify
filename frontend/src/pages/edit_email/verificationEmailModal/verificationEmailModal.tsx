@@ -45,7 +45,7 @@ function VerificationEmailModal({ newEmail }: Props) {
           New email: <span className="font-normal">{newEmail}</span>
         </p>
         <Button
-          className="w-full py-6 md:py-5 rounded-xl text-lg bg-gradient-to-r from-blue-600 via-purple-600 to-purple-700 text-white"
+          className="w-full py-6 md:py-5 rounded-xl text-lg bg-gradient-to-r from-blue-600 via-purple-600 to-purple-700 text-white cursor-pointer hover:text-white hover:scale-105"
           variant="outline"
           onClick={() => navigate("/user/profile")}
         >

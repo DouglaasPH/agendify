@@ -14,7 +14,7 @@ class DataToVerifyAccount(BaseModel):
     phoneNumber: str
     
 
-class TokenInRegister(BaseModel):
+class Token(BaseModel):
     token: str
 
 
@@ -26,9 +26,7 @@ class UserDataToUpdate(BaseModel):
 
 
 class UserEmailToUpdate(BaseModel):
-    email: str
-    password: str
-
+    new_email: str
 
 class UserPasswordToUpdate(BaseModel):
     currentPassword: str

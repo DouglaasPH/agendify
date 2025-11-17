@@ -12,8 +12,8 @@ from models.users import Users
 from models.appointments import Appointments
 from models.availabilities import Availabilities
 from models.refresh_tokens import RefreshToken
-from services.mail_service import send_password_reset_email, send_verification_email
-from views.auth import DataToVerifyAccount, EmailData, ResetPasswordData, TokenInRegister, UserDataToUpdate, UserEmailToUpdate, UserPasswordToUpdate
+from services.mail_service import send_email_change_confirmation, send_password_reset_email, send_verification_email
+from views.auth import DataToVerifyAccount, EmailData, ResetPasswordData, Token, UserDataToUpdate, UserEmailToUpdate, UserPasswordToUpdate
 from services.auth import decode_token, generation_token, get_db, authenticate_user, pwd_context, get_current_user, verify_password
 from services.token import create_access_token, create_refresh_token
 
@@ -46,7 +46,7 @@ async def generate_verification_token(user_data: DataToVerifyAccount):
 
 
 @router.post("/register")
-def register(data: TokenInRegister, db: Session = Depends(get_db)):
+def register(data: Token, db: Session = Depends(get_db)):
     decoded_token = decode_token(data.token)
     
     existing_user = db.query(Users).filter(Users.email == decoded_token["email"]).first()
@@ -217,27 +217,46 @@ def modifyUserData(user_data_to_update: UserDataToUpdate, current_user: Users = 
     return user
 
 
-@router.put("/modify-user-email")
-def modifyUserEmail(user_email_to_update: UserEmailToUpdate, current_user: Users = Depends(get_current_user), db: Session = Depends(get_db)):
+@router.post("/send-email-to-change-email")
+async def sendEmailToChangeEmail(data: UserEmailToUpdate, current_user: Users = Depends(get_current_user), db: Session = Depends(get_db)):
     user = db.query(Users).filter(Users.id == current_user.id).first()
     
     
-    verify_email = db.query(Users).filter(Users.email == user_email_to_update.email).first()
+    verify_email = db.query(Users).filter(Users.email == data.new_email).first()
     
     if not user:
         raise HTTPException(status_code=404, detail="User not found.")
     if verify_email:
         raise HTTPException(status_code=409, detail="The email is already linked to an account.")
-    if not verify_password(user_email_to_update.password, user.hashed_password):
-        raise HTTPException(status_code=401, detail="Invalid password.")
     
-    user.email = user_email_to_update.email
+    payload =  {
+        "current_email":user.email,
+        "new_email":data.new_email,
+        "exp": int((datetime.utcnow() + timedelta(minutes=15)).timestamp())
+    }
+    token = generation_token(payload)
+    
+    link = f"http://localhost:5173/change-email/{token}"
+    
+    await send_email_change_confirmation(current_user.name, current_user.email, data.new_email, link)
+    
+    return { "msg": "Email sent successfully." }
+
+
+@router.put("/modify-user-email")
+def modifyUserEmail(data: Token, db: Session = Depends(get_db)):
+    decoded_token = decode_token(data.token)
+    user = db.query(Users).filter(Users.email == decoded_token["current_email"]).first()
+    
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found.")
+        
+    user.email = decoded_token["new_email"]
     
     db.commit()
     db.refresh(user)
     
-    return { "email": user.email }
-
+    return { "msg": "Password changed succesfully." }
 
 
 
