@@ -1,19 +1,14 @@
-import { Calendar } from "lucide-react";
+import logo from "../../../public/logo.png";
 
 function FooterBar() {
   return (
     <footer className="py-20">
       <section className="px-10 flex flex-col md:flex-row justify-between items-start gap-7 border-b-1 border-b-gray-200 pb-10">
         <div className="flex flex-col justify-start gap-4 md:w-1/6">
-          <div className="flex gap-3 items-center select-none">
-            <div className="text-center bg-gradient-to-b from-black/80 to-gray-900 p-1.5 rounded-md">
-              <Calendar className="text-white size-5" strokeWidth={2} />
-            </div>
-            <h4 className="scroll-m-20 text-md font-normal tracking-tight text-black">
-              Agendify
-            </h4>
+          <div className="select-none">
+            <img src={logo} alt="logo" className="h-7" />
           </div>
-          <small className="font-small text-sm text-gray-600">
+          <small className="font-small text-sm text-gray-600 pl-3">
             The complete platform to revolutionize your scheduling and grow your
             business.
           </small>

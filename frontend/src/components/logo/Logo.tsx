@@ -1,15 +1,10 @@
-// lucide
-import { Calendar } from "lucide-react";
+// logo img
+import logo from "../../../public/logo.png";
 
 function LogoComponent() {
   return (
-    <section className="flex gap-3 items-center select-none">
-      <div className="text-center bg-gradient-to-b from-black/70 to-gray-800 p-1.5 rounded-lg">
-        <Calendar size={20} strokeWidth={2} className="text-white" />
-      </div>
-      <h4 className="scroll-m-20 text-xl font-semibold tracking-tight text-black">
-        Agendify
-      </h4>
+    <section className="flex gap-1 items-center select-none">
+      <img src={logo} alt="logo" className="" />
     </section>
   );
 }
