@@ -20,10 +20,14 @@ O **Agendify** é um sistema de agendamento desenvolvido para profissionais aut�
 ### **Backend**
 
 - FastAPI (Python)
+- Uvicorn
 - SQLAlchemy
 - Alembic
 - JWT Authentication
-- SQLite (desenvolvimento) / PostgreSQL (produção opcional)
+- Python-jose (criptografia)
+- Fastapi-Mail (envios de email)
+- Jinja2
+- SQLite (desenvolvimento)
 - `pyproject.toml` para gerenciamento de dependências (Poetry)
 
 ---
@@ -32,12 +36,11 @@ O **Agendify** é um sistema de agendamento desenvolvido para profissionais aut�
 
 ### 👤 Autenticação e Usuários
 
-- Registro de conta com fluxo completo
-- Login com **access_token** e **refresh_token**
+- Registro de conta com fluxo completo e com envio de email
+- Login com **access_token** e **refresh_token** e com envio de email
 - Edição de perfil
-- Alteração de e-mail (em desenvolvimento)
-- Fluxo de recuperação de senha (Forgot/Reset) — pendente
-- Verificação de e-mail — pendente
+- Alteração de e-mail e com envio de email
+- Fluxo de recuperação de senha (Forgot/Reset) e com envio de email
 
 ---
 
@@ -45,14 +48,14 @@ O **Agendify** é um sistema de agendamento desenvolvido para profissionais aut�
 
 - Criar horários de disponibilidade
 - Cancelar horários
-- Visualização pelo profissional
+- Visualização/Gerenciamento pelo profissional
 
 ---
 
 ### 🗓️ Agendamentos
 
-- Cliente pode agendar, desmarcar e visualizar agendamentos
-- Profissional pode visualizar e gerenciar os agendamentos
+- Cliente pode agendar, desmarcar e visualizar seus agendamentos
+- Profissional pode visualizar e gerenciar os agendamentos de todos seus clientes
 - Regras de validação e prevenção de conflitos
 
 ---
@@ -63,6 +66,7 @@ O **Agendify** é um sistema de agendamento desenvolvido para profissionais aut�
 - Desmarcação
 - Visualização de horários
 - Experiência simples e intuitiva para o cliente
+- chat exclusivo para cada profissional, com base no código de chat
 
 ---
 
@@ -70,18 +74,6 @@ O **Agendify** é um sistema de agendamento desenvolvido para profissionais aut�
 
 - Visão geral dos agendamentos
 - Indicadores úteis para o profissional
-
----
-
-## 📌 Status do Projeto
-
-✅ Funcionalidades principais implementadas
-⏳ Em andamento:
-
-- Envio de e-mails (confirmação, verificação, recuperação)
-- Lógica de alteração de e-mail
-- Telas Forgot/Reset Password
-- Verificação de e-mail
 
 ---
 
